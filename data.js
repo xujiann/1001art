@@ -36,7 +36,7 @@ const CURATED = [
   {title:"圣维克多山",artist:"保罗·塞尚",year:"约1904",era:"后印象派",medium:"布面油画",country:"法国",location:"费城艺术博物馆",desc:"塞尚反复描绘的故乡之山，以几何化笔触预示了立体主义。",img:wm("Paul_C%C3%A9zanne_-_Mont_Sainte-Victoire_-_Google_Art_Project.jpg")},
   {title:"舞蹈",artist:"亨利·马蒂斯",year:"1910",era:"野兽派",medium:"布面油画",country:"法国",location:"圣彼得堡冬宫博物馆",desc:"五个手拉手旋转的裸体，原始的生命律动与纯粹的色彩。",img:wm("Matisse-Dance_(I).jpg")},
   {title:"红黄蓝的构成",artist:"皮特·蒙德里安",year:"1930",era:"风格派",medium:"布面油画",country:"荷兰",location:"苏黎世美术馆",desc:"以黑色网格与三原色构筑的纯粹抽象秩序。",img:wm("Piet_Mondriaan,_1930_-_Mondrian_Composition_II_in_Red,_Blue,_and_Yellow.jpg")},
-  {title:"持续性记忆",artist:"瓦西里·康定斯基",year:"1913",era:"抽象艺术",medium:"布面油画",country:"俄罗斯",location:"多家博物馆藏",desc:"康定斯基以色彩与线条的「内在必然性」开创纯粹抽象。",img:wm("Vassily_Kandinsky,_1913_-_Composition_7.jpg")},
+  {title:"第七号构成",artist:"瓦西里·康定斯基",year:"1913",era:"抽象艺术",medium:"布面油画",country:"俄罗斯",location:"莫斯科特列季亚科夫画廊",desc:"康定斯基以色彩与线条的「内在必然性」开创纯粹抽象。",img:wm("Vassily_Kandinsky,_1913_-_Composition_7.jpg")},
   {title:"格兰德渡口",artist:"乔治·修拉",year:"1888",era:"后印象派",medium:"布面油画",country:"法国",location:"印第安纳波利斯艺术博物馆",desc:"点彩技法描绘的港口黄昏，宁静而富有诗意。",img:wm("Georges_Seurat_-_Le_Chenal_de_Gravelines,_Grand_Fort-Philippe.jpg")},
   {title:"埃及艳后",artist:"老卢卡斯·克拉纳赫",year:"约1530",era:"北方文艺复兴",medium:"木板油画",country:"德国",location:"私人收藏",desc:"克拉纳赫笔下纤细优雅的女性形象，北方文艺复兴的代表。",img:null},
   {title:"加拉太的凯旋",artist:"拉斐尔",year:"约1514",era:"文艺复兴",medium:"湿壁画",country:"意大利",location:"罗马法尔内西纳别墅",desc:"海中仙女加拉太驾驭海豚战车，盛期文艺复兴的优雅典范。",img:wm("Galatea_by_Raphael.jpg")},
@@ -110,7 +110,7 @@ const CURATED = [
   {title:"下楼梯的裸女二号",artist:"马塞尔·杜尚",year:"1912",era:"立体主义",medium:"布面油画",country:"法国",location:"费城艺术博物馆",desc:"将运动分解为连续形态，立体主义与未来主义的融合。",img:wm("Duchamp_-_Nude_Descending_a_Staircase.jpg")},
   {title:"我与村庄",artist:"马克·夏加尔",year:"1911",era:"超现实主义",medium:"布面油画",country:"白俄罗斯",location:"纽约现代艺术博物馆",desc:"梦幻的故乡记忆，人与动物的诗意并置。",img:wm("Marc_Chagall,_1911,_I_and_the_Village,_oil_on_canvas,_192.1_x_151.4_cm,_Museum_of_Modern_Art,_New_York.jpg")},
   {title:"生日",artist:"马克·夏加尔",year:"1915",era:"超现实主义",medium:"纸板油画",country:"白俄罗斯",location:"纽约现代艺术博物馆",desc:"飘浮空中的热吻，爱情让恋人失重飞翔。",img:wm("Marc_Chagall,_1915,_Birthday_(L%27Anniversaire),_oil_on_cardboard,_80.6_x_99.7_cm,_Museum_of_Modern_Art,_New_York.jpg")},
-  {title:"持续的记忆",artist:"乔治·德·基里科",year:"1914",era:"形而上画派",medium:"布面油画",country:"意大利",location:"私人收藏",desc:"空寂广场与长影，形而上画派的忧郁与梦境感。",img:wm("Giorgio_de_Chirico,_1913,_The_Uncertainty_of_the_Poet.jpg")},
+  {title:"诗人的不确定性",artist:"乔治·德·基里科",year:"1913",era:"形而上画派",medium:"布面油画",country:"意大利",location:"伦敦泰特美术馆",desc:"空寂广场与长影，形而上画派的忧郁与梦境感。",img:wm("Giorgio_de_Chirico,_1913,_The_Uncertainty_of_the_Poet.jpg")},
   {title:"红气球",artist:"保罗·克利",year:"1922",era:"包豪斯",medium:"纱布油画",country:"瑞士",location:"纽约古根海姆博物馆",desc:"几何形与色块构成的诗意都市，童真与精密并存。",img:wm("Paul_Klee,_Red_Balloon,_1922.jpg")},
   {title:"喧闹的机器",artist:"保罗·克利",year:"1922",era:"包豪斯",medium:"水彩与油转印",country:"瑞士",location:"纽约现代艺术博物馆",desc:"歌唱的机械小鸟，对机器时代的幽默讽喻。",img:wm("Twittering_Machine.jpg")},
   {title:"加泰罗尼亚风景",artist:"胡安·米罗",year:"1923–1924",era:"超现实主义",medium:"布面油画",country:"西班牙",location:"纽约现代艺术博物馆",desc:"符号化的奇幻生物漂浮于黄色大地，米罗的诗意宇宙。",img:wm("Joan_Mir%C3%B3,_1923-24,_The_Tilled_Field,_oil_on_canvas,_66_x_92.7_cm,_Solomon_R._Guggenheim_Museum,_New_York.jpg")},
@@ -123,12 +123,12 @@ const CURATED = [
   {title:"夜鹰",artist:"爱德华·霍珀",year:"1942",era:"美国现实主义",medium:"布面油画",country:"美国",location:"芝加哥艺术博物馆",desc:"深夜餐馆中孤独的都市人，美国式疏离感的经典图像。",img:wm("Nighthawks_by_Edward_Hopper_1942.jpg")},
   {title:"铁路旁的房子",artist:"爱德华·霍珀",year:"1925",era:"美国现实主义",medium:"布面油画",country:"美国",location:"纽约现代艺术博物馆",desc:"铁轨旁孤立的维多利亚式宅邸，荒凉而疏离。",img:wm("Edward_Hopper_House_by_the_Railroad_1925.jpg")},
   {title:"克里斯蒂娜的世界",artist:"安德鲁·怀斯",year:"1948",era:"美国现实主义",medium:"蛋彩画",country:"美国",location:"纽约现代艺术博物馆",desc:"残疾女子匍匐于草坡望向远处农舍，孤独与渴望。",img:wm("Christinas_World.jpg")},
-  {title:"一号，1950（薰衣草之雾）",artist:"杰克逊·波洛克",year:"1950",era:"抽象表现主义",medium:"布面油彩与瓷漆",country:"美国",location:"华盛顿国家美术馆",desc:"滴洒技法编织的能量之网，行动绘画的巅峰。",img:wm("Jackson_Pollock,_1950,_Autumn_Rhythm_(Number_30),_Metropolitan_Museum_of_Art.jpg")},
-  {title:"秋韵（三十号）",artist:"杰克逊·波洛克",year:"1950",era:"抽象表现主义",medium:"布面瓷漆",country:"美国",location:"纽约大都会艺术博物馆",desc:"棕黑线条的律动如秋日韵律，滴画的纯粹动能。",img:wm("Number_8,_1949_(Jackson_Pollock).jpg")},
-  {title:"橙红黄",artist:"马克·罗斯科",year:"1961",era:"色域绘画",medium:"布面油画",country:"美国",location:"私人收藏",desc:"漂浮的矩形色块，引人沉思的崇高色彩体验。",img:wm("No._61_(Rust_and_Blue)_Mark_Rothko_1953.jpg")},
+  {title:"秋韵（第30号）",artist:"杰克逊·波洛克",year:"1950",era:"抽象表现主义",medium:"布面瓷漆",country:"美国",location:"纽约大都会艺术博物馆",desc:"棕黑线条的律动如秋日韵律，行动绘画的巅峰。",img:wm("Jackson_Pollock,_1950,_Autumn_Rhythm_(Number_30),_Metropolitan_Museum_of_Art.jpg")},
+  {title:"第8号，1949",artist:"杰克逊·波洛克",year:"1949",era:"抽象表现主义",medium:"布面瓷漆",country:"美国",location:"私人收藏",desc:"滴洒技法编织的能量之网，滴画的纯粹动能。",img:wm("Number_8,_1949_(Jackson_Pollock).jpg")},
+  {title:"第61号（铁锈与蓝）",artist:"马克·罗斯科",year:"1953",era:"色域绘画",medium:"布面油画",country:"美国",location:"洛杉矶现代艺术博物馆",desc:"漂浮的矩形色块，引人沉思的崇高色彩体验。",img:wm("No._61_(Rust_and_Blue)_Mark_Rothko_1953.jpg")},
   {title:"玛丽莲·梦露双联画",artist:"安迪·沃霍尔",year:"1962",era:"波普艺术",medium:"布面丝网印刷",country:"美国",location:"伦敦泰特美术馆",desc:"重复印刷的梦露形象，名人崇拜与大众消费的图腾。",img:wm("Marilyn_Diptych.jpg")},
   {title:"金宝汤罐头",artist:"安迪·沃霍尔",year:"1962",era:"波普艺术",medium:"布面合成聚合物",country:"美国",location:"纽约现代艺术博物馆",desc:"三十二罐汤的并置，消费社会的冷峻肖像。",img:wm("Campbells_Soup_Cans_MOMA.jpg")},
-  {title:"哭泣的女孩",artist:"罗伊·利希滕斯坦",year:"1964",era:"波普艺术",medium:"瓷漆钢板",country:"美国",location:"私人收藏",desc:"放大的漫画分格与本戴点，波普艺术的商业图像挪用。",img:wm("Roy_Lichtenstein_Drowning_Girl.jpg")},
+  {title:"溺水的女孩",artist:"罗伊·利希滕斯坦",year:"1963",era:"波普艺术",medium:"布面油彩与镁版颜料",country:"美国",location:"纽约现代艺术博物馆",desc:"放大的漫画分格与本戴点，波普艺术的商业图像挪用。",img:wm("Roy_Lichtenstein_Drowning_Girl.jpg")},
   {title:"国旗",artist:"贾斯培·琼斯",year:"1954–1955",era:"新达达主义",medium:"布面蜡画拼贴",country:"美国",location:"纽约现代艺术博物馆",desc:"以蜡画重绘美国国旗，对符号与物性的追问。",img:wm("Flag_by_Jasper_Johns_1954-55.jpg")},
   {title:"气球女孩",artist:"班克斯",year:"2002",era:"街头艺术",medium:"喷漆模板",country:"英国",location:"多处墙面",desc:"伸手追逐红气球的女孩，希望与失去的当代寓言。",img:null},
   {title:"思想者",artist:"奥古斯特·罗丹",year:"1904",era:"现代雕塑",medium:"青铜",country:"法国",location:"巴黎罗丹博物馆",desc:"沉思中的裸体男子，对人类理智与痛苦的凝缩。",img:wm("The_Thinker,_Rodin.jpg")},
@@ -247,28 +247,79 @@ const GEN_TITLES = [
   "都市夜景","钢铁与玻璃","孤独的房间","等待","离别",
 ];
 
-// 构造完整数据集
+// —— 双语解析工具（依赖 lang.js 中的 window.LANG）——
+const L = (typeof window !== "undefined" && window.LANG) ? window.LANG : {dict:{},curated:{},gen:{},ui:{}};
+function dictEn(kind, zh){ return (L.dict[kind] && L.dict[kind][zh]) || zh; }
+
+// 从中文年代串推算可排序年份（负数表示公元前）
+function sortYear(zh){
+  if(!zh) return 0;
+  const bc = /公元前/.test(zh);
+  const cent = /世纪/.test(zh);
+  const m = zh.match(/\d+/);
+  if(!m) return 0;
+  const n = parseInt(m[0], 10);
+  let y = cent ? (n * 100 - 50) : n;
+  return bc ? -y : y;
+}
+// 中文年代串 → 英文显示
+function yearEn(zh){
+  if(!zh) return zh;
+  const bc = /公元前/.test(zh);
+  let s = zh.replace(/约/g, "c. ").replace(/公元前/g, "").replace(/年/g, "").replace(/世纪/g, "th c.").trim();
+  if(bc) s += " BCE";
+  return s;
+}
+
+// 构造完整数据集（每条带中英双语字段）
 const ART_DATA = [];
 let _id = 1;
-for (const a of CURATED){ a.id = _id++; ART_DATA.push(a); }
+for (const a of CURATED){
+  a.id = _id++;
+  a.sy = sortYear(a.year);
+  const ce = (L.curated && L.curated[a.title + "|" + a.artist]) || null;
+  a.title_en    = ce ? ce[0] : a.title;
+  a.desc_en     = ce ? ce[1] : a.desc;
+  a.artist_en   = dictEn("artist", a.artist);
+  a.era_en      = dictEn("era", a.era);
+  a.medium_en   = dictEn("medium", a.medium);
+  a.country_en  = dictEn("country", a.country);
+  a.location_en = dictEn("location", a.location);
+  a.year_en     = yearEn(a.year);
+  ART_DATA.push(a);
+}
 
-// 程序化补足到 1001
+// 程序化补足到 1001（同样生成双语）
+const G = L.gen || {};
+const ZH_MED = ["布面油画","纸本水墨","木板蛋彩","水彩","版画","素描"];
+const ZH_LOC = ["私人收藏","区域美术馆藏","博物馆馆藏","艺术家工作室遗存"];
+const ZH_BIT = ["光影","色彩","形体","空间","情感","线条"];
 let gi = 0;
 while (ART_DATA.length < 1001){
-  const [artist, era, country] = GEN_ARTISTS[gi % GEN_ARTISTS.length];
-  const title = GEN_TITLES[gi % GEN_TITLES.length];
+  const idx = gi % GEN_ARTISTS.length;
+  const [artist, era, country] = GEN_ARTISTS[idx];
+  const tIdx = gi % GEN_TITLES.length;
+  const title = GEN_TITLES[tIdx];
   const variant = Math.floor(gi / GEN_TITLES.length) + 1;
   const baseYear = 1400 + (gi * 7) % 560;
+  const artistEn = (G.artists && G.artists[idx]) || artist;
+  const eraEn = dictEn("era", era);
+  const countryEn = dictEn("country", country);
+  const titleEn = (G.titles && G.titles[tIdx]) || title;
+  const bitEn = (G.bits && G.bits[gi % 6]) || ZH_BIT[gi % 6];
   ART_DATA.push({
     id: _id++,
+    sy: baseYear,
     title: variant > 1 ? `${title}（习作${variant}）` : title,
-    artist: artist,
-    year: String(baseYear),
-    era: era,
-    medium: ["布面油画","纸本水墨","木板蛋彩","水彩","版画","素描"][gi % 6],
-    country: country,
-    location: ["私人收藏","区域美术馆藏","博物馆馆藏","艺术家工作室遗存"][gi % 4],
-    desc: `${artist}创作的${era}风格作品，体现了该时期对${["光影","色彩","形体","空间","情感","线条"][gi%6]}的探索。（精选集扩展条目）`,
+    title_en: variant > 1 ? `${titleEn} (Study ${variant})` : titleEn,
+    artist, artist_en: artistEn,
+    year: String(baseYear), year_en: String(baseYear),
+    era, era_en: eraEn,
+    medium: ZH_MED[gi % 6], medium_en: (G.mediums && G.mediums[gi % 6]) || ZH_MED[gi % 6],
+    country, country_en: countryEn,
+    location: ZH_LOC[gi % 4], location_en: (G.locations && G.locations[gi % 4]) || ZH_LOC[gi % 4],
+    desc: `${artist}创作的${era}风格作品，体现了该时期对${ZH_BIT[gi % 6]}的探索。（精选集扩展条目）`,
+    desc_en: `A ${eraEn}-style work by ${artistEn}, exploring the period's treatment of ${bitEn}. (Extended selection entry.)`,
     img: null
   });
   gi++;
