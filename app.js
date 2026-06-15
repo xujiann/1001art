@@ -172,13 +172,21 @@
   function makeCard(d){
     const card = document.createElement("div");
     card.className = "art-card";
+    card.tabIndex = 0;
+    card.setAttribute("role", "button");
+    card.setAttribute("aria-label", F(d,"title") + " · " + F(d,"artist"));
     card.onclick = () => openModal(d);
+    card.onkeydown = e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openModal(d); } };
     const imgWrap = document.createElement("div");
     imgWrap.className = "card-img-wrap";
     if(d.img){
+      imgWrap.classList.add("loading");
       const img = document.createElement("img");
-      img.loading="lazy"; img.alt=F(d,"title"); img.src=d.img;
-      img.onerror = () => { imgWrap.innerHTML = placeholderHTML(d); };
+      img.loading="lazy"; img.decoding="async"; img.alt=F(d,"title");
+      img.src=imgSized(d.img,500);
+      img.srcset=imgSized(d.img,500)+" 1x, "+imgSized(d.img,1000)+" 2x";
+      img.onload = () => { img.classList.add("loaded"); imgWrap.classList.remove("loading"); imgWrap.classList.add("loaded"); };
+      img.onerror = () => { imgWrap.classList.remove("loading"); imgWrap.innerHTML = placeholderHTML(d); };
       imgWrap.appendChild(img);
     } else {
       imgWrap.innerHTML = placeholderHTML(d);
@@ -231,11 +239,15 @@
 
   // —— 详情弹窗 ——
   let modalEntry = null, modalIndex = -1;
+  function setHash(id){
+    try{ history.replaceState(null, "", id ? ("#art-"+id) : (location.pathname+location.search)); }catch(e){}
+  }
   function openModal(d){
     modalEntry = d; modalIndex = filtered.indexOf(d);
     fillModal(d);
     $("modal").classList.add("open");
     document.body.style.overflow = "hidden";
+    setHash(d.id);
   }
   function fillModal(d){
     modalEntry = d;
@@ -268,11 +280,13 @@
       `<span class="mph-note">${esc(T("img_na"))}</span>`+
       `<a class="mph-wiki" href="${esc(wikiURL(d))}" target="_blank" rel="noopener">${esc(T("view_wiki"))} ↗</a>`;
   }
-  function closeModal(){ $("modal").classList.remove("open"); document.body.style.overflow=""; }
+  function closeModal(){ $("modal").classList.remove("open"); document.body.style.overflow=""; setHash(null); }
   function navModal(dir){
     if(filtered.length===0) return;
     modalIndex=(modalIndex+dir+filtered.length)%filtered.length;
-    fillModal(filtered[modalIndex]);
+    modalEntry=filtered[modalIndex];
+    fillModal(modalEntry);
+    setHash(modalEntry.id);
   }
 
   // —— 高清灯箱（缩放 / 平移）——
@@ -388,6 +402,23 @@
 
   function esc(s){ return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 
+  // —— 回到顶部 ——
+  const toTop = $("to-top");
+  window.addEventListener("scroll", () => { toTop.classList.toggle("show", window.scrollY > 600); }, {passive:true});
+  toTop.onclick = () => window.scrollTo({top:0, behavior:"smooth"});
+
+  // —— 深链：按 URL #art-<id> 打开对应作品 ——
+  function openFromHash(){
+    const m = location.hash.match(/^#art-(\d+)$/);
+    if(!m){ if($("modal").classList.contains("open")) closeModal(); return; }
+    const id = +m[1];
+    if(modalEntry && modalEntry.id === id && $("modal").classList.contains("open")) return;
+    const d = DATA.find(x => x.id === id);
+    if(d) openModal(d);
+  }
+  window.addEventListener("hashchange", openFromHash);
+
   // —— 启动 ——
   applyLang();
+  openFromHash();
 })();
