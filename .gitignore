@@ -2,3 +2,8 @@ node_modules/
 .DS_Store
 Thumbs.db
 .claude/
+
+# 临时构建脚本与中间产物
+_*.mjs
+_resolved.json
+images.json

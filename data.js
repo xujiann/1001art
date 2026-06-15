@@ -5,7 +5,12 @@
 */
 
 // 工具：构造 Wikimedia 缩略图 URL
-function wm(file, w){ return "https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent(file) + "?width=" + (w||500); }
+// 文件名可能已含百分号编码，先解码再统一编码一次，避免双重编码导致 404
+function wm(file, w){
+  let f = file;
+  try { if(/%[0-9A-Fa-f]{2}/.test(file)) f = decodeURIComponent(file); } catch(e){ f = file; }
+  return "https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent(f) + "?width=" + (w||500);
+}
 
 // —— 精选真实著名作品（带真实图片）——
 const CURATED = [
@@ -271,11 +276,16 @@ function yearEn(zh){
   return s;
 }
 
+// 校正后的精选作品图片映射（仅含已验证可加载的真实图片，详见 images.js）
+const IMG = (typeof window !== "undefined" && window.ART_IMAGES) ? window.ART_IMAGES : {};
+
 // 构造完整数据集（每条带中英双语字段）
 const ART_DATA = [];
 let _id = 1;
 for (const a of CURATED){
   a.id = _id++;
+  // 用校正后的图片覆盖内联链接：有验证图则用，无则置空走优雅占位（杜绝坏图）
+  a.img = IMG[a.id] || null;
   a.sy = sortYear(a.year);
   const ce = (L.curated && L.curated[a.title + "|" + a.artist]) || null;
   a.title_en    = ce ? ce[0] : a.title;

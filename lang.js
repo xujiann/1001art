@@ -20,6 +20,7 @@ ui: {
     prev:"← 上一件", next:"下一件 →", of_total:"件",
     zoom_hint:"滚轮缩放 · 双击放大 · 拖动平移", view_original:"查看原图", download:"下载", close:"关闭",
     no_results:"未找到符合条件的作品", reset:"重置筛选",
+    img_na:"暂无可公开展示的图片（多为版权保护作品）", view_wiki:"在 Wikipedia 查看",
     footer:"精选人类历史上1001件著名艺术作品 · 从史前壁画到当代艺术",
     lang_btn:"EN"
   },
@@ -35,6 +36,7 @@ ui: {
     prev:"← Previous", next:"Next →", of_total:"",
     zoom_hint:"Scroll to zoom · double-click to enlarge · drag to pan", view_original:"View original", download:"Download", close:"Close",
     no_results:"No works match your filters", reset:"Reset filters",
+    img_na:"No public image available (often under copyright)", view_wiki:"View on Wikipedia",
     footer:"A curated selection of 1001 famous works of art · from cave paintings to contemporary art",
     lang_btn:"中文"
   }

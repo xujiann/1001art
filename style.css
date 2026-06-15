@@ -69,8 +69,14 @@ select:focus{border-color:var(--accent)}
 .card-img-wrap{width:100%;aspect-ratio:4/3;overflow:hidden;position:relative;background:var(--bg3)}
 .card-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s ease;display:block}
 .art-card:hover .card-img-wrap img{transform:scale(1.05)}
-.card-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:2rem;color:rgba(255,255,255,0.1);padding:1rem;text-align:center}
-.card-placeholder .art-num{font-size:0.65rem;color:var(--text3);margin-top:0.5rem;letter-spacing:0.1em}
+.card-placeholder{width:100%;height:100%;position:relative}
+.ph-inner{position:absolute;inset:7px;border:1px solid rgba(255,255,255,0.14);border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0.6rem;gap:0.25rem}
+.ph-inner::before{content:"";position:absolute;inset:3px;border:1px solid rgba(255,255,255,0.06);border-radius:2px;pointer-events:none}
+.ph-glyph{font-size:1.5rem;color:rgba(255,255,255,0.3);line-height:1}
+.ph-title{font-family:var(--font-serif,Georgia,"Songti SC",serif);font-size:0.82rem;color:rgba(255,255,255,0.78);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ph-artist{font-size:0.66rem;color:rgba(255,255,255,0.45);line-height:1.2;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.list-view .ph-title,.list-view .ph-artist{display:none}
+.list-view .ph-glyph{font-size:1.1rem}
 .card-body{padding:0.85rem}
 .card-era{font-size:0.65rem;color:var(--accent2);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.3rem;font-weight:500}
 .card-title{font-size:0.88rem;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:0.25rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -98,8 +104,14 @@ select:focus{border-color:var(--accent)}
 .modal-content{display:grid;grid-template-columns:1fr 1fr;min-height:400px}
 .modal-img-wrap{position:relative;background:var(--bg3);border-radius:16px 0 0 16px;overflow:hidden;min-height:300px}
 .modal-img-wrap img{width:100%;height:100%;object-fit:contain;display:block}
-.modal-img-placeholder{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:3rem;flex-direction:column;gap:0.5rem}
+.modal-img-placeholder{position:absolute;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;gap:0.6rem;padding:2rem;text-align:center}
 .modal-img-placeholder.show{display:flex}
+.modal-img-placeholder .ph-glyph{font-size:2.6rem;color:rgba(255,255,255,0.3)}
+.modal-img-placeholder .mph-title{font-family:var(--font-serif,Georgia,"Songti SC",serif);font-size:1.1rem;color:rgba(255,255,255,0.85);line-height:1.4}
+.modal-img-placeholder .mph-artist{font-size:0.85rem;color:rgba(255,255,255,0.5)}
+.modal-img-placeholder .mph-note{font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:0.4rem;max-width:80%}
+.modal-img-placeholder .mph-wiki{margin-top:0.5rem;font-size:0.78rem;color:var(--accent2);text-decoration:none;border:1px solid var(--border);padding:0.35rem 0.85rem;border-radius:7px;transition:all var(--trans)}
+.modal-img-placeholder .mph-wiki:hover{border-color:var(--accent);background:rgba(124,106,247,0.12)}
 .modal-info{padding:2rem;display:flex;flex-direction:column;gap:0.75rem}
 .modal-era-badge{display:inline-block;padding:0.25rem 0.75rem;border-radius:20px;font-size:0.72rem;font-weight:500;background:rgba(124,106,247,0.2);color:var(--accent2);text-transform:uppercase;letter-spacing:0.08em;width:fit-content}
 .modal-info h2{font-size:1.4rem;font-weight:700;line-height:1.3;color:#fff}

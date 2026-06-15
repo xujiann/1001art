@@ -198,8 +198,13 @@
 
   function placeholderHTML(d){
     return `<div class="card-placeholder ${eraTheme(d.era)}">`+
-      `<span>❖</span><span class="art-num">${esc(F(d,"title"))}</span></div>`+
+      `<div class="ph-inner"><span class="ph-glyph">❖</span>`+
+      `<span class="ph-title">${esc(F(d,"title"))}</span>`+
+      `<span class="ph-artist">${esc(F(d,"artist"))}</span></div></div>`+
       `<div class="card-num">#${d.id}</div>`;
+  }
+  function wikiURL(d){
+    return "https://en.wikipedia.org/w/index.php?search=" + encodeURIComponent(d.title_en + " " + d.artist_en);
   }
 
   function renderPagination(totalPages){
@@ -235,12 +240,13 @@
   function fillModal(d){
     modalEntry = d;
     const img=$("modal-img"), ph=$("modal-placeholder"), badge=$("zoom-badge");
+    const wrap=$("modal-img-wrap");
     if(d.img){
       img.style.display="block"; img.src=imgSized(d.img,1280); img.alt=F(d,"title");
-      ph.classList.remove("show"); badge.style.display="flex";
-      img.onerror = () => { img.style.display="none"; badge.style.display="none"; showModalPlaceholder(d); };
+      ph.classList.remove("show"); badge.style.display="flex"; wrap.style.cursor="zoom-in";
+      img.onerror = () => { img.style.display="none"; badge.style.display="none"; wrap.style.cursor="default"; showModalPlaceholder(d); };
     } else {
-      img.style.display="none"; badge.style.display="none"; showModalPlaceholder(d);
+      img.style.display="none"; badge.style.display="none"; wrap.style.cursor="default"; showModalPlaceholder(d);
     }
     $("modal-era").textContent=F(d,"era");
     $("modal-title").textContent=F(d,"title");
@@ -255,7 +261,12 @@
   function showModalPlaceholder(d){
     const ph=$("modal-placeholder");
     ph.className="modal-img-placeholder show "+eraTheme(d.era);
-    ph.innerHTML=`<span>❖</span><span style="font-size:0.9rem;color:var(--text2)">${esc(F(d,"title"))}</span>`;
+    ph.innerHTML=
+      `<span class="ph-glyph">❖</span>`+
+      `<span class="mph-title">${esc(F(d,"title"))}</span>`+
+      `<span class="mph-artist">${esc(F(d,"artist"))}</span>`+
+      `<span class="mph-note">${esc(T("img_na"))}</span>`+
+      `<a class="mph-wiki" href="${esc(wikiURL(d))}" target="_blank" rel="noopener">${esc(T("view_wiki"))} ↗</a>`;
   }
   function closeModal(){ $("modal").classList.remove("open"); document.body.style.overflow=""; }
   function navModal(dir){
