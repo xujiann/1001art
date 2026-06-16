@@ -9,8 +9,11 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="1001件人类艺术瑰宝 · 1001 Masterpieces of Human Art">
 <meta property="og:description" content="精选人类历史上1001件著名艺术作品 · 从史前壁画到当代艺术">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="images/1.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="images/1.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%237c6af7'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='white' font-family='Georgia,serif'%3E%E2%9D%96%3C/text%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -42,6 +45,7 @@
     <select id="medium-filter"><option value="">全部媒材</option></select>
     <select id="country-filter"><option value="">全部地区</option></select>
     <button id="timeline-btn" class="btn-outline btn-text">时间线</button>
+    <button id="fav-only-btn" class="btn-outline btn-text">♥ 收藏</button>
     <button id="random-btn" class="btn-accent">随机作品</button>
     <button id="view-toggle" class="btn-outline" title="切换视图">⊞</button>
   </div>
@@ -65,7 +69,10 @@
         <button class="zoom-badge" id="zoom-badge" title="放大">⛶</button>
       </div>
       <div class="modal-info">
-        <div class="modal-era-badge" id="modal-era"></div>
+        <div class="modal-head">
+          <div class="modal-era-badge" id="modal-era"></div>
+          <button class="modal-fav" id="modal-fav">♡ 收藏</button>
+        </div>
         <h2 id="modal-title"></h2>
         <p class="modal-artist" id="modal-artist"></p>
         <dl class="modal-meta">
@@ -117,5 +124,10 @@
 <script src="lang.js"></script>
 <script src="data.js"></script>
 <script src="app.js"></script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(()=>{}));
+}
+</script>
 </body>
 </html>

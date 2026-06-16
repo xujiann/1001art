@@ -54,6 +54,15 @@
   let listView = false;
   let timelineMode = false;
   let periodFilter = null;
+  let favOnly = false;
+
+  // —— 收藏（localStorage 持久化）——
+  const FAV_KEY = "art1001_favs";
+  let favs = new Set();
+  try{ favs = new Set(JSON.parse(localStorage.getItem(FAV_KEY) || "[]")); }catch(e){}
+  const isFav = id => favs.has(id);
+  function saveFavs(){ try{ localStorage.setItem(FAV_KEY, JSON.stringify([...favs])); }catch(e){} }
+  function toggleFav(id){ favs.has(id) ? favs.delete(id) : favs.add(id); saveFavs(); return favs.has(id); }
 
   // —— DOM ——
   const $ = id => document.getElementById(id);
@@ -131,6 +140,7 @@
     const q = searchInput.value.trim().toLowerCase();
     const fe = eraFilter.value, fm = mediumFilter.value, fc = countryFilter.value;
     filtered = DATA.filter(d => {
+      if(favOnly && !favs.has(d.id)) return false;
       if(fe && d.era !== fe) return false;
       if(fm && d.medium !== fm) return false;
       if(fc && d.country !== fc) return false;
@@ -145,6 +155,7 @@
     if(timelineMode) filtered.sort((a,b)=>a.sy-b.sy);
     page = 0;
     buildTabs();
+    syncURL();
     render();
   }
 
@@ -189,6 +200,17 @@
     }
     const num = document.createElement("div");
     num.className="card-num"; num.textContent="#"+d.id; imgWrap.appendChild(num);
+    const fav = document.createElement("button");
+    fav.className = "card-fav" + (isFav(d.id) ? " on" : "");
+    fav.innerHTML = isFav(d.id) ? "♥" : "♡";
+    fav.setAttribute("aria-label", T("fav"));
+    fav.onclick = (e) => {
+      e.stopPropagation();
+      const on = toggleFav(d.id);
+      fav.classList.toggle("on", on); fav.innerHTML = on ? "♥" : "♡";
+      if(favOnly) applyFilters();
+    };
+    imgWrap.appendChild(fav);
     const body = document.createElement("div");
     body.className="card-body";
     body.innerHTML =
@@ -233,17 +255,42 @@
     pagination.appendChild(mk("›", page+1, {disabled: page===totalPages-1}));
   }
 
+  // —— URL 状态同步（筛选 → 查询串，详情 → #art-id，皆可分享）——
+  const modalOpen = () => $("modal").classList.contains("open");
+  function currentModalId(){ return (modalOpen() && modalEntry) ? modalEntry.id : null; }
+  function syncURL(){
+    const p = new URLSearchParams();
+    if(searchInput.value.trim()) p.set("q", searchInput.value.trim());
+    if(eraFilter.value) p.set("era", eraFilter.value);
+    if(mediumFilter.value) p.set("medium", mediumFilter.value);
+    if(countryFilter.value) p.set("region", countryFilter.value);
+    if(periodFilter) p.set("period", periodFilter);
+    if(timelineMode) p.set("timeline", "1");
+    if(favOnly) p.set("fav", "1");
+    const qs = p.toString();
+    const mid = currentModalId();
+    const url = location.pathname + (qs ? ("?" + qs) : "") + (mid ? ("#art-" + mid) : "");
+    try{ history.replaceState(null, "", url); }catch(e){}
+  }
+  function restoreFromURL(){
+    const p = new URLSearchParams(location.search);
+    if(p.get("q")) searchInput.value = p.get("q");
+    if(p.get("era")) eraFilter.value = p.get("era");
+    if(p.get("medium")) mediumFilter.value = p.get("medium");
+    if(p.get("region")) countryFilter.value = p.get("region");
+    if(p.get("period")) periodFilter = p.get("period");
+    if(p.get("timeline") === "1"){ timelineMode = true; timelineBar.classList.add("show"); $("timeline-btn").classList.add("active"); }
+    if(p.get("fav") === "1"){ favOnly = true; $("fav-only-btn").classList.add("active"); }
+  }
+
   // —— 详情弹窗 ——
   let modalEntry = null, modalIndex = -1;
-  function setHash(id){
-    try{ history.replaceState(null, "", id ? ("#art-"+id) : (location.pathname+location.search)); }catch(e){}
-  }
   function openModal(d){
     modalEntry = d; modalIndex = filtered.indexOf(d);
     fillModal(d);
     $("modal").classList.add("open");
     document.body.style.overflow = "hidden";
-    setHash(d.id);
+    syncURL();
   }
   function fillModal(d){
     modalEntry = d;
@@ -265,6 +312,9 @@
     $("modal-country").textContent=F(d,"country");
     $("modal-desc").textContent=F(d,"desc");
     $("modal-num").textContent = lang==="zh" ? `第 ${d.id} / 1001 ${T("of_total")}` : `${d.id} / 1001`;
+    const mf = $("modal-fav");
+    mf.classList.toggle("on", isFav(d.id));
+    mf.innerHTML = (isFav(d.id) ? "♥ " : "♡ ") + T(isFav(d.id) ? "fav_on" : "fav");
   }
   function showModalPlaceholder(d){
     const ph=$("modal-placeholder");
@@ -276,13 +326,13 @@
       `<span class="mph-note">${esc(T("img_na"))}</span>`+
       `<a class="mph-wiki" href="${esc(wikiURL(d))}" target="_blank" rel="noopener">${esc(T("view_wiki"))} ↗</a>`;
   }
-  function closeModal(){ $("modal").classList.remove("open"); document.body.style.overflow=""; setHash(null); }
+  function closeModal(){ $("modal").classList.remove("open"); document.body.style.overflow=""; syncURL(); }
   function navModal(dir){
     if(filtered.length===0) return;
     modalIndex=(modalIndex+dir+filtered.length)%filtered.length;
     modalEntry=filtered[modalIndex];
     fillModal(modalEntry);
-    setHash(modalEntry.id);
+    syncURL();
   }
 
   // —— 高清灯箱（缩放 / 平移）——
@@ -318,9 +368,28 @@
 
   lbStage.addEventListener("wheel", e=>{ e.preventDefault(); lbZoom(e.deltaY<0?1.15:0.87, e.clientX, e.clientY); }, {passive:false});
   lbStage.addEventListener("dblclick", e=>{ lbZoom(scale>1?0.001:2.4, e.clientX, e.clientY); });
-  lbStage.addEventListener("pointerdown", e=>{ if(scale<=1) return; dragging=true; lbStage.classList.add("grabbing"); sx=e.clientX; sy=e.clientY; stx=tx; sty=ty; lbStage.setPointerCapture(e.pointerId); });
-  lbStage.addEventListener("pointermove", e=>{ if(!dragging) return; tx=stx+(e.clientX-sx); ty=sty+(e.clientY-sy); lbApply(); });
-  lbStage.addEventListener("pointerup", e=>{ dragging=false; lbStage.classList.remove("grabbing"); });
+  // 指针：单指拖动平移，双指捏合缩放
+  const pts = new Map();
+  let lastPinch = 0;
+  lbStage.addEventListener("pointerdown", e=>{
+    pts.set(e.pointerId, {x:e.clientX, y:e.clientY});
+    lbStage.setPointerCapture(e.pointerId);
+    if(pts.size===1 && scale>1){ dragging=true; lbStage.classList.add("grabbing"); sx=e.clientX; sy=e.clientY; stx=tx; sty=ty; }
+    else if(pts.size===2){ dragging=false; lastPinch=0; }
+  });
+  lbStage.addEventListener("pointermove", e=>{
+    if(!pts.has(e.pointerId)) return;
+    pts.set(e.pointerId, {x:e.clientX, y:e.clientY});
+    if(pts.size===2){
+      const [a,b] = [...pts.values()];
+      const dist = Math.hypot(a.x-b.x, a.y-b.y);
+      if(lastPinch) lbZoom(dist/lastPinch, (a.x+b.x)/2, (a.y+b.y)/2);
+      lastPinch = dist;
+    } else if(dragging){ tx=stx+(e.clientX-sx); ty=sty+(e.clientY-sy); lbApply(); }
+  });
+  function lbPointerEnd(e){ pts.delete(e.pointerId); if(pts.size<2) lastPinch=0; if(pts.size===0){ dragging=false; lbStage.classList.remove("grabbing"); } }
+  lbStage.addEventListener("pointerup", lbPointerEnd);
+  lbStage.addEventListener("pointercancel", lbPointerEnd);
   $("lb-zoomin").onclick=()=>lbZoom(1.4); $("lb-zoomout").onclick=()=>lbZoom(0.7); $("lb-reset").onclick=lbReset; $("lb-close").onclick=closeLightbox;
 
   // —— 语言切换 ——
@@ -335,6 +404,7 @@
     searchInput.placeholder = T("search_ph");
     rebuildSelects();
     $("timeline-btn").textContent = timelineMode ? T("timeline_off") : T("timeline");
+    $("fav-only-btn").innerHTML = "♥ " + T("fav_only");
     $("random-btn").textContent = T("random");
     $("l-date").textContent = T("m_date");
     $("l-medium").textContent = T("m_medium");
@@ -371,6 +441,18 @@
     if(!timelineMode){ periodFilter=null; buildTimelineBar(); }
     applyFilters();
   };
+  $("fav-only-btn").onclick=(e)=>{
+    favOnly=!favOnly;
+    e.currentTarget.classList.toggle("active", favOnly);
+    applyFilters();
+  };
+  $("modal-fav").onclick=()=>{
+    if(!modalEntry) return;
+    const on=toggleFav(modalEntry.id);
+    const mf=$("modal-fav");
+    mf.classList.toggle("on", on); mf.innerHTML=(on?"♥ ":"♡ ")+T(on?"fav_on":"fav");
+    if(favOnly) applyFilters();
+  };
   $("random-btn").onclick=()=>{ if(filtered.length) openModal(filtered[Math.floor(Math.random()*filtered.length)]); };
   $("view-toggle").onclick=(e)=>{ listView=!listView; e.target.textContent=listView?"☰":"⊞"; render(); };
   $("modal-close").onclick=closeModal;
@@ -394,7 +476,8 @@
   $("reset-btn").onclick = () => window.resetFilters();
   window.resetFilters = function(){
     searchInput.value=""; eraFilter.value=""; mediumFilter.value=""; countryFilter.value="";
-    periodFilter=null; buildTimelineBar(); applyFilters();
+    periodFilter=null; favOnly=false; $("fav-only-btn").classList.remove("active");
+    buildTimelineBar(); applyFilters();
   };
 
   function esc(s){ return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
@@ -417,6 +500,10 @@
 
   // —— 启动 ——
   buildTrMaps();
-  applyLang();
-  openFromHash();
+  applyLang();          // 构建下拉/标签/时间线，首次渲染
+  restoreFromURL();     // 从 URL 恢复筛选状态
+  buildTimelineBar();   // 反映恢复后的 period 高亮
+  const wantId = (location.hash.match(/^#art-(\d+)$/) || [])[1];  // 先抓取深链 id（applyFilters 的 syncURL 会清掉 hash）
+  applyFilters();       // 应用已恢复的筛选
+  if(wantId){ const d = DATA.find(x => x.id === +wantId); if(d) openModal(d); }
 })();

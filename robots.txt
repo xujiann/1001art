@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://xujiann.github.io/1001art/sitemap.xml
