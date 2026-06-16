@@ -2,7 +2,7 @@
    - 外壳（HTML/CSS/JS）：stale-while-revalidate
    - 本地图片（images/）：cache-first，按需缓存，离线可回看已浏览作品
 */
-const SHELL = "art1001-shell-v1";
+const SHELL = "art1001-shell-v2";
 const IMGS  = "art1001-img-v1";
 const SHELL_ASSETS = [
   "./", "./index.html", "./style.css", "./lang.js", "./data.js", "./app.js", "./manifest.webmanifest"
@@ -25,6 +25,19 @@ self.addEventListener("fetch", e => {
   if (req.method !== "GET") return;
   const url = new URL(req.url);
   if (url.origin !== location.origin) return; // 仅处理同源
+
+  // 页面与数据：network-first（在线总是最新，离线回退缓存）
+  const p = url.pathname;
+  const isDoc = req.mode === "navigate" || p.endsWith("/") || p.endsWith("/index.html") || p.endsWith("/data.js");
+  if (isDoc) {
+    e.respondWith(
+      fetch(req).then(res => {
+        if (res.ok) { const cl = res.clone(); caches.open(SHELL).then(c => c.put(req, cl)); }
+        return res;
+      }).catch(() => caches.match(req).then(hit => hit || caches.match("./index.html")))
+    );
+    return;
+  }
 
   // 图片：cache-first，命中即返回，未命中则取回并缓存
   if (url.pathname.includes("/images/")) {
