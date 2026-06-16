@@ -10,31 +10,28 @@
   const T = k => (LANG.ui[lang] && LANG.ui[lang][k]) || (LANG.ui.zh[k] || k);
   // 取条目的当前语言字段
   const F = (d, base) => (lang === "en" && d[base + "_en"]) ? d[base + "_en"] : d[base];
-  // 字段翻译（下拉用：value 始终为中文，label 随语言）
-  function tr(kind, zh){ return (lang === "en" && LANG.dict[kind] && LANG.dict[kind][zh]) ? LANG.dict[kind][zh] : zh; }
+  // 字段翻译（下拉/标签用：value 恒为中文，label 随语言）——映射从数据自身构建
+  const TRMAP = { era:{}, medium:{}, country:{} };
+  function buildTrMaps(){
+    DATA.forEach(d => {
+      if(d.era) TRMAP.era[d.era] = d.era_en || d.era;
+      if(d.medium) TRMAP.medium[d.medium] = d.medium_en || d.medium;
+      if(d.country) TRMAP.country[d.country] = d.country_en || d.country;
+    });
+  }
+  function tr(kind, zh){ return (lang === "en" && TRMAP[kind] && TRMAP[kind][zh]) ? TRMAP[kind][zh] : zh; }
 
-  // —— 时代 → 占位主题类 ——
-  const ERA_THEME = {
-    "古埃及":"era-egypt","古希腊":"era-greece","古罗马":"era-rome","拜占庭":"era-byzantine",
-    "文艺复兴":"era-renaissance","北方文艺复兴":"era-renaissance","风格主义":"era-renaissance",
-    "巴洛克":"era-baroque","洛可可":"era-rococo","古典主义":"era-neoclassic","新古典主义":"era-neoclassic",
-    "浪漫主义":"era-romantic","现实主义":"era-realism","拉斐尔前派":"era-romantic","印象派":"era-impressionism",
-    "后印象派":"era-impressionism","象征主义":"era-gothic","表现主义":"era-modern","野兽派":"era-modern",
-    "立体主义":"era-modern","抽象艺术":"era-modern","至上主义":"era-modern","风格派":"era-modern",
-    "包豪斯":"era-modern","达达主义":"era-modern","超现实主义":"era-modern","形而上画派":"era-modern",
-    "未来主义":"era-modern","抽象表现主义":"era-contemporary","色域绘画":"era-contemporary",
-    "波普艺术":"era-contemporary","新达达主义":"era-contemporary","街头艺术":"era-contemporary",
-    "美国现实主义":"era-realism","美国现代主义":"era-modern","素朴艺术":"era-impressionism",
-    "现代雕塑":"era-modern","中国秦代":"era-ancient","中国宋代":"era-ancient","中国元代":"era-ancient",
-    "中国魏晋":"era-ancient","中国五代":"era-ancient","中国唐代":"era-ancient","中国清代":"era-ancient",
-    "中国近现代":"era-modern","中国当代":"era-contemporary","中国佛教艺术":"era-ancient",
-    "伊斯兰艺术":"era-medieval","莫卧儿建筑":"era-medieval","浮世绘":"era-realism","巡回画派":"era-realism",
-  };
-  const eraTheme = era => ERA_THEME[era] || "era-default";
+  // —— 时代 → 占位主题类（每条数据自带 th 主题后缀）——
+  const eraTheme = d => "era-" + ((d && d.th) ? d.th : "default");
 
-  // —— 图片尺寸派生（从 width=500 缩略图推导）——
-  const imgBase = url => url ? url.replace(/\?width=\d+$/, "") : null;
-  function imgSized(url, w){ const b = imgBase(url); return b ? (w ? b + "?width=" + w : b) : null; }
+  // —— 图片：本地缓存优先；file 仅用于「查看原图」外链 ——
+  const FP = "https://commons.wikimedia.org/wiki/Special:FilePath/";
+  function originalURL(file){
+    if(!file) return null;
+    let f = file;
+    try{ if(/%[0-9A-Fa-f]{2}/.test(file)) f = decodeURIComponent(file); }catch(e){}
+    return FP + encodeURIComponent(f);
+  }
 
   // —— 时间线分期 ——
   function periodKey(sy){
@@ -179,12 +176,11 @@
     card.onkeydown = e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openModal(d); } };
     const imgWrap = document.createElement("div");
     imgWrap.className = "card-img-wrap";
-    if(d.img){
+    if(d.thumb){
       imgWrap.classList.add("loading");
       const img = document.createElement("img");
       img.loading="lazy"; img.decoding="async"; img.alt=F(d,"title");
-      img.src=imgSized(d.img,500);
-      img.srcset=imgSized(d.img,500)+" 1x, "+imgSized(d.img,1000)+" 2x";
+      img.src=d.thumb;
       img.onload = () => { img.classList.add("loaded"); imgWrap.classList.remove("loading"); imgWrap.classList.add("loaded"); };
       img.onerror = () => { imgWrap.classList.remove("loading"); imgWrap.innerHTML = placeholderHTML(d); };
       imgWrap.appendChild(img);
@@ -205,7 +201,7 @@
   }
 
   function placeholderHTML(d){
-    return `<div class="card-placeholder ${eraTheme(d.era)}">`+
+    return `<div class="card-placeholder ${eraTheme(d)}">`+
       `<div class="ph-inner"><span class="ph-glyph">❖</span>`+
       `<span class="ph-title">${esc(F(d,"title"))}</span>`+
       `<span class="ph-artist">${esc(F(d,"artist"))}</span></div></div>`+
@@ -254,7 +250,7 @@
     const img=$("modal-img"), ph=$("modal-placeholder"), badge=$("zoom-badge");
     const wrap=$("modal-img-wrap");
     if(d.img){
-      img.style.display="block"; img.src=imgSized(d.img,1280); img.alt=F(d,"title");
+      img.style.display="block"; img.src=d.img; img.alt=F(d,"title");
       ph.classList.remove("show"); badge.style.display="flex"; wrap.style.cursor="zoom-in";
       img.onerror = () => { img.style.display="none"; badge.style.display="none"; wrap.style.cursor="default"; showModalPlaceholder(d); };
     } else {
@@ -272,7 +268,7 @@
   }
   function showModalPlaceholder(d){
     const ph=$("modal-placeholder");
-    ph.className="modal-img-placeholder show "+eraTheme(d.era);
+    ph.className="modal-img-placeholder show "+eraTheme(d);
     ph.innerHTML=
       `<span class="ph-glyph">❖</span>`+
       `<span class="mph-title">${esc(F(d,"title"))}</span>`+
@@ -307,12 +303,13 @@
     if(!d || !d.img) return;
     lbReset();
     lbSpinner.classList.add("show");
-    const big=imgSized(d.img,2500);
     lbImg.onload=()=>lbSpinner.classList.remove("show");
-    lbImg.onerror=()=>{ lbSpinner.classList.remove("show"); lbImg.src=imgSized(d.img,1280); };
-    lbImg.src=big; lbImg.alt=F(d,"title");
+    lbImg.onerror=()=>lbSpinner.classList.remove("show");
+    lbImg.src=d.img; lbImg.alt=F(d,"title");
     $("lb-caption").textContent = F(d,"title")+" · "+F(d,"artist");
-    $("lb-original").href = imgBase(d.img);
+    const orig = originalURL(d.file);
+    const ol = $("lb-original");
+    if(orig){ ol.href = orig; ol.style.display=""; } else { ol.style.display="none"; }
     lb.classList.add("open");
     const hint=$("lb-hint"); hint.classList.remove("fade");
     clearTimeout(hintTimer); hintTimer=setTimeout(()=>hint.classList.add("fade"), 2600);
@@ -419,6 +416,7 @@
   window.addEventListener("hashchange", openFromHash);
 
   // —— 启动 ——
+  buildTrMaps();
   applyLang();
   openFromHash();
 })();

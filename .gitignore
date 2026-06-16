@@ -3,7 +3,8 @@ node_modules/
 Thumbs.db
 .claude/
 
-# 临时构建脚本与中间产物
-_*.mjs
-_resolved.json
+# 临时构建脚本与中间产物（_ 前缀），运行时不需要
+_*
+
+# 旧的外链图片映射（已被本地缓存取代）
 images.json
