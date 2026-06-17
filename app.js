@@ -231,12 +231,20 @@
     render();
   }
 
+  // —— 屏幕阅读器播报 ——
+  function announce(msg){ const l=$("live"); if(l) l.textContent = msg; }
+
   // —— 渲染 ——
   function render(){
     $("shown-count").textContent = filtered.length;
     if(filtered.length === 0){
-      gallery.innerHTML=""; pagination.innerHTML=""; noResults.style.display="block"; return;
+      gallery.innerHTML=""; pagination.innerHTML="";
+      $("t-noresults").textContent = favOnly ? T("fav_empty") : T("no_results");
+      noResults.style.display="block";
+      announce(favOnly ? T("fav_empty") : T("no_results"));
+      return;
     }
+    announce(filtered.length + " " + T("works"));
     noResults.style.display = "none";
     const totalPages = Math.ceil(filtered.length / PER_PAGE);
     if(page >= totalPages) page = totalPages - 1;
@@ -358,13 +366,15 @@
   }
 
   // —— 详情弹窗 ——
-  let modalEntry = null, modalIndex = -1;
+  let modalEntry = null, modalIndex = -1, lastFocus = null;
   function openModal(d){
+    if(!modalOpen()) lastFocus = document.activeElement;   // 记住触发元素以便归还焦点
     modalEntry = d; modalIndex = filtered.indexOf(d);
     fillModal(d);
     $("modal").classList.add("open");
     document.body.style.overflow = "hidden";
     syncURL();
+    setTimeout(() => { try{ $("modal-close").focus(); }catch(e){} }, 30);
   }
   function fillModal(d){
     modalEntry = d;
@@ -389,6 +399,10 @@
     const mf = $("modal-fav");
     mf.classList.toggle("on", isFav(d.id));
     mf.innerHTML = (isFav(d.id) ? "♥ " : "♡ ") + T(isFav(d.id) ? "fav_on" : "fav");
+    const al = $("modal-artist-link");
+    const akey = d.artist_en || d.artist;
+    if(artistFilter === akey){ al.style.display = "none"; }
+    else { al.style.display = ""; al.textContent = T("more_by"); }
   }
   function showModalPlaceholder(d){
     const ph=$("modal-placeholder");
@@ -400,7 +414,7 @@
       `<span class="mph-note">${esc(T("img_na"))}</span>`+
       `<a class="mph-wiki" href="${esc(wikiURL(d))}" target="_blank" rel="noopener">${esc(T("view_wiki"))} ↗</a>`;
   }
-  function closeModal(){ $("modal").classList.remove("open"); document.body.style.overflow=""; syncURL(); }
+  function closeModal(){ $("modal").classList.remove("open"); document.body.style.overflow=""; syncURL(); try{ lastFocus && lastFocus.focus(); }catch(e){} }
   function navModal(dir){
     if(filtered.length===0) return;
     modalIndex=(modalIndex+dir+filtered.length)%filtered.length;
@@ -487,6 +501,7 @@
     $("l-country").textContent = T("m_country");
     $("prev-art").textContent = T("prev");
     $("next-art").textContent = T("next");
+    $("modal-share").title = T("share");
     $("t-original").textContent = T("view_original");
     $("lb-hint").textContent = T("zoom_hint");
     $("t-noresults").textContent = T("no_results");
@@ -531,6 +546,18 @@
     mf.classList.toggle("on", on); mf.innerHTML=(on?"♥ ":"♡ ")+T(on?"fav_on":"fav");
     if(favOnly) applyFilters();
   };
+  $("modal-artist-link").onclick=()=>{
+    if(!modalEntry) return;
+    const key = modalEntry.artist_en || modalEntry.artist;
+    closeModal();
+    selectArtist(key);
+  };
+  $("modal-share").onclick=async()=>{
+    try{ await navigator.clipboard.writeText(location.href); }catch(e){ return; }
+    const b=$("modal-share"); const old=b.innerHTML; b.innerHTML="✓"; b.classList.add("done");
+    announce(T("shared"));
+    setTimeout(()=>{ b.innerHTML=old; b.classList.remove("done"); }, 1400);
+  };
   $("random-btn").onclick=()=>{ if(filtered.length) openModal(filtered[Math.floor(Math.random()*filtered.length)]); };
   $("view-toggle").onclick=(e)=>{ listView=!listView; e.target.textContent=listView?"☰":"⊞"; render(); };
   $("modal-close").onclick=closeModal;
@@ -550,6 +577,14 @@
     if(e.key==="Escape") closeModal();
     else if(e.key==="ArrowLeft") navModal(-1);
     else if(e.key==="ArrowRight") navModal(1);
+    else if(e.key==="Tab"){   // 焦点陷阱：Tab 循环停留在弹窗内
+      const box=$("modal").querySelector(".modal-box");
+      const f=[...box.querySelectorAll('button, a[href], [tabindex]:not([tabindex="-1"])')].filter(el=>el.offsetParent!==null);
+      if(!f.length) return;
+      const first=f[0], last=f[f.length-1];
+      if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+    }
   });
   $("reset-btn").onclick = () => window.resetFilters();
   window.resetFilters = function(){

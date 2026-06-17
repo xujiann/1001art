@@ -2,7 +2,7 @@
    - 外壳（HTML/CSS/JS）：stale-while-revalidate
    - 本地图片（images/）：cache-first，按需缓存，离线可回看已浏览作品
 */
-const SHELL = "art1001-shell-v3";
+const SHELL = "art1001-shell-v4";
 const IMGS  = "art1001-img-v1";
 const SHELL_ASSETS = [
   "./", "./index.html", "./style.css", "./lang.js", "./data.js", "./app.js", "./manifest.webmanifest"

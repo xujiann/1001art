@@ -17,9 +17,9 @@ ui: {
     view_original:"查看原图", download:"下载", close:"关闭",
     no_results:"未找到符合条件的作品", reset:"重置筛选",
     img_na:"暂无可公开展示的图片（多为版权保护作品）", view_wiki:"在 Wikipedia 查看",
-    fav:"收藏", fav_on:"已收藏", fav_only:"仅看收藏", fav_empty:"还没有收藏任何作品",
+    fav:"收藏", fav_on:"已收藏", fav_only:"仅看收藏", fav_empty:"还没有收藏任何作品，点卡片上的 ♡ 即可收藏",
     by_artist:"按艺术家", all_artists:"全部艺术家", artist_works:"件作品",
-    share:"复制链接", shared:"链接已复制",
+    more_by:"查看该艺术家全部作品 →", share:"复制链接", shared:"链接已复制 ✓",
     footer:"精选人类历史上的著名艺术作品 · 从史前壁画到当代艺术",
     lang_btn:"EN"
   },
@@ -37,9 +37,9 @@ ui: {
     view_original:"View original", download:"Download", close:"Close",
     no_results:"No works match your filters", reset:"Reset filters",
     img_na:"No public image available (often under copyright)", view_wiki:"View on Wikipedia",
-    fav:"Favorite", fav_on:"Favorited", fav_only:"Favorites", fav_empty:"No favorites yet",
+    fav:"Favorite", fav_on:"Favorited", fav_only:"Favorites", fav_empty:"No favorites yet — tap ♡ on any card to save it",
     by_artist:"By artist", all_artists:"All artists", artist_works:"works",
-    share:"Copy link", shared:"Link copied",
+    more_by:"View all works by this artist →", share:"Copy link", shared:"Link copied ✓",
     footer:"A curated selection of famous works of art · from cave paintings to contemporary art",
     lang_btn:"中文"
   }

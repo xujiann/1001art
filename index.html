@@ -76,10 +76,14 @@
       <div class="modal-info">
         <div class="modal-head">
           <div class="modal-era-badge" id="modal-era"></div>
-          <button class="modal-fav" id="modal-fav">♡ 收藏</button>
+          <div class="modal-head-actions">
+            <button class="modal-fav" id="modal-fav">♡ 收藏</button>
+            <button class="modal-share" id="modal-share" title="复制链接">⎘</button>
+          </div>
         </div>
         <h2 id="modal-title"></h2>
         <p class="modal-artist" id="modal-artist"></p>
+        <button class="modal-artist-link" id="modal-artist-link">查看该艺术家全部作品 →</button>
         <dl class="modal-meta">
           <dt id="l-date">年代</dt><dd id="modal-year"></dd>
           <dt id="l-medium">媒材</dt><dd id="modal-medium"></dd>
@@ -120,6 +124,7 @@
   <button id="reset-btn">重置筛选</button>
 </div>
 
+<div id="live" class="sr-only" aria-live="polite"></div>
 <button id="to-top" class="to-top" aria-label="回到顶部" title="回到顶部">↑</button>
 
 <footer class="site-footer">
