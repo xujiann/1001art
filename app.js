@@ -219,12 +219,18 @@
       if(periodFilter && periodKey(d.sy) !== periodFilter) return false;
       if(q){
         const hay = (d.title+" "+d.artist+" "+d.year+" "+d.era+" "+d.medium+" "+d.location+" "+
-          (d.title_en||"")+" "+(d.artist_en||"")+" "+(d.era_en||"")+" "+(d.location_en||"")).toLowerCase();
+          (d.title_en||"")+" "+(d.artist_en||"")+" "+(d.era_en||"")+" "+(d.location_en||"")+" "+(d.py||"")).toLowerCase();
         if(!hay.includes(q)) return false;
       }
       return true;
     });
-    if(timelineMode) filtered.sort((a,b)=>a.sy-b.sy);
+    if(timelineMode){ filtered.sort((a,b)=>a.sy-b.sy); }
+    else {
+      const sf = $("sort-filter").value;
+      if(sf==="year_asc") filtered.sort((a,b)=>a.sy-b.sy);
+      else if(sf==="year_desc") filtered.sort((a,b)=>b.sy-a.sy);
+      else if(sf==="title") filtered.sort((a,b)=>F(a,"title").localeCompare(F(b,"title"), lang==="en"?"en":"zh"));
+    }
     page = 0;
     buildTabs();
     syncURL();
@@ -349,6 +355,7 @@
     if(favOnly) p.set("fav", "1");
     if(artistFilter) p.set("artist", artistFilter);
     else if(artistIndexOn) p.set("view", "artists");
+    const sf = $("sort-filter").value; if(sf && sf !== "default") p.set("sort", sf);
     const qs = p.toString();
     const mid = currentModalId();
     const url = location.pathname + (qs ? ("?" + qs) : "") + (mid ? ("#art-" + mid) : "");
@@ -363,6 +370,7 @@
     if(p.get("period")) periodFilter = p.get("period");
     if(p.get("timeline") === "1"){ timelineMode = true; timelineBar.classList.add("show"); $("timeline-btn").classList.add("active"); }
     if(p.get("fav") === "1"){ favOnly = true; $("fav-only-btn").classList.add("active"); }
+    if(p.get("sort")) $("sort-filter").value = p.get("sort");
   }
 
   // —— 详情弹窗 ——
@@ -489,11 +497,20 @@
     $("t-works").textContent = T("works");
     $("t-eras").textContent = T("eras");
     $("t-artists").textContent = T("artists");
-    searchInput.placeholder = T("search_ph");
+    searchInput.placeholder = T("search_ph2");
     rebuildSelects();
     $("timeline-btn").textContent = timelineMode ? T("timeline_off") : T("timeline");
     $("fav-only-btn").innerHTML = "♥ " + T("fav_only");
     $("artist-btn").textContent = T("by_artist");
+    $("daily-btn").textContent = T("daily");
+    const so = $("sort-filter").options;
+    so[0].textContent = T("sort_default"); so[1].textContent = T("sort_year_asc");
+    so[2].textContent = T("sort_year_desc"); so[3].textContent = T("sort_title");
+    $("help-title").textContent = T("kbd");
+    $("kbd-search").textContent = T("kbd_search"); $("kbd-random").textContent = T("kbd_random");
+    $("kbd-artist").textContent = T("kbd_artist"); $("kbd-timeline").textContent = T("kbd_timeline");
+    $("kbd-fav").textContent = T("kbd_fav"); $("kbd-nav").textContent = T("kbd_nav");
+    $("kbd-close").textContent = T("kbd_close"); $("kbd-help").textContent = T("kbd_help");
     $("random-btn").textContent = T("random");
     $("l-date").textContent = T("m_date");
     $("l-medium").textContent = T("m_medium");
@@ -560,6 +577,22 @@
   };
   $("random-btn").onclick=()=>{ if(filtered.length) openModal(filtered[Math.floor(Math.random()*filtered.length)]); };
   $("view-toggle").onclick=(e)=>{ listView=!listView; e.target.textContent=listView?"☰":"⊞"; render(); };
+  $("sort-filter").onchange=applyFilters;
+  // —— 每日一作（按日期确定，每天稳定）——
+  function dailyArtwork(){
+    const withImg = DATA.filter(d=>d.img);
+    if(!withImg.length) return;
+    const day = Math.floor(Date.now()/86400000);
+    const idx = ((day*2654435761) % withImg.length + withImg.length) % withImg.length;
+    openModal(withImg[idx]);
+  }
+  $("daily-btn").onclick=dailyArtwork;
+  // —— 快捷键帮助 ——
+  function openHelp(){ $("help-overlay").classList.add("open"); setTimeout(()=>{ try{ $("help-close").focus(); }catch(e){} }, 30); }
+  function closeHelp(){ $("help-overlay").classList.remove("open"); }
+  $("help-btn").onclick=openHelp;
+  $("help-close").onclick=closeHelp;
+  $("help-overlay").addEventListener("click", e=>{ if(e.target===$("help-overlay")) closeHelp(); });
   $("modal-close").onclick=closeModal;
   $("prev-art").onclick=()=>navModal(-1);
   $("next-art").onclick=()=>navModal(1);
@@ -586,9 +619,24 @@
       else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
     }
   });
+  // —— 全局快捷键 ——
+  document.addEventListener("keydown", e=>{
+    if($("help-overlay").classList.contains("open")){ if(e.key==="Escape"||e.key==="?") closeHelp(); return; }
+    if(lb.classList.contains("open") || modalOpen()) return;   // 弹窗/灯箱有各自键盘处理
+    if(e.key==="?"){ e.preventDefault(); openHelp(); return; }
+    const tag=(e.target.tagName||"").toLowerCase();
+    if(tag==="input"||tag==="select"||tag==="textarea"){ if(e.key==="Escape") e.target.blur(); return; }
+    if(e.metaKey||e.ctrlKey||e.altKey) return;
+    if(e.key==="/"){ e.preventDefault(); searchInput.focus(); }
+    else if(e.key==="r"||e.key==="R"){ $("random-btn").click(); }
+    else if(e.key==="a"||e.key==="A"){ $("artist-btn").click(); }
+    else if(e.key==="t"||e.key==="T"){ $("timeline-btn").click(); }
+    else if(e.key==="f"||e.key==="F"){ $("fav-only-btn").click(); }
+  });
+
   $("reset-btn").onclick = () => window.resetFilters();
   window.resetFilters = function(){
-    searchInput.value=""; eraFilter.value=""; mediumFilter.value=""; countryFilter.value="";
+    searchInput.value=""; eraFilter.value=""; mediumFilter.value=""; countryFilter.value=""; $("sort-filter").value="default";
     periodFilter=null; favOnly=false; $("fav-only-btn").classList.remove("active");
     artistFilter=null; artistIndexOn=false;
     artistIndex.style.display="none"; artistBar.style.display="none";
