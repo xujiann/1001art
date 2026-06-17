@@ -17,7 +17,7 @@ const THEMES = new Set(["prehistoric","ancient","egypt","greece","rome","byzanti
 const errs = [];
 const warns = [];
 
-if (DATA.length !== 1001) errs.push(`作品总数应为 1001，实际 ${DATA.length}`);
+if (DATA.length < 1000) errs.push(`作品总数异常偏少：${DATA.length}`);
 
 const ids = new Set();
 let withImg = 0, placeholders = 0;

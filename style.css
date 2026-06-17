@@ -62,6 +62,24 @@ select:focus{border-color:var(--accent)}
 .era-tab:hover{border-color:var(--accent);color:var(--accent2)}
 .era-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
 
+/* 按艺术家：索引网格 */
+.artist-index{max-width:1400px;margin:0 auto;padding:0.5rem 2rem 1rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:1.1rem}
+.artist-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--card-r);overflow:hidden;cursor:pointer;transition:transform var(--trans),border-color var(--trans),box-shadow var(--trans)}
+.artist-card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 8px 30px rgba(124,106,247,0.15)}
+.artist-thumb{width:100%;aspect-ratio:1/1;overflow:hidden;background:var(--bg3);position:relative}
+.artist-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.4s ease}
+.artist-card:hover .artist-thumb img{transform:scale(1.05)}
+.artist-noimg{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2rem;color:rgba(255,255,255,0.15)}
+.artist-meta{padding:0.6rem 0.75rem}
+.artist-name{font-size:0.85rem;font-weight:600;color:var(--text);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.artist-count{font-size:0.72rem;color:var(--accent2);margin-top:0.25rem}
+/* 面包屑栏 */
+.artist-bar{max-width:1400px;margin:0 auto;padding:0.4rem 2rem 0.2rem;display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap}
+.artist-bar .crumb{background:none;border:none;color:var(--accent2);font-size:0.85rem;cursor:pointer;padding:0.3rem 0;display:inline-flex;align-items:center;gap:4px}
+.artist-bar .crumb:hover{text-decoration:underline}
+.artist-bar .cur{font-size:1rem;font-weight:600;color:var(--text)}
+.artist-bar .cur small{font-size:0.78rem;color:var(--text3);font-weight:400;margin-left:6px}
+
 .gallery{max-width:1400px;margin:0 auto;padding:0.5rem 2rem 1rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.25rem}
 .gallery.list-view{grid-template-columns:1fr;gap:0.6rem}
 

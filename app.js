@@ -4,6 +4,7 @@
   const DATA = window.ART_DATA || [];
   const LANG = window.LANG || {ui:{zh:{},en:{}},dict:{}};
   const PER_PAGE = 48;
+  const TOTAL = DATA.length;
 
   // —— 语言状态 ——
   let lang = (localStorage.getItem("art1001_lang") === "en") ? "en" : "zh";
@@ -55,6 +56,8 @@
   let timelineMode = false;
   let periodFilter = null;
   let favOnly = false;
+  let artistFilter = null;     // 选中的艺术家 key（artist_en）
+  let artistIndexOn = false;   // 是否正在显示艺术家索引
 
   // —— 收藏（localStorage 持久化）——
   const FAV_KEY = "art1001_favs";
@@ -70,6 +73,7 @@
   const eraFilter = $("era-filter"), mediumFilter = $("medium-filter"), countryFilter = $("country-filter");
   const eraTabs = $("era-tabs"), timelineBar = $("timeline-bar");
   const pagination = $("pagination"), noResults = $("no-results");
+  const artistIndex = $("artist-index"), artistBar = $("artist-bar");
 
   // —— 下拉选项（value=中文，label 随语言）——
   function uniq(key){
@@ -135,11 +139,79 @@
     });
   }
 
+  // —— 按艺术家聚合 ——
+  const artistAgg = (() => {
+    const m = new Map();
+    DATA.forEach(d => {
+      const k = d.artist_en || d.artist;
+      let a = m.get(k);
+      if(!a){ a = {key:k, zh:d.artist, en:d.artist_en || d.artist, n:0, rep:null}; m.set(k, a); }
+      a.n++; if(!a.rep && d.thumb) a.rep = d;
+    });
+    return [...m.values()].sort((x,y) => y.n - x.n || x.en.localeCompare(y.en));
+  })();
+  const artistName = a => (lang === "en" ? a.en : a.zh) || a.en;
+
+  function renderArtistIndex(){
+    const frag = document.createDocumentFragment();
+    artistAgg.forEach(a => {
+      const card = document.createElement("div");
+      card.className = "artist-card"; card.tabIndex = 0;
+      card.setAttribute("role","button"); card.setAttribute("aria-label", artistName(a));
+      const open = () => selectArtist(a.key);
+      card.onclick = open;
+      card.onkeydown = e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); open(); } };
+      const thumb = (a.rep && a.rep.thumb)
+        ? `<img loading="lazy" decoding="async" src="${a.rep.thumb}" alt="">`
+        : `<div class="artist-noimg">❖</div>`;
+      card.innerHTML = `<div class="artist-thumb">${thumb}</div>`+
+        `<div class="artist-meta"><div class="artist-name">${esc(artistName(a))}</div>`+
+        `<div class="artist-count">${a.n} ${esc(T("works"))}</div></div>`;
+      frag.appendChild(card);
+    });
+    artistIndex.innerHTML = ""; artistIndex.appendChild(frag);
+  }
+  function showArtistIndex(){
+    artistIndexOn = true; artistFilter = null;
+    renderArtistIndex();
+    artistIndex.style.display = "grid";
+    artistBar.style.display = "none";
+    gallery.style.display = "none"; pagination.innerHTML = ""; noResults.style.display = "none";
+    eraTabs.style.display = "none"; timelineBar.classList.remove("show");
+    $("artist-btn").classList.add("active");
+    $("shown-count").textContent = artistAgg.length;
+    syncURL();
+    window.scrollTo({top:0, behavior:"smooth"});
+  }
+  function selectArtist(key){
+    artistFilter = key; artistIndexOn = false;
+    artistIndex.style.display = "none"; gallery.style.display = ""; eraTabs.style.display = "none";
+    const a = artistAgg.find(x => x.key === key);
+    artistBar.style.display = "flex"; artistBar.innerHTML = "";
+    const back = document.createElement("button");
+    back.className = "crumb"; back.innerHTML = "‹ " + esc(T("all_artists"));
+    back.onclick = showArtistIndex;
+    const cur = document.createElement("span");
+    cur.className = "cur";
+    cur.innerHTML = esc(a ? artistName(a) : key) + ` <small>${a ? a.n : 0} ${esc(T("artist_works"))}</small>`;
+    artistBar.appendChild(back); artistBar.appendChild(cur);
+    $("artist-btn").classList.add("active");
+    applyFilters();
+  }
+  function exitArtist(){
+    artistIndexOn = false; artistFilter = null;
+    artistIndex.style.display = "none"; artistBar.style.display = "none";
+    gallery.style.display = ""; eraTabs.style.display = "";
+    $("artist-btn").classList.remove("active");
+    applyFilters();
+  }
+
   // —— 筛选 ——
   function applyFilters(){
     const q = searchInput.value.trim().toLowerCase();
     const fe = eraFilter.value, fm = mediumFilter.value, fc = countryFilter.value;
     filtered = DATA.filter(d => {
+      if(artistFilter && (d.artist_en || d.artist) !== artistFilter) return false;
       if(favOnly && !favs.has(d.id)) return false;
       if(fe && d.era !== fe) return false;
       if(fm && d.medium !== fm) return false;
@@ -267,6 +339,8 @@
     if(periodFilter) p.set("period", periodFilter);
     if(timelineMode) p.set("timeline", "1");
     if(favOnly) p.set("fav", "1");
+    if(artistFilter) p.set("artist", artistFilter);
+    else if(artistIndexOn) p.set("view", "artists");
     const qs = p.toString();
     const mid = currentModalId();
     const url = location.pathname + (qs ? ("?" + qs) : "") + (mid ? ("#art-" + mid) : "");
@@ -311,7 +385,7 @@
     $("modal-location").textContent=F(d,"location");
     $("modal-country").textContent=F(d,"country");
     $("modal-desc").textContent=F(d,"desc");
-    $("modal-num").textContent = lang==="zh" ? `第 ${d.id} / 1001 ${T("of_total")}` : `${d.id} / 1001`;
+    $("modal-num").textContent = lang==="zh" ? `第 ${d.id} / ${TOTAL} ${T("of_total")}` : `${d.id} / ${TOTAL}`;
     const mf = $("modal-fav");
     mf.classList.toggle("on", isFav(d.id));
     mf.innerHTML = (isFav(d.id) ? "♥ " : "♡ ") + T(isFav(d.id) ? "fav_on" : "fav");
@@ -405,6 +479,7 @@
     rebuildSelects();
     $("timeline-btn").textContent = timelineMode ? T("timeline_off") : T("timeline");
     $("fav-only-btn").innerHTML = "♥ " + T("fav_only");
+    $("artist-btn").textContent = T("by_artist");
     $("random-btn").textContent = T("random");
     $("l-date").textContent = T("m_date");
     $("l-medium").textContent = T("m_medium");
@@ -420,6 +495,8 @@
     buildTimelineBar();
     buildTabs();
     render();
+    if(artistIndexOn) renderArtistIndex();
+    else if(artistFilter) selectArtist(artistFilter);
     if($("modal").classList.contains("open") && modalEntry) fillModal(modalEntry);
   }
   $("lang-toggle").onclick = () => {
@@ -446,6 +523,7 @@
     e.currentTarget.classList.toggle("active", favOnly);
     applyFilters();
   };
+  $("artist-btn").onclick=()=>{ if(artistIndexOn || artistFilter) exitArtist(); else showArtistIndex(); };
   $("modal-fav").onclick=()=>{
     if(!modalEntry) return;
     const on=toggleFav(modalEntry.id);
@@ -477,6 +555,9 @@
   window.resetFilters = function(){
     searchInput.value=""; eraFilter.value=""; mediumFilter.value=""; countryFilter.value="";
     periodFilter=null; favOnly=false; $("fav-only-btn").classList.remove("active");
+    artistFilter=null; artistIndexOn=false;
+    artistIndex.style.display="none"; artistBar.style.display="none";
+    gallery.style.display=""; eraTabs.style.display=""; $("artist-btn").classList.remove("active");
     buildTimelineBar(); applyFilters();
   };
 
@@ -505,5 +586,8 @@
   buildTimelineBar();   // 反映恢复后的 period 高亮
   const wantId = (location.hash.match(/^#art-(\d+)$/) || [])[1];  // 先抓取深链 id（applyFilters 的 syncURL 会清掉 hash）
   applyFilters();       // 应用已恢复的筛选
+  const _ap = new URLSearchParams(location.search);
+  if(_ap.get("artist")) selectArtist(_ap.get("artist"));      // 恢复艺术家作品页
+  else if(_ap.get("view") === "artists") showArtistIndex();   // 恢复艺术家索引
   if(wantId){ const d = DATA.find(x => x.id === +wantId); if(d) openModal(d); }
 })();
