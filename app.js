@@ -5,6 +5,10 @@
   const LANG = window.LANG || {ui:{zh:{},en:{}},dict:{}};
   const PER_PAGE = 48;
   const TOTAL = DATA.length;
+  const ARTISTS = window.ART_ARTISTS || {};   // 艺术家小传 / 生卒 / 国籍
+  function lifespanStr(key){ const m=ARTISTS[key]; if(!m||(!m.born&&!m.died)) return ""; return (m.born||"?")+"–"+(m.died||(m.born?"":"?")); }
+  function artistBio(key){ const m=ARTISTS[key]; if(!m) return null; return lang==="en" ? (m.bio_en||m.bio_zh) : (m.bio_zh||m.bio_en); }
+  function artistCountry(key){ const m=ARTISTS[key]; if(!m) return ""; return lang==="en" ? (m.cty_en||m.cty_zh||"") : (m.cty_zh||m.cty_en||""); }
 
   // —— 语言状态 ——
   let lang = (localStorage.getItem("art1001_lang") === "en") ? "en" : "zh";
@@ -164,8 +168,10 @@
       const thumb = (a.rep && a.rep.thumb)
         ? `<img loading="lazy" decoding="async" src="${a.rep.thumb}" alt="">`
         : `<div class="artist-noimg">❖</div>`;
+      const ls = lifespanStr(a.key);
       card.innerHTML = `<div class="artist-thumb">${thumb}</div>`+
         `<div class="artist-meta"><div class="artist-name">${esc(artistName(a))}</div>`+
+        (ls ? `<div class="artist-life">${esc(ls)}</div>` : "")+
         `<div class="artist-count">${a.n} ${esc(T("works"))}</div></div>`;
       frag.appendChild(card);
     });
@@ -175,7 +181,7 @@
     artistIndexOn = true; artistFilter = null;
     renderArtistIndex();
     artistIndex.style.display = "grid";
-    artistBar.style.display = "none";
+    artistBar.style.display = "none"; $("artist-header").style.display = "none";
     gallery.style.display = "none"; pagination.innerHTML = ""; noResults.style.display = "none";
     eraTabs.style.display = "none"; timelineBar.classList.remove("show");
     $("artist-btn").classList.add("active");
@@ -195,12 +201,29 @@
     cur.className = "cur";
     cur.innerHTML = esc(a ? artistName(a) : key) + ` <small>${a ? a.n : 0} ${esc(T("artist_works"))}</small>`;
     artistBar.appendChild(back); artistBar.appendChild(cur);
+    // 艺术家小传头图
+    const hdr = $("artist-header");
+    const bio = artistBio(key), ls = lifespanStr(key), cty = artistCountry(key);
+    const sub = [ls, cty].filter(Boolean).join(" · ");
+    const alt = a ? (lang === "en" ? a.zh : a.en) : "";
+    const cover = (a && a.rep && a.rep.thumb)
+      ? `<img class="ah-cover" loading="lazy" decoding="async" src="${a.rep.thumb}" alt="">`
+      : `<div class="ah-cover ah-noimg">❖</div>`;
+    hdr.innerHTML = cover +
+      `<div class="ah-info">`+
+        `<div class="ah-name">${esc(a ? artistName(a) : key)}</div>`+
+        (alt && alt !== (a ? artistName(a) : key) ? `<div class="ah-altname">${esc(alt)}</div>` : "")+
+        (sub ? `<div class="ah-sub">${esc(sub)}</div>` : "")+
+        (bio ? `<p class="ah-bio">${esc(bio)}</p>` : "")+
+        `<div class="ah-count">${a ? a.n : 0} ${esc(T("artist_works"))}</div>`+
+      `</div>`;
+    hdr.style.display = "flex";
     $("artist-btn").classList.add("active");
     applyFilters();
   }
   function exitArtist(){
     artistIndexOn = false; artistFilter = null;
-    artistIndex.style.display = "none"; artistBar.style.display = "none";
+    artistIndex.style.display = "none"; artistBar.style.display = "none"; $("artist-header").style.display = "none";
     gallery.style.display = ""; eraTabs.style.display = "";
     $("artist-btn").classList.remove("active");
     applyFilters();
@@ -227,7 +250,7 @@
     if(timelineMode){ filtered.sort((a,b)=>a.sy-b.sy); }
     else {
       const sf = $("sort-filter").value;
-      if(sf==="year_asc") filtered.sort((a,b)=>a.sy-b.sy);
+      if(sf==="year_asc" || (artistFilter && sf==="default")) filtered.sort((a,b)=>a.sy-b.sy);  // 艺术家专辑默认按创作年代
       else if(sf==="year_desc") filtered.sort((a,b)=>b.sy-a.sy);
       else if(sf==="title") filtered.sort((a,b)=>F(a,"title").localeCompare(F(b,"title"), lang==="en"?"en":"zh"));
     }
