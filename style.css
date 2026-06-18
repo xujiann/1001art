@@ -14,8 +14,8 @@
   --card-r:10px;
   --trans:0.2s ease;
 }
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.6;min-height:100vh}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.6;min-height:100vh;-webkit-tap-highlight-color:transparent}
 
 .site-header{background:var(--bg2);border-bottom:1px solid var(--border);padding:1.5rem 2rem;position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
 .header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
@@ -277,7 +277,7 @@ select:focus{border-color:var(--accent)}
 .era-default{background:linear-gradient(135deg,#0d0d1a,#1a1a2e)}
 
 @media(max-width:768px){
-  .site-header{padding:1rem}
+  .site-header{padding:1rem;padding-top:calc(1rem + env(safe-area-inset-top))}
   h1{font-size:1.3rem}
   .toolbar{padding:0.75rem 1rem}
   .timeline-nav{padding:0 1rem 0.5rem}
@@ -285,10 +285,33 @@ select:focus{border-color:var(--accent)}
   .modal-content{grid-template-columns:1fr}
   .modal-img-wrap{min-height:220px;border-radius:16px 16px 0 0}
   .modal-info{padding:1.25rem}
+  /* 工具栏：单行横向滑动，节省竖向空间 */
+  .filter-row{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:4px;-ms-overflow-style:none}
+  .filter-row::-webkit-scrollbar{display:none}
+  .filter-row > *{flex:0 0 auto;min-height:44px}
+  .filter-row select{min-height:44px;padding-top:0;padding-bottom:0}
+  .btn-outline,.btn-accent,.btn-text{min-height:44px;display:inline-flex;align-items:center}
+  .lang-btn{min-height:36px}
+  .timeline-bar{padding-left:1rem;padding-right:1rem}
+  /* 安全区适配（刘海/底部条） */
+  .gallery,.pagination,.artist-index,.artist-header,.artist-bar{padding-left:max(1rem,env(safe-area-inset-left));padding-right:max(1rem,env(safe-area-inset-right))}
+  .site-footer{padding-bottom:calc(2rem + env(safe-area-inset-bottom))}
+  .to-top{bottom:calc(16px + env(safe-area-inset-bottom))}
+  /* 灯箱工具栏避让状态栏 */
+  .lightbox-toolbar{padding-top:calc(0.6rem + env(safe-area-inset-top))}
+  /* 弹窗按钮更易点按 */
+  .modal-nav button,.modal-fav,.modal-share{min-height:40px}
+  .modal-close,.help-close{width:40px;height:40px}
 }
 @media(max-width:480px){
   .gallery{grid-template-columns:repeat(2,1fr);gap:0.6rem}
   .card-body{padding:0.6rem}
+  .header-stats{gap:0.85rem}
+  .stat{font-size:0.72rem}
+  /* 触屏设备：始终显示卡片收藏心（无 hover） */
+}
+@media(hover:none){
+  .card-fav{opacity:0.9}
 }
 
 ::-webkit-scrollbar{width:6px}
