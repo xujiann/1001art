@@ -257,7 +257,7 @@
     const slice = filtered.slice(page*PER_PAGE, page*PER_PAGE + PER_PAGE);
     gallery.className = "gallery" + (listView ? " list-view" : "");
     const frag = document.createDocumentFragment();
-    slice.forEach(d => frag.appendChild(makeCard(d)));
+    slice.forEach((d, i) => { const c = makeCard(d); c.style.animationDelay = Math.min(i, 14) * 0.022 + "s"; frag.appendChild(c); });
     gallery.innerHTML = ""; gallery.appendChild(frag);
     renderPagination(totalPages);
     window.scrollTo({top:0, behavior:"smooth"});
@@ -511,6 +511,18 @@
     $("kbd-artist").textContent = T("kbd_artist"); $("kbd-timeline").textContent = T("kbd_timeline");
     $("kbd-fav").textContent = T("kbd_fav"); $("kbd-nav").textContent = T("kbd_nav");
     $("kbd-close").textContent = T("kbd_close"); $("kbd-help").textContent = T("kbd_help");
+    $("about-btn").textContent = T("about");
+    $("about-title").textContent = T("about_title");
+    $("about-intro").textContent = T("about_intro");
+    $("about-sources").textContent = T("about_sources");
+    $("about-tech").textContent = T("about_tech");
+    $("about-credits").textContent = T("about_credits");
+    $("about-github").textContent = T("about_github");
+    const nImg = DATA.filter(d=>d.img).length, nArt = uniq("artist").length;
+    $("about-stats").innerHTML =
+      `<span><strong>${TOTAL}</strong> ${esc(T("about_works"))}</span>`+
+      `<span><strong>${nArt}</strong> ${esc(T("about_artists"))}</span>`+
+      `<span><strong>${nImg}</strong> ${esc(T("about_images"))}</span>`;
     $("random-btn").textContent = T("random");
     $("l-date").textContent = T("m_date");
     $("l-medium").textContent = T("m_medium");
@@ -593,6 +605,12 @@
   $("help-btn").onclick=openHelp;
   $("help-close").onclick=closeHelp;
   $("help-overlay").addEventListener("click", e=>{ if(e.target===$("help-overlay")) closeHelp(); });
+  // —— 关于本站 ——
+  function openAbout(){ $("about-overlay").classList.add("open"); setTimeout(()=>{ try{ $("about-close").focus(); }catch(e){} }, 30); }
+  function closeAbout(){ $("about-overlay").classList.remove("open"); }
+  $("about-btn").onclick=openAbout;
+  $("about-close").onclick=closeAbout;
+  $("about-overlay").addEventListener("click", e=>{ if(e.target===$("about-overlay")) closeAbout(); });
   $("modal-close").onclick=closeModal;
   $("prev-art").onclick=()=>navModal(-1);
   $("next-art").onclick=()=>navModal(1);
@@ -621,6 +639,7 @@
   });
   // —— 全局快捷键 ——
   document.addEventListener("keydown", e=>{
+    if($("about-overlay").classList.contains("open")){ if(e.key==="Escape") closeAbout(); return; }
     if($("help-overlay").classList.contains("open")){ if(e.key==="Escape"||e.key==="?") closeHelp(); return; }
     if(lb.classList.contains("open") || modalOpen()) return;   // 弹窗/灯箱有各自键盘处理
     if(e.key==="?"){ e.preventDefault(); openHelp(); return; }

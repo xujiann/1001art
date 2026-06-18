@@ -166,6 +166,33 @@ select:focus{border-color:var(--accent)}
 .help-list dt{text-align:right}
 .help-list dd{font-size:0.85rem;color:var(--text2)}
 .help-list kbd{display:inline-block;background:var(--bg3);border:1px solid var(--border);border-bottom-width:2px;border-radius:5px;padding:2px 7px;font-size:0.78rem;font-family:var(--font-mono,monospace);color:var(--text);min-width:20px;text-align:center}
+
+/* 关于本站 */
+.about-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:250;display:none;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px)}
+.about-overlay.open{display:flex}
+.about-box{background:var(--bg2);border:1px solid var(--border);border-radius:16px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;padding:2rem;position:relative;text-align:center}
+.about-logo{font-size:2.4rem;color:var(--accent2);line-height:1}
+.about-box h2{font-size:1.35rem;font-weight:700;color:#fff;margin:0.5rem 0 1rem}
+.about-stats{display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;margin-bottom:1.25rem;padding:0.85rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.about-stats span{font-size:0.8rem;color:var(--text3)}
+.about-stats strong{display:block;font-size:1.4rem;color:var(--accent2);font-weight:700}
+.about-box p{font-size:0.85rem;color:var(--text2);line-height:1.7;text-align:left;margin-bottom:0.85rem}
+.about-box .about-credits{font-size:0.78rem;color:var(--text3)}
+.about-gh{display:inline-block;margin-top:0.5rem;padding:0.5rem 1.25rem;background:var(--accent);color:#fff;border-radius:8px;text-decoration:none;font-size:0.85rem;transition:background var(--trans)}
+.about-gh:hover{background:var(--accent2)}
+.footer-about{background:none;border:none;color:var(--accent2);font-size:0.8rem;cursor:pointer;margin-top:0.5rem;padding:0.2rem 0.5rem;border-radius:5px;transition:all var(--trans)}
+.footer-about:hover{background:var(--bg3);text-decoration:underline}
+
+/* —— 动效 —— */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes popIn{from{opacity:0;transform:translateY(10px) scale(0.97)}to{opacity:1;transform:none}}
+@keyframes cardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.modal-overlay.open,.lightbox.open,.help-overlay.open,.about-overlay.open{animation:fadeIn 0.2s ease}
+.modal-overlay.open .modal-box,.help-overlay.open .help-box,.about-overlay.open .about-box{animation:popIn 0.28s cubic-bezier(0.2,0.7,0.3,1)}
+.art-card,.artist-card{animation:cardIn 0.4s ease both}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:0.001ms !important;animation-delay:0ms !important;transition-duration:0.001ms !important;scroll-behavior:auto !important}
+}
 .modal-info h2{font-size:1.4rem;font-weight:700;line-height:1.3;color:#fff}
 .modal-artist{font-size:1rem;color:var(--accent2);font-weight:500}
 .modal-meta{display:grid;grid-template-columns:auto 1fr;gap:0.35rem 1rem;font-size:0.82rem;margin-top:0.25rem}
