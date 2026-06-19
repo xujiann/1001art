@@ -30,6 +30,7 @@ ui: {
     about_credits:"图片版权归原作者及收藏机构所有；少数 20 世纪受版权保护的作品以占位卡呈现，并提供 Wikipedia 链接。",
     about_works:"件作品", about_artists:"位艺术家", about_images:"张本地高清图",
     about_github:"在 GitHub 查看源码 ↗",
+    credit_img:"图片来源", credit_pd:"公有领域",
     footer:"精选人类历史上的著名艺术作品 · 从史前壁画到当代艺术",
     lang_btn:"EN"
   },
@@ -60,6 +61,7 @@ ui: {
     about_credits:"Image rights belong to the original artists and holding institutions; a few 20th-century works under copyright are shown as placeholders with a link to Wikipedia.",
     about_works:"works", about_artists:"artists", about_images:"local HD images",
     about_github:"View source on GitHub ↗",
+    credit_img:"Image source", credit_pd:"Public domain",
     footer:"A curated selection of famous works of art · from cave paintings to contemporary art",
     lang_btn:"中文"
   }

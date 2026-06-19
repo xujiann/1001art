@@ -6,6 +6,7 @@
   const PER_PAGE = 48;
   const TOTAL = DATA.length;
   const ARTISTS = window.ART_ARTISTS || {};   // 艺术家小传 / 生卒 / 国籍
+  const CREDITS = window.ART_CREDITS || {};   // 逐图作者 / 许可署名
   function lifespanStr(key){ const m=ARTISTS[key]; if(!m||(!m.born&&!m.died)) return ""; return (m.born||"?")+"–"+(m.died||(m.born?"":"?")); }
   function artistBio(key){ const m=ARTISTS[key]; if(!m) return null; return lang==="en" ? (m.bio_en||m.bio_zh) : (m.bio_zh||m.bio_en); }
   function artistCountry(key){ const m=ARTISTS[key]; if(!m) return ""; return lang==="en" ? (m.cty_en||m.cty_zh||"") : (m.cty_zh||m.cty_en||""); }
@@ -426,6 +427,7 @@
     $("modal-location").textContent=F(d,"location");
     $("modal-country").textContent=F(d,"country");
     $("modal-desc").textContent=F(d,"desc");
+    fillCredit(d);
     $("modal-num").textContent = lang==="zh" ? `第 ${d.id} / ${TOTAL} ${T("of_total")}` : `${d.id} / ${TOTAL}`;
     const mf = $("modal-fav");
     mf.classList.toggle("on", isFav(d.id));
@@ -435,6 +437,23 @@
     if(artistFilter === akey){ al.style.display = "none"; }
     else { al.style.display = ""; al.textContent = T("more_by"); }
   }
+  // 逐图作者/许可署名（合规：标注作者、许可、来源）
+  function fillCredit(d){
+    const mc = $("modal-credit");
+    const cr = (d.img && d.file) ? CREDITS[d.id] : null;
+    if(!cr){ mc.style.display = "none"; mc.innerHTML = ""; return; }
+    const src = "https://commons.wikimedia.org/wiki/File:" + encodeURIComponent(d.file);
+    const parts = [];
+    if(cr.a) parts.push(esc(cr.a));
+    if(cr.l){
+      const licName = /public domain/i.test(cr.l) ? T("credit_pd") : cr.l;
+      parts.push(cr.lu ? `<a href="${esc(cr.lu)}" target="_blank" rel="noopener">${esc(licName)}</a>` : esc(licName));
+    }
+    parts.push(`<a href="${esc(src)}" target="_blank" rel="noopener">Wikimedia Commons ↗</a>`);
+    mc.innerHTML = `<span class="mc-label">${esc(T("credit_img"))}：</span>` + parts.join(" · ");
+    mc.style.display = "";
+  }
+
   function showModalPlaceholder(d){
     const ph=$("modal-placeholder");
     ph.className="modal-img-placeholder show "+eraTheme(d);
@@ -475,7 +494,13 @@
     lbImg.onload=()=>lbSpinner.classList.remove("show");
     lbImg.onerror=()=>lbSpinner.classList.remove("show");
     lbImg.src=d.img; lbImg.alt=F(d,"title");
-    $("lb-caption").textContent = F(d,"title")+" · "+F(d,"artist");
+    let cap = F(d,"title")+" · "+F(d,"artist");
+    const cr = CREDITS[d.id];
+    if(cr && (cr.a || cr.l)){
+      const lic = cr.l ? (/public domain/i.test(cr.l) ? T("credit_pd") : cr.l) : null;
+      cap += "　·　" + T("credit_img") + ": " + [cr.a, lic].filter(Boolean).join(" / ");
+    }
+    $("lb-caption").textContent = cap;
     const orig = originalURL(d.file);
     const ol = $("lb-original");
     if(orig){ ol.href = orig; ol.style.display=""; } else { ol.style.display="none"; }
