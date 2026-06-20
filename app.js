@@ -297,6 +297,7 @@
     card.onkeydown = e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openModal(d); } };
     const imgWrap = document.createElement("div");
     imgWrap.className = "card-img-wrap";
+    imgWrap.style.setProperty("--ar", d.ar ? Math.max(0.45, Math.min(2.4, d.ar)) : 1.33);  // 真实宽高比（极端长卷/竖轴做限幅，contain 不裁切）
     if(d.thumb){
       imgWrap.classList.add("loading");
       const img = document.createElement("img");
