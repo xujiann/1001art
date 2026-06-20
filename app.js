@@ -427,7 +427,7 @@
     $("modal-medium").textContent=F(d,"medium");
     $("modal-location").textContent=F(d,"location");
     $("modal-country").textContent=F(d,"country");
-    $("modal-desc").textContent=F(d,"desc");
+    fillDesc(d);
     fillCredit(d);
     $("modal-num").textContent = lang==="zh" ? `第 ${d.id} / ${TOTAL} ${T("of_total")}` : `${d.id} / ${TOTAL}`;
     const mf = $("modal-fav");
@@ -439,6 +439,27 @@
     else { al.style.display = ""; al.textContent = T("more_by"); }
   }
   // 逐图作者/许可署名（合规：标注作者、许可、来源）
+  // 描述按需懒加载（desc.js 不进首屏，首次开弹窗时拉取并缓存）
+  let DESC = window.ART_DESC || null, descLoading = null;
+  function loadDesc(){
+    if(DESC) return Promise.resolve(DESC);
+    if(descLoading) return descLoading;
+    descLoading = new Promise(res => {
+      const s = document.createElement("script"); s.src = "desc.js";
+      s.onload = () => { DESC = window.ART_DESC || {}; res(DESC); };
+      s.onerror = () => { DESC = {}; res(DESC); };
+      document.head.appendChild(s);
+    });
+    return descLoading;
+  }
+  function pickDesc(d){ const e = DESC && DESC[d.id]; return e ? (lang === "en" ? (e[1] || e[0]) : (e[0] || e[1])) : ""; }
+  function fillDesc(d){
+    const el = $("modal-desc");
+    if(DESC){ el.textContent = pickDesc(d); return; }
+    el.textContent = "";
+    loadDesc().then(() => { if(modalEntry === d) el.textContent = pickDesc(d); });
+  }
+
   function fillCredit(d){
     const mc = $("modal-credit");
     const cr = (d.img && d.file) ? CREDITS[d.id] : null;
