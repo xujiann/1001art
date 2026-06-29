@@ -221,6 +221,10 @@ select:focus{border-color:var(--accent)}
 .modal-meta{display:grid;grid-template-columns:auto 1fr;gap:0.35rem 1rem;font-size:0.82rem;margin-top:0.25rem}
 .modal-meta dt{color:var(--text3);font-weight:500}
 .modal-meta dd{color:var(--text2)}
+.modal-meta dd.loc-link{color:var(--accent2);cursor:pointer;width:fit-content}
+.modal-meta dd.loc-link::after{content:" ›";opacity:0.65}
+.modal-meta dd.loc-link:hover{text-decoration:underline}
+.museum-header .ah-sub{text-transform:uppercase;letter-spacing:0.1em;font-size:0.72rem}
 .modal-desc{font-size:0.85rem;color:var(--text2);line-height:1.7;margin-top:0.25rem;flex:1}
 .modal-credit{font-size:0.72rem;color:var(--text3);line-height:1.5;margin-top:0.5rem;padding-top:0.5rem;border-top:1px dashed var(--border)}
 .modal-credit .mc-label{color:var(--text3)}
