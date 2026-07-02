@@ -39,6 +39,13 @@
     return FP + encodeURIComponent(f);
   }
 
+  // —— 图片 CDN 基址（jsDelivr）——
+  // 本地缓存图已迁至独立仓 xujiann/1001art-img，经 jsDelivr 分发。
+  // data.js 内仍存相对路径（images/…），此处统一拼接 CDN 前缀；
+  // 迁移到别的 CDN 只需改这一行。留空字符串即回退为同源相对路径（本地调试用）。
+  const IMG_BASE = "https://cdn.jsdelivr.net/gh/xujiann/1001art-img@v1/";
+  const imgURL = p => (p && IMG_BASE) ? IMG_BASE + p : p;
+
   // —— 时间线分期 ——
   function periodKey(sy){
     if(sy < 0) return "bce";
@@ -168,7 +175,7 @@
       card.onclick = open;
       card.onkeydown = e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); open(); } };
       const thumb = (a.rep && a.rep.thumb)
-        ? `<img loading="lazy" decoding="async" src="${a.rep.thumb}" alt="">`
+        ? `<img loading="lazy" decoding="async" src="${imgURL(a.rep.thumb)}" alt="">`
         : `<div class="artist-noimg">❖</div>`;
       const ls = lifespanStr(a.key);
       card.innerHTML = `<div class="artist-thumb">${thumb}</div>`+
@@ -212,7 +219,7 @@
     const sub = [ls, cty].filter(Boolean).join(" · ");
     const alt = a ? (lang === "en" ? a.zh : a.en) : "";
     const cover = (a && a.rep && a.rep.thumb)
-      ? `<img class="ah-cover" loading="lazy" decoding="async" src="${a.rep.thumb}" alt="">`
+      ? `<img class="ah-cover" loading="lazy" decoding="async" src="${imgURL(a.rep.thumb)}" alt="">`
       : `<div class="ah-cover ah-noimg">❖</div>`;
     hdr.innerHTML = cover +
       `<div class="ah-info">`+
@@ -252,7 +259,7 @@
     bar.appendChild(back);
     const hdr = $("museum-header");
     const cover = (rep && rep.thumb)
-      ? `<img class="ah-cover" loading="lazy" decoding="async" src="${rep.thumb}" alt="">`
+      ? `<img class="ah-cover" loading="lazy" decoding="async" src="${imgURL(rep.thumb)}" alt="">`
       : `<div class="ah-cover ah-noimg">❖</div>`;
     hdr.innerHTML = cover +
       `<div class="ah-info">`+
@@ -344,7 +351,7 @@
       imgWrap.classList.add("loading");
       const img = document.createElement("img");
       img.loading="lazy"; img.decoding="async"; img.alt=F(d,"title");
-      img.src=d.thumb;
+      img.src=imgURL(d.thumb);
       img.onload = () => { img.classList.add("loaded"); imgWrap.classList.remove("loading"); imgWrap.classList.add("loaded"); };
       img.onerror = () => { imgWrap.classList.remove("loading"); imgWrap.innerHTML = placeholderHTML(d); };
       imgWrap.appendChild(img);
@@ -457,7 +464,7 @@
     const img=$("modal-img"), ph=$("modal-placeholder"), badge=$("zoom-badge");
     const wrap=$("modal-img-wrap");
     if(d.img){
-      img.style.display="block"; img.src=d.img; img.alt=F(d,"title");
+      img.style.display="block"; img.src=imgURL(d.img); img.alt=F(d,"title");
       ph.classList.remove("show"); badge.style.display="flex"; wrap.style.cursor="zoom-in";
       img.onerror = () => { img.style.display="none"; badge.style.display="none"; wrap.style.cursor="default"; showModalPlaceholder(d); };
     } else {
@@ -562,7 +569,7 @@
     lbSpinner.classList.add("show");
     lbImg.onload=()=>lbSpinner.classList.remove("show");
     lbImg.onerror=()=>lbSpinner.classList.remove("show");
-    lbImg.src=d.img; lbImg.alt=F(d,"title");
+    lbImg.src=imgURL(d.img); lbImg.alt=F(d,"title");
     let cap = F(d,"title")+" · "+F(d,"artist");
     const cr = CREDITS[d.id];
     if(cr && (cr.a || cr.l)){
