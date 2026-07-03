@@ -450,6 +450,7 @@
 
   // —— 详情弹窗 ——
   let modalEntry = null, modalIndex = -1, lastFocus = null;
+  let _nbrPreload = [], _nbrTimer = 0;
   function openModal(d){
     if(!modalOpen()) lastFocus = document.activeElement;   // 记住触发元素以便归还焦点
     modalEntry = d; modalIndex = filtered.indexOf(d);
@@ -491,6 +492,7 @@
     const akey = d.artist_en || d.artist;
     if(artistFilter === akey){ al.style.display = "none"; }
     else { al.style.display = ""; al.textContent = T("more_by"); }
+    scheduleNeighborPreload();
   }
   // 逐图作者/许可署名（合规：标注作者、许可、来源）
   // 描述按需懒加载（desc.js 不进首屏，首次开弹窗时拉取并缓存）
@@ -547,6 +549,18 @@
     modalEntry=filtered[modalIndex];
     fillModal(modalEntry);
     syncURL();
+  }
+  // 预加载相邻作品大图：连续翻页时秒开（延后 250ms 不与当前图抢带宽；
+  // 保留 Image 引用防止被 GC 中断下载）
+  function scheduleNeighborPreload(){ clearTimeout(_nbrTimer); _nbrTimer = setTimeout(preloadNeighbors, 250); }
+  function preloadNeighbors(){
+    if(modalIndex < 0 || !filtered.length) return;
+    const imgs = [];
+    for(const dir of [1, -1]){
+      const n = filtered[(modalIndex + dir + filtered.length) % filtered.length];
+      if(n && n.img){ const im = new Image(); im.decoding = "async"; im.src = imgURL(n.img); imgs.push(im); }
+    }
+    _nbrPreload = imgs;
   }
 
   // —— 高清灯箱（缩放 / 平移）——
