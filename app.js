@@ -330,13 +330,13 @@
     const slice = filtered.slice(page*PER_PAGE, page*PER_PAGE + PER_PAGE);
     gallery.className = "gallery" + (listView ? " list-view" : "");
     const frag = document.createDocumentFragment();
-    slice.forEach((d, i) => { const c = makeCard(d); c.style.animationDelay = Math.min(i, 14) * 0.022 + "s"; frag.appendChild(c); });
+    slice.forEach((d, i) => { const c = makeCard(d, i); c.style.animationDelay = Math.min(i, 14) * 0.022 + "s"; frag.appendChild(c); });
     gallery.innerHTML = ""; gallery.appendChild(frag);
     renderPagination(totalPages);
     window.scrollTo({top:0, behavior:"smooth"});
   }
 
-  function makeCard(d){
+  function makeCard(d, i){
     const card = document.createElement("div");
     card.className = "art-card";
     card.tabIndex = 0;
@@ -350,7 +350,9 @@
     if(d.thumb){
       imgWrap.classList.add("loading");
       const img = document.createElement("img");
-      img.loading="lazy"; img.decoding="async"; img.alt=F(d,"title");
+      const eager = i < 8;   // 首屏首行：eager + 高优先级，其余懒加载
+      img.loading = eager ? "eager" : "lazy"; img.decoding="async"; img.alt=F(d,"title");
+      if(eager) img.fetchPriority = "high";
       img.src=imgURL(d.thumb);
       img.onload = () => { img.classList.add("loaded"); imgWrap.classList.remove("loading"); imgWrap.classList.add("loaded"); };
       img.onerror = () => { imgWrap.classList.remove("loading"); imgWrap.innerHTML = placeholderHTML(d); };
