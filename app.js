@@ -467,11 +467,14 @@
     const img=$("modal-img"), ph=$("modal-placeholder"), badge=$("zoom-badge");
     const wrap=$("modal-img-wrap");
     if(d.img){
-      img.style.display="block"; img.src=imgURL(d.img); img.alt=F(d,"title");
+      img.style.display="block";
+      img.style.backgroundImage = d.thumb ? `url("${imgURL(d.thumb)}")` : "none";  // 缩略图秒显垫底(LQIP)，大图加载完覆盖
+      img.fetchPriority = "high";                                                    // 优先拉当前大图
+      img.src=imgURL(d.img); img.alt=F(d,"title");
       ph.classList.remove("show"); badge.style.display="flex"; wrap.style.cursor="zoom-in";
-      img.onerror = () => { img.style.display="none"; badge.style.display="none"; wrap.style.cursor="default"; showModalPlaceholder(d); };
+      img.onerror = () => { img.style.backgroundImage="none"; img.style.display="none"; badge.style.display="none"; wrap.style.cursor="default"; showModalPlaceholder(d); };
     } else {
-      img.style.display="none"; badge.style.display="none"; wrap.style.cursor="default"; showModalPlaceholder(d);
+      img.style.backgroundImage="none"; img.style.display="none"; badge.style.display="none"; wrap.style.cursor="default"; showModalPlaceholder(d);
     }
     $("modal-era").textContent=F(d,"era");
     $("modal-title").textContent=F(d,"title");

@@ -155,7 +155,7 @@ select:focus{border-color:var(--accent)}
 .modal-close:hover{background:var(--border);color:#fff}
 .modal-content{display:grid;grid-template-columns:1fr 1fr;min-height:400px}
 .modal-img-wrap{position:relative;background:var(--bg3);border-radius:16px 0 0 16px;overflow:hidden;min-height:300px}
-.modal-img-wrap img{width:100%;height:100%;object-fit:contain;display:block}
+.modal-img-wrap img{width:100%;height:100%;object-fit:contain;display:block;background-size:contain;background-repeat:no-repeat;background-position:center}
 .modal-img-placeholder{position:absolute;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;gap:0.6rem;padding:2rem;text-align:center}
 .modal-img-placeholder.show{display:flex}
 .modal-img-placeholder .ph-glyph{font-size:2.6rem;color:rgba(255,255,255,0.3)}
