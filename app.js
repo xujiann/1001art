@@ -43,7 +43,7 @@
   // 本地缓存图已迁至独立仓 xujiann/1001art-img，经 jsDelivr 分发。
   // data.js 内仍存相对路径（images/…），此处统一拼接 CDN 前缀；
   // 迁移到别的 CDN 只需改这一行。留空字符串即回退为同源相对路径（本地调试用）。
-  const IMG_BASE = "https://cdn.jsdelivr.net/gh/xujiann/1001art-img@v1/";
+  const IMG_BASE = "https://cdn.jsdelivr.net/gh/xujiann/1001art-img@v2/";
   const imgURL = p => (p && IMG_BASE) ? IMG_BASE + p : p;
 
   // —— 时间线分期 ——
