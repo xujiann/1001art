@@ -2,11 +2,11 @@
    - 外壳（HTML/CSS/JS）：stale-while-revalidate
    - 本地图片（images/）：cache-first，按需缓存，离线可回看已浏览作品
 */
-const SHELL = "art1001-shell-v27";
+const SHELL = "art1001-shell-v28";
 const IMGS  = "art1001-img-v9";
 const IMG_CDN = "cdn.jsdelivr.net";   // 图片走 jsDelivr（xujiann/1001art-img）
 const SHELL_ASSETS = [
-  "./", "./index.html", "./style.css", "./lang.js", "./data.js", "./artists.js", "./credits.js", "./app.js", "./manifest.webmanifest"
+  "./", "./index.html", "./style.css", "./lang.js", "./data.js", "./data-rest.js", "./artists.js", "./credits.js", "./app.js", "./manifest.webmanifest"
 ];
 
 self.addEventListener("install", e => {
@@ -47,7 +47,7 @@ self.addEventListener("fetch", e => {
 
   // 页面与数据：network-first（在线总是最新，离线回退缓存）
   const p = url.pathname;
-  const isDoc = req.mode === "navigate" || p.endsWith("/") || p.endsWith("/index.html") || p.endsWith("/data.js");
+  const isDoc = req.mode === "navigate" || p.endsWith("/") || p.endsWith("/index.html") || p.endsWith("/data.js") || p.endsWith("/data-rest.js");
   if (isDoc) {
     e.respondWith(
       fetch(req).then(res => {

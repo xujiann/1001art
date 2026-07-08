@@ -4,7 +4,7 @@
   const DATA = window.ART_DATA || [];
   const LANG = window.LANG || {ui:{zh:{},en:{}},dict:{}};
   const PER_PAGE = 48;
-  const TOTAL = DATA.length;
+  let TOTAL = DATA.length;
   const ARTISTS = window.ART_ARTISTS || {};   // 艺术家小传 / 生卒 / 国籍
   const CREDITS = window.ART_CREDITS || {};   // 逐图作者 / 许可署名
   function lifespanStr(key){ const m=ARTISTS[key]; if(!m||(!m.born&&!m.died)) return ""; return (m.born||"?")+"–"+(m.died||(m.born?"":"?")); }
@@ -94,7 +94,7 @@
     DATA.forEach(d => { if(d[key]) s.add(d[key]); });
     return [...s].sort((a,b)=>a.localeCompare(b,"zh"));
   }
-  const eraVals = uniq("era"), mediumVals = uniq("medium"), countryVals = uniq("country");
+  let eraVals = [], mediumVals = [], countryVals = [];
   function buildSelect(sel, kind, vals, allKey){
     sel.innerHTML = "";
     const o0 = document.createElement("option");
@@ -112,14 +112,11 @@
     eraFilter.value=e; mediumFilter.value=m; countryFilter.value=c;
   }
 
-  // 统计
-  $("era-count").textContent = eraVals.length;
-  $("artist-count").textContent = uniq("artist").length;
+  // 统计（值在 computeDerived 后更新）
+  function updateStats(){ $("era-count").textContent = eraVals.length; $("artist-count").textContent = uniq("artist").length; }
 
-  // —— 时代快捷标签 ——
-  const eraCounts = {};
-  DATA.forEach(d => eraCounts[d.era] = (eraCounts[d.era]||0)+1);
-  const topEras = Object.keys(eraCounts).sort((a,b)=>eraCounts[b]-eraCounts[a]).slice(0,14);
+  // —— 时代快捷标签（计数在 computeDerived 中构建）——
+  let eraCounts = {}, topEras = [];
   function buildTabs(){
     eraTabs.innerHTML = "";
     const all = document.createElement("button");
@@ -138,9 +135,7 @@
   }
 
   // —— 时间线索引条 ——
-  const periodCounts = {};
-  DATA.forEach(d => { const k=periodKey(d.sy); periodCounts[k]=(periodCounts[k]||0)+1; });
-  const periodKeys = Object.keys(periodCounts).sort((a,b)=>periodOrder(a)-periodOrder(b));
+  let periodCounts = {}, periodKeys = [];
   function buildTimelineBar(){
     timelineBar.innerHTML = "";
     periodKeys.forEach(k => {
@@ -153,7 +148,8 @@
   }
 
   // —— 按艺术家聚合 ——
-  const artistAgg = (() => {
+  let artistAgg = [];
+  function buildArtistAgg(){
     const m = new Map();
     DATA.forEach(d => {
       const k = d.artist_en || d.artist;
@@ -161,8 +157,20 @@
       if(!a){ a = {key:k, zh:d.artist, en:d.artist_en || d.artist, n:0, rep:null}; m.set(k, a); }
       a.n++; if(!a.rep && d.thumb) a.rep = d;
     });
-    return [...m.values()].sort((x,y) => y.n - x.n || x.en.localeCompare(y.en));
-  })();
+    artistAgg = [...m.values()].sort((x,y) => y.n - x.n || x.en.localeCompare(y.en));
+  }
+  // 重算所有 DATA 派生结构（首屏一次；其余数据流式合并后再调一次）
+  function computeDerived(){
+    buildTrMaps();
+    eraVals = uniq("era"); mediumVals = uniq("medium"); countryVals = uniq("country");
+    eraCounts = {}; DATA.forEach(d => eraCounts[d.era] = (eraCounts[d.era]||0)+1);
+    topEras = Object.keys(eraCounts).sort((a,b)=>eraCounts[b]-eraCounts[a]).slice(0,14);
+    periodCounts = {}; DATA.forEach(d => { const k=periodKey(d.sy); periodCounts[k]=(periodCounts[k]||0)+1; });
+    periodKeys = Object.keys(periodCounts).sort((a,b)=>periodOrder(a)-periodOrder(b));
+    buildArtistAgg();
+    TOTAL = DATA.length;
+    updateStats();
+  }
   const artistName = a => (lang === "en" ? a.en : a.zh) || a.en;
 
   function renderArtistIndex(){
@@ -837,16 +845,46 @@
   }
   window.addEventListener("hashchange", openFromHash);
 
+  // —— 按需分片：其余数据流式加载 ——
+  let _restLoaded = false, _restLoading = null, _pendingWantId = null;
+  function loadRest(cb){
+    if(_restLoaded){ cb && cb(); return; }
+    if(_restLoading){ if(cb) _restLoading.then(cb); return; }
+    _restLoading = new Promise(res => {
+      const merge = () => {
+        if(window.ART_DATA_REST && window.ART_DATA_REST.length){ for(const d of window.ART_DATA_REST) DATA.push(d); window.ART_DATA_REST = null; }
+        _restLoaded = true; res();
+      };
+      const s = document.createElement("script"); s.src = "data-rest.js";
+      s.onload = merge; s.onerror = () => { _restLoaded = true; res(); };   // 失败也放行，核心集仍可用
+      document.head.appendChild(s);
+    });
+    if(cb) _restLoading.then(cb);
+  }
+  function reinitAfterRest(){
+    computeDerived();     // 重算派生结构 + 头部统计
+    applyLang();          // 重建下拉/标签/时间线/关于页（rebuildSelects 保留当前筛选值）
+    if(artistIndexOn){ renderArtistIndex(); $("shown-count").textContent = artistAgg.length; }
+    else applyFilters();  // 以全量数据重渲染当前视图（分页/计数更新）
+    if(_pendingWantId != null){ const d = DATA.find(x => x.id === _pendingWantId); _pendingWantId = null; if(d) openModal(d); }
+  }
+
   // —— 启动 ——
-  buildTrMaps();
-  applyLang();          // 构建下拉/标签/时间线，首次渲染
-  restoreFromURL();     // 从 URL 恢复筛选状态
-  buildTimelineBar();   // 反映恢复后的 period 高亮
-  const wantId = (location.hash.match(/^#art-(\d+)$/) || [])[1];  // 先抓取深链 id（applyFilters 的 syncURL 会清掉 hash）
-  const _ap = new URLSearchParams(location.search);              // 必须在 applyFilters(→syncURL) 清掉查询串之前抓取
-  applyFilters();       // 应用已恢复的筛选
-  if(_ap.get("artist")) selectArtist(_ap.get("artist"));      // 恢复艺术家作品页
-  else if(_ap.get("view") === "artists") showArtistIndex();   // 恢复艺术家索引
-  else if(_ap.get("museum")) selectMuseum(_ap.get("museum")); // 恢复馆藏展
-  if(wantId){ const d = DATA.find(x => x.id === +wantId); if(d) openModal(d); }
+  function initApp(){
+    computeDerived();     // 构建全部 DATA 派生结构（TRMAP/下拉值/计数/artistAgg/TOTAL/统计）
+    applyLang();          // 构建下拉/标签/时间线，首次渲染
+    restoreFromURL();     // 从 URL 恢复筛选状态
+    buildTimelineBar();   // 反映恢复后的 period 高亮
+    const wantId = (location.hash.match(/^#art-(\d+)$/) || [])[1];  // 先抓取深链 id（applyFilters 的 syncURL 会清掉 hash）
+    const _ap = new URLSearchParams(location.search);              // 必须在 applyFilters(→syncURL) 清掉查询串之前抓取
+    applyFilters();       // 应用已恢复的筛选
+    if(_ap.get("artist")) selectArtist(_ap.get("artist"));      // 恢复艺术家作品页
+    else if(_ap.get("view") === "artists") showArtistIndex();   // 恢复艺术家索引
+    else if(_ap.get("museum")) selectMuseum(_ap.get("museum")); // 恢复馆藏展
+    if(wantId){ const d = DATA.find(x => x.id === +wantId); if(d) openModal(d); else _pendingWantId = +wantId; }
+  }
+  // 带参/深链的 URL 需全量数据才正确 → 先加载其余再初始化；纯首页 → 核心集先渲染，其余随后流式合并
+  const _needFull = location.search.length > 1 || /^#art-\d+$/.test(location.hash);
+  if(_needFull){ loadRest(initApp); }
+  else { initApp(); setTimeout(() => loadRest(reinitAfterRest), 0); }
 })();
