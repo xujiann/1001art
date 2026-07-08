@@ -344,6 +344,7 @@
     card.setAttribute("aria-label", F(d,"title") + " · " + F(d,"artist"));
     card.onclick = () => openModal(d);
     card.onkeydown = e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openModal(d); } };
+    if(HOVER && d.img){ let pf; card.addEventListener("mouseenter", () => { pf = setTimeout(() => prefetchFull(d), 140); }); card.addEventListener("mouseleave", () => clearTimeout(pf)); }
     const imgWrap = document.createElement("div");
     imgWrap.className = "card-img-wrap";
     imgWrap.style.setProperty("--ar", d.ar ? Math.max(0.45, Math.min(2.4, d.ar)) : 1.33);  // 真实宽高比（极端长卷/竖轴做限幅，contain 不裁切）
@@ -566,6 +567,17 @@
       if(n && n.img){ const im = new Image(); im.decoding = "async"; im.src = imgURL(n.img); imgs.push(im); }
     }
     _nbrPreload = imgs;
+  }
+  // 桌面端 hover 预取大图：悬停 140ms 即后台拉取，点开秒显（去重 + 持有引用防 GC）
+  const HOVER = !!(window.matchMedia && window.matchMedia("(hover: hover)").matches);
+  const _pfDone = new Set(), _pfHold = [];
+  function prefetchFull(d){
+    if(!d || !d.img || _pfDone.has(d.id)) return;
+    _pfDone.add(d.id);
+    const im = new Image(); im.decoding = "async";
+    im.onload = im.onerror = () => { const k = _pfHold.indexOf(im); if(k >= 0) _pfHold.splice(k, 1); };
+    im.src = imgURL(d.img);
+    _pfHold.push(im);
   }
 
   // —— 高清灯箱（缩放 / 平移）——
