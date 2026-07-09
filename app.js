@@ -71,6 +71,7 @@
   let favOnly = false;
   let artistFilter = null;     // 选中的艺术家 key（artist_en）
   let artistIndexOn = false;   // 是否正在显示艺术家索引
+  let artistIdxFilter = "";    // 艺术家索引内的筛选词
   let museumFilter = null;     // 选中的馆藏地（藏品展）
 
   // —— 收藏（localStorage 持久化）——
@@ -175,8 +176,10 @@
   const artistName = a => (lang === "en" ? a.en : a.zh) || a.en;
 
   function renderArtistIndex(){
+    const q = artistIdxFilter;
+    const list = q ? artistAgg.filter(a => ((a.zh||"") + " " + (a.en||"") + " " + a.key).toLowerCase().includes(q)) : artistAgg;
     const frag = document.createDocumentFragment();
-    artistAgg.forEach(a => {
+    list.forEach(a => {
       const card = document.createElement("div");
       card.className = "artist-card"; card.tabIndex = 0;
       card.setAttribute("role","button"); card.setAttribute("aria-label", artistName(a));
@@ -197,10 +200,14 @@
       frag.appendChild(card);
     });
     artistIndex.innerHTML = ""; artistIndex.appendChild(frag);
+    $("artist-filter-count").textContent = q ? `${list.length} / ${artistAgg.length}` : "";
+    if(artistIndexOn) $("shown-count").textContent = list.length;
   }
   function showArtistIndex(){
     clearMuseum();
     artistIndexOn = true; artistFilter = null;
+    artistIdxFilter = ""; { const fi = $("artist-filter"); if(fi) fi.value = ""; }
+    $("artist-index-bar").style.display = "flex";
     renderArtistIndex();
     if(!_metaLoaded) loadMeta().then(() => { if(artistIndexOn) renderArtistIndex(); });  // artists.js 到达后补生卒年
     artistIndex.style.display = "grid";
@@ -208,7 +215,6 @@
     gallery.style.display = "none"; pagination.innerHTML = ""; noResults.style.display = "none";
     eraTabs.style.display = "none"; timelineBar.classList.remove("show");
     $("artist-btn").classList.add("active");
-    $("shown-count").textContent = artistAgg.length;
     syncURL();
     window.scrollTo({top:0, behavior:"smooth"});
   }
@@ -217,7 +223,7 @@
     clearMuseum();
     artistFilter = key; artistIndexOn = false;
     if(!_metaLoaded) loadMeta().then(() => { if(artistFilter === key) selectArtist(key); });  // artists.js 到达后补小传
-    artistIndex.style.display = "none"; gallery.style.display = ""; eraTabs.style.display = "none";
+    artistIndex.style.display = "none"; $("artist-index-bar").style.display = "none"; gallery.style.display = ""; eraTabs.style.display = "none";
     const a = artistAgg.find(x => x.key === key);
     artistBar.style.display = "flex"; artistBar.innerHTML = "";
     const back = document.createElement("button");
@@ -252,7 +258,7 @@
   }
   function exitArtist(){
     artistIndexOn = false; artistFilter = null;
-    artistIndex.style.display = "none"; artistBar.style.display = "none"; $("artist-header").style.display = "none";
+    artistIndex.style.display = "none"; $("artist-index-bar").style.display = "none"; artistBar.style.display = "none"; $("artist-header").style.display = "none";
     gallery.style.display = ""; eraTabs.style.display = "";
     $("artist-btn").classList.remove("active");
     applyFilters();
@@ -739,6 +745,7 @@
   let searchTimer;
   searchInput.addEventListener("input", ()=>{ clearTimeout(searchTimer); searchTimer=setTimeout(applyFilters,180); });
   $("clear-search").onclick=()=>{ searchInput.value=""; applyFilters(); searchInput.focus(); };
+  $("artist-filter").addEventListener("input", ()=>{ artistIdxFilter = $("artist-filter").value.trim().toLowerCase(); renderArtistIndex(); });
   eraFilter.onchange=applyFilters; mediumFilter.onchange=applyFilters; countryFilter.onchange=applyFilters;
   $("timeline-btn").onclick=(e)=>{
     timelineMode=!timelineMode;

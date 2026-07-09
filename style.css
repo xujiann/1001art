@@ -73,6 +73,11 @@ select:focus{border-color:var(--accent)}
 .artist-card:hover .artist-thumb img{transform:scale(1.05)}
 /* 艺术家肖像：方形裁切时偏上，保住面部 */
 .artist-portrait{object-position:center 20% !important}
+/* 艺术家索引筛选条 */
+.artist-index-bar{display:flex;align-items:center;gap:0.75rem;max-width:1400px;margin:0 auto;padding:0 1.5rem 0.5rem}
+.artist-index-bar input{flex:1;max-width:320px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:0.55rem 0.9rem;color:var(--text);font-size:0.9rem;outline:none;transition:border-color var(--trans)}
+.artist-index-bar input:focus{border-color:var(--accent)}
+.artist-index-bar .aif-count{font-size:0.8rem;color:var(--text2)}
 .artist-noimg{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2rem;color:rgba(255,255,255,0.15)}
 .artist-meta{padding:0.6rem 0.75rem}
 .artist-name{font-size:0.85rem;font-weight:600;color:var(--text);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
