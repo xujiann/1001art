@@ -5,8 +5,8 @@
   const LANG = window.LANG || {ui:{zh:{},en:{}},dict:{}};
   const PER_PAGE = 48;
   let TOTAL = DATA.length;
-  const ARTISTS = window.ART_ARTISTS || {};   // 艺术家小传 / 生卒 / 国籍
-  const CREDITS = window.ART_CREDITS || {};   // 逐图作者 / 许可署名
+  let ARTISTS = window.ART_ARTISTS || {};   // 艺术家小传 / 生卒 / 国籍（懒加载后重赋值）
+  let CREDITS = window.ART_CREDITS || {};   // 逐图作者 / 许可署名（懒加载后重赋值）
   function lifespanStr(key){ const m=ARTISTS[key]; if(!m||(!m.born&&!m.died)) return ""; return (m.born||"?")+"–"+(m.died||(m.born?"":"?")); }
   function artistBio(key){ const m=ARTISTS[key]; if(!m) return null; return lang==="en" ? (m.bio_en||m.bio_zh) : (m.bio_zh||m.bio_en); }
   function artistCountry(key){ const m=ARTISTS[key]; if(!m) return ""; return lang==="en" ? (m.cty_en||m.cty_zh||"") : (m.cty_zh||m.cty_en||""); }
@@ -198,6 +198,7 @@
     clearMuseum();
     artistIndexOn = true; artistFilter = null;
     renderArtistIndex();
+    if(!_metaLoaded) loadMeta().then(() => { if(artistIndexOn) renderArtistIndex(); });  // artists.js 到达后补生卒年
     artistIndex.style.display = "grid";
     artistBar.style.display = "none"; $("artist-header").style.display = "none";
     gallery.style.display = "none"; pagination.innerHTML = ""; noResults.style.display = "none";
@@ -211,6 +212,7 @@
   function selectArtist(key){
     clearMuseum();
     artistFilter = key; artistIndexOn = false;
+    if(!_metaLoaded) loadMeta().then(() => { if(artistFilter === key) selectArtist(key); });  // artists.js 到达后补小传
     artistIndex.style.display = "none"; gallery.style.display = ""; eraTabs.style.display = "none";
     const a = artistAgg.find(x => x.key === key);
     artistBar.style.display = "flex"; artistBar.innerHTML = "";
@@ -508,30 +510,31 @@
     else { al.style.display = ""; al.textContent = T("more_by"); }
     scheduleNeighborPreload();
   }
-  // 逐图作者/许可署名（合规：标注作者、许可、来源）
-  // 描述按需懒加载（desc.js 不进首屏，首次开弹窗时拉取并缓存）
-  let DESC = window.ART_DESC || null, descLoading = null;
-  function loadDesc(){
-    if(DESC) return Promise.resolve(DESC);
-    if(descLoading) return descLoading;
-    descLoading = new Promise(res => {
-      const s = document.createElement("script"); s.src = "desc.js";
-      s.onload = () => { DESC = window.ART_DESC || {}; res(DESC); };
-      s.onerror = () => { DESC = {}; res(DESC); };
-      document.head.appendChild(s);
-    });
-    return descLoading;
+  // 元数据（desc/credits/artists）不进首屏关键路径，首次开弹窗或进艺术家视图时懒加载并缓存
+  let DESC = window.ART_DESC || null;
+  let _metaLoaded = !!(window.ART_DESC && window.ART_CREDITS && window.ART_ARTISTS), _metaLoading = null;
+  function _loadScript(src){ return new Promise(res => { const s = document.createElement("script"); s.src = src; s.onload = res; s.onerror = res; document.head.appendChild(s); }); }
+  function loadMeta(){
+    if(_metaLoaded) return Promise.resolve();
+    if(_metaLoading) return _metaLoading;
+    _metaLoading = Promise.all([
+      window.ART_DESC ? null : _loadScript("desc.js"),
+      window.ART_CREDITS ? null : _loadScript("credits.js"),
+      window.ART_ARTISTS ? null : _loadScript("artists.js")
+    ]).then(() => { DESC = window.ART_DESC || {}; CREDITS = window.ART_CREDITS || {}; ARTISTS = window.ART_ARTISTS || {}; _metaLoaded = true; });
+    return _metaLoading;
   }
   function pickDesc(d){ const e = DESC && DESC[d.id]; return e ? (lang === "en" ? (e[1] || e[0]) : (e[0] || e[1])) : ""; }
   function fillDesc(d){
     const el = $("modal-desc");
-    if(DESC){ el.textContent = pickDesc(d); return; }
+    if(_metaLoaded){ el.textContent = pickDesc(d); return; }
     el.textContent = "";
-    loadDesc().then(() => { if(modalEntry === d) el.textContent = pickDesc(d); });
+    loadMeta().then(() => { if(modalEntry === d) el.textContent = pickDesc(d); });
   }
 
   function fillCredit(d){
     const mc = $("modal-credit");
+    if(!_metaLoaded) loadMeta().then(() => { if(modalEntry === d) fillCredit(d); });  // credits.js 到达后补署名
     const cr = (d.img && d.file) ? CREDITS[d.id] : null;
     if(!cr){ mc.style.display = "none"; mc.innerHTML = ""; return; }
     const src = "https://commons.wikimedia.org/wiki/File:" + encodeURIComponent(d.file);

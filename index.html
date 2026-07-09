@@ -199,10 +199,9 @@
   <button class="footer-about" id="about-btn">关于本站</button>
 </footer>
 
+<!-- 首屏关键路径仅需 lang + 核心数据 + 引擎；artists.js/credits.js/desc.js/data-rest.js 由 app.js 按需懒加载 -->
 <script defer src="lang.js"></script>
 <script defer src="data.js"></script>
-<script defer src="artists.js"></script>
-<script defer src="credits.js"></script>
 <script defer src="app.js"></script>
 <script>
 if ("serviceWorker" in navigator) {
