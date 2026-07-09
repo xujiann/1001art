@@ -176,10 +176,11 @@
     updateStats();
   }
   let museumAgg = [];
+  const MU_SKIP = { "未知收藏":1, "私人收藏":1, "Private collection":1 };   // 占位归组，非真实机构，不进索引
   function buildMuseumAgg(){
     const m = new Map();
     DATA.forEach(d => {
-      if(!d.location || d.location === "未知收藏") return;
+      if(!d.location || MU_SKIP[d.location]) return;
       let a = m.get(d.location);
       if(!a){ a = {name:d.location, en:d.location_en || d.location, n:0, rep:null}; m.set(d.location, a); }
       a.n++; if(!a.rep && d.thumb) a.rep = d;
@@ -319,7 +320,8 @@
   // —— 按馆藏博物馆索引（复用艺术家索引网格）——
   function renderMuseumIndex(){
     const q = artistIdxFilter;
-    const list = q ? museumAgg.filter(a => ((a.name||"") + " " + (a.en||"")).toLowerCase().includes(q)) : museumAgg;
+    // 默认只列 ≥2 件的真实馆藏（去长尾）；一旦筛选则搜全部（含单件馆，可被找到）
+    const list = q ? museumAgg.filter(a => ((a.name||"") + " " + (a.en||"")).toLowerCase().includes(q)) : museumAgg.filter(a => a.n >= 2);
     const frag = document.createDocumentFragment();
     list.forEach(a => {
       const card = document.createElement("div");
