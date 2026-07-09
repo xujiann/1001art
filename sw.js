@@ -2,8 +2,8 @@
    - 外壳（HTML/CSS/JS）：stale-while-revalidate
    - 本地图片（images/）：cache-first，按需缓存，离线可回看已浏览作品
 */
-const SHELL = "art1001-shell-v29";
-const IMGS  = "art1001-img-v9";
+const SHELL = "art1001-shell-v30";
+const IMGS  = "art1001-img-v10";
 const IMG_CDN = "cdn.jsdelivr.net";   // 图片走 jsDelivr（xujiann/1001art-img）
 const SHELL_ASSETS = [
   "./", "./index.html", "./style.css", "./lang.js", "./data.js", "./data-rest.js", "./artists.js", "./credits.js", "./app.js", "./manifest.webmanifest"

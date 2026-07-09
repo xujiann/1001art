@@ -9,7 +9,8 @@ import { dirname, join } from "path";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 globalThis.window = {};
 await import("file://" + join(ROOT, "data.js").replace(/\\/g, "/"));
-const DATA = globalThis.window.ART_DATA || [];
+await import("file://" + join(ROOT, "data-rest.js").replace(/\\/g, "/"));   // 按需分片：合并核心+其余
+const DATA = (globalThis.window.ART_DATA || []).concat(globalThis.window.ART_DATA_REST || []);
 
 const REQ = ["id","sy","th","title","title_en","artist","artist_en","year","era","era_en","medium","country","location"];
 const THEMES = new Set(["prehistoric","ancient","egypt","greece","rome","byzantine","medieval","gothic","renaissance","baroque","rococo","neoclassic","romantic","realism","impressionism","modern","contemporary","default"]);
