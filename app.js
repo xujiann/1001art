@@ -515,7 +515,19 @@
     const akey = d.artist_en || d.artist;
     if(artistFilter === akey){ al.style.display = "none"; }
     else { al.style.display = ""; al.textContent = T("more_by"); }
+    fillArtistAvatar(d, akey);
     scheduleNeighborPreload();
+  }
+  // 弹窗艺术家小头像（肖像懒加载到达后填充；点击跳该艺术家）
+  function fillArtistAvatar(d, akey){
+    const av = $("modal-artist-avatar");
+    const setP = () => {
+      const p = artistPortrait(akey);
+      if(p){ av.src = p; av.style.display = ""; av.title = F(d, "artist"); av.onclick = () => { closeModal(); selectArtist(akey); }; }
+      else { av.style.display = "none"; av.removeAttribute("src"); av.onclick = null; }
+    };
+    setP();
+    if(!_metaLoaded) loadMeta().then(() => { if(modalEntry === d) setP(); });
   }
   // 元数据（desc/credits/artists）不进首屏关键路径，首次开弹窗或进艺术家视图时懒加载并缓存
   let DESC = window.ART_DESC || null;
