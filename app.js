@@ -10,6 +10,7 @@
   function lifespanStr(key){ const m=ARTISTS[key]; if(!m||(!m.born&&!m.died)) return ""; return (m.born||"?")+"–"+(m.died||(m.born?"":"?")); }
   function artistBio(key){ const m=ARTISTS[key]; if(!m) return null; return lang==="en" ? (m.bio_en||m.bio_zh) : (m.bio_zh||m.bio_en); }
   function artistCountry(key){ const m=ARTISTS[key]; if(!m) return ""; return lang==="en" ? (m.cty_en||m.cty_zh||"") : (m.cty_zh||m.cty_en||""); }
+  function artistPortrait(key){ const m=ARTISTS[key]; return (m && m.p) ? imgURL(m.p) : null; }   // 艺术家肖像（懒加载后可用）
 
   // —— 语言状态 ——
   let lang = (localStorage.getItem("art1001_lang") === "en") ? "en" : "zh";
@@ -43,7 +44,7 @@
   // 本地缓存图已迁至独立仓 xujiann/1001art-img，经 jsDelivr 分发。
   // data.js 内仍存相对路径（images/…），此处统一拼接 CDN 前缀；
   // 迁移到别的 CDN 只需改这一行。留空字符串即回退为同源相对路径（本地调试用）。
-  const IMG_BASE = "https://cdn.jsdelivr.net/gh/xujiann/1001art-img@v4/";
+  const IMG_BASE = "https://cdn.jsdelivr.net/gh/xujiann/1001art-img@v5/";
   const imgURL = p => (p && IMG_BASE) ? IMG_BASE + p : p;
 
   // —— 时间线分期 ——
@@ -182,9 +183,12 @@
       const open = () => selectArtist(a.key);
       card.onclick = open;
       card.onkeydown = e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); open(); } };
-      const thumb = (a.rep && a.rep.thumb)
-        ? `<img loading="lazy" decoding="async" src="${imgURL(a.rep.thumb)}" alt="">`
-        : `<div class="artist-noimg">❖</div>`;
+      const pImg = artistPortrait(a.key);
+      const thumb = pImg
+        ? `<img class="artist-portrait" loading="lazy" decoding="async" src="${pImg}" alt="">`
+        : (a.rep && a.rep.thumb)
+          ? `<img loading="lazy" decoding="async" src="${imgURL(a.rep.thumb)}" alt="">`
+          : `<div class="artist-noimg">❖</div>`;
       const ls = lifespanStr(a.key);
       card.innerHTML = `<div class="artist-thumb">${thumb}</div>`+
         `<div class="artist-meta"><div class="artist-name">${esc(artistName(a))}</div>`+
@@ -228,9 +232,12 @@
     const bio = artistBio(key), ls = lifespanStr(key), cty = artistCountry(key);
     const sub = [ls, cty].filter(Boolean).join(" · ");
     const alt = a ? (lang === "en" ? a.zh : a.en) : "";
-    const cover = (a && a.rep && a.rep.thumb)
-      ? `<img class="ah-cover" loading="lazy" decoding="async" src="${imgURL(a.rep.thumb)}" alt="">`
-      : `<div class="ah-cover ah-noimg">❖</div>`;
+    const pCover = artistPortrait(key);
+    const cover = pCover
+      ? `<img class="ah-cover artist-portrait" loading="lazy" decoding="async" src="${pCover}" alt="">`
+      : (a && a.rep && a.rep.thumb)
+        ? `<img class="ah-cover" loading="lazy" decoding="async" src="${imgURL(a.rep.thumb)}" alt="">`
+        : `<div class="ah-cover ah-noimg">❖</div>`;
     hdr.innerHTML = cover +
       `<div class="ah-info">`+
         `<div class="ah-name">${esc(a ? artistName(a) : key)}</div>`+
