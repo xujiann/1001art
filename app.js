@@ -86,6 +86,7 @@
   let artistIndexOn = false;   // 是否正在显示艺术家索引
   let museumIndexOn = false;   // 是否正在显示馆藏博物馆索引
   let artistIdxFilter = "";    // 索引（艺术家/博物馆）内的筛选词（共用）
+  let idxSort = "count";       // 索引排序：count（按数量）| name（按名称）
   let museumFilter = null;     // 选中的馆藏地（藏品展）
 
   // —— 收藏（localStorage 持久化）——
@@ -204,7 +205,8 @@
 
   function renderArtistIndex(){
     const q = artistIdxFilter;
-    const list = q ? artistAgg.filter(a => ((a.zh||"") + " " + (a.en||"") + " " + a.key).toLowerCase().includes(q)) : artistAgg;
+    let list = q ? artistAgg.filter(a => ((a.zh||"") + " " + (a.en||"") + " " + a.key).toLowerCase().includes(q)) : artistAgg;
+    if(idxSort === "name") list = list.slice().sort((a,b) => artistName(a).localeCompare(artistName(b), "zh"));
     const frag = document.createDocumentFragment();
     list.forEach(a => {
       const card = document.createElement("div");
@@ -334,7 +336,8 @@
   function renderMuseumIndex(){
     const q = artistIdxFilter;
     // 默认只列 ≥2 件的真实馆藏（去长尾）；一旦筛选则搜全部（含单件馆，可被找到）
-    const list = q ? museumAgg.filter(a => ((a.name||"") + " " + (a.en||"")).toLowerCase().includes(q)) : museumAgg.filter(a => a.n >= 2);
+    let list = q ? museumAgg.filter(a => ((a.name||"") + " " + (a.en||"")).toLowerCase().includes(q)) : museumAgg.filter(a => a.n >= 2);
+    if(idxSort === "name") list = list.slice().sort((a,b) => ((lang==="en"?a.en:a.name)||"").localeCompare((lang==="en"?b.en:b.name)||"", "zh"));
     const frag = document.createDocumentFragment();
     list.forEach(a => {
       const card = document.createElement("div");
@@ -773,6 +776,7 @@
     $("fav-only-btn").innerHTML = "♥ " + T("fav_only");
     $("artist-btn").textContent = T("by_artist");
     $("museum-btn").textContent = T("by_museum");
+    $("idx-sort").textContent = T(idxSort === "count" ? "sort_by_count" : "sort_by_name");
     { const fi = $("artist-filter"); if(fi) fi.placeholder = museumIndexOn ? T("filter_museum") : T("filter_artist"); }
     $("daily-btn").textContent = T("daily");
     const so = $("sort-filter").options;
@@ -828,6 +832,7 @@
   $("clear-search").onclick=()=>{ searchInput.value=""; applyFilters(); searchInput.focus(); };
   $("artist-filter").addEventListener("input", ()=>{ artistIdxFilter = $("artist-filter").value.trim().toLowerCase(); if(museumIndexOn) renderMuseumIndex(); else renderArtistIndex(); });
   $("museum-btn").onclick=()=>{ if(museumIndexOn) exitMuseumIndex(); else showMuseumIndex(); };
+  $("idx-sort").onclick=()=>{ idxSort = idxSort === "count" ? "name" : "count"; $("idx-sort").textContent = T(idxSort === "count" ? "sort_by_count" : "sort_by_name"); if(museumIndexOn) renderMuseumIndex(); else renderArtistIndex(); };
   eraFilter.onchange=applyFilters; mediumFilter.onchange=applyFilters; countryFilter.onchange=applyFilters;
   $("timeline-btn").onclick=(e)=>{
     timelineMode=!timelineMode;
