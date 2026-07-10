@@ -40,12 +40,25 @@
     return FP + encodeURIComponent(f);
   }
 
-  // —— 图片 CDN 基址（jsDelivr）——
-  // 本地缓存图已迁至独立仓 xujiann/1001art-img，经 jsDelivr 分发。
-  // data.js 内仍存相对路径（images/…），此处统一拼接 CDN 前缀；
-  // 迁移到别的 CDN 只需改这一行。留空字符串即回退为同源相对路径（本地调试用）。
-  const IMG_BASE = "https://cdn.jsdelivr.net/gh/xujiann/1001art-img@v6/";
-  const imgURL = p => (p && IMG_BASE) ? IMG_BASE + p : p;
+  // —— 图片 CDN 分片（jsDelivr，支持多图库仓无缝扩容）——
+  // 图片存在独立仓，经 jsDelivr 分发；data.js 内存相对路径（images/<id>.<ext>），此处按 id 路由到对应仓再拼 CDN 前缀。
+  // 单仓约 5GB 撞 GitHub 软上限（~13000 件）。扩容时：新建仓 1001art-img-N、把超界 id 的图推过去打标签，
+  //   然后在下表把当前分片的 until 改成分界 id、追加一行新分片即可——前端零改动。
+  // 迁移/换 CDN：改对应分片的 base。留空字符串数组则回退同源相对路径（本地调试）。
+  // 肖像 images/a/<qid>.<ext>（无数字 id）恒落第一分片。
+  const IMG_SHARDS = [
+    { base: "https://cdn.jsdelivr.net/gh/xujiann/1001art-img@v6/", until: Infinity },
+    // 扩容示例（届时取消注释并把上一行 until 改为分界 id，如 13000）：
+    // { base: "https://cdn.jsdelivr.net/gh/xujiann/1001art-img-2@v1/", until: Infinity },
+  ];
+  const _idRe = /^images\/(?:t\/)?(\d+)\./;   // 从 images/<id>. 或 images/t/<id>. 提取 id
+  function imgURL(p){
+    if(!p) return p;
+    let base = IMG_SHARDS.length ? IMG_SHARDS[0].base : "";
+    const m = _idRe.exec(p);
+    if(m){ const id = +m[1]; for(const s of IMG_SHARDS){ if(id <= s.until){ base = s.base; break; } } }
+    return base + p;
+  }
 
   // —— 时间线分期 ——
   function periodKey(sy){

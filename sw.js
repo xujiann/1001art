@@ -2,7 +2,7 @@
    - 外壳（HTML/CSS/JS）：stale-while-revalidate
    - 本地图片（images/）：cache-first，按需缓存，离线可回看已浏览作品
 */
-const SHELL = "art1001-shell-v37";
+const SHELL = "art1001-shell-v38";
 const IMGS  = "art1001-img-v12";
 const IMG_CDN = "cdn.jsdelivr.net";   // 图片走 jsDelivr（xujiann/1001art-img）
 const SHELL_ASSETS = [
