@@ -614,6 +614,7 @@
     const ctyEl=$("modal-country"); ctyEl.textContent=F(d,"country"); metaClick(ctyEl, (d.country && d.country!=="未知") ? d.country : null, "country");
     fillDesc(d);
     fillCredit(d);
+    fillRelated(d);
     $("modal-num").textContent = lang==="zh" ? `第 ${d.id} / ${TOTAL} ${T("of_total")}` : `${d.id} / ${TOTAL}`;
     const mf = $("modal-fav");
     mf.classList.toggle("on", isFav(d.id));
@@ -673,6 +674,20 @@
     parts.push(`<a href="${esc(src)}" target="_blank" rel="noopener">Wikimedia Commons ↗</a>`);
     mc.innerHTML = `<span class="mc-label">${esc(T("credit_img"))}：</span>` + parts.join(" · ");
     mc.style.display = "";
+  }
+  // 弹窗底部：同一艺术家的其他作品缩略图条
+  function fillRelated(d){
+    const box = $("modal-related");
+    const key = d.artist_en || d.artist;
+    const others = DATA.filter(x => (x.artist_en || x.artist) === key && x.id !== d.id && x.thumb);
+    if(!others.length){ box.style.display = "none"; box.innerHTML = ""; return; }
+    const pick = others.slice(0, 10);
+    box.style.display = "";
+    box.innerHTML = `<div class="mr-label">${esc(T("related_by"))}</div>` +
+      `<div class="mr-strip">` + pick.map(x =>
+        `<img class="mr-thumb" loading="lazy" decoding="async" src="${imgURL(x.thumb)}" alt="${esc(F(x,"title"))}" title="${esc(F(x,"title") + " · " + F(x,"year"))}" data-id="${x.id}">`
+      ).join("") + `</div>`;
+    box.querySelectorAll(".mr-thumb").forEach(im => { im.onclick = () => { const w = DATA.find(y => y.id === +im.dataset.id); if(w) openModal(w); }; });
   }
 
   function showModalPlaceholder(d){
