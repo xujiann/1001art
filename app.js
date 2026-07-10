@@ -568,6 +568,25 @@
     syncURL();
     setTimeout(() => { try{ $("modal-close").focus(); }catch(e){} }, 30);
   }
+  // 弹窗元数据（时代/媒材/国家）可点击 → 跳转到该维度的全部作品
+  function metaClick(el, value, kind){
+    const on = !!value;
+    el.classList.toggle("meta-link", on);
+    el.onclick = on ? () => pivotFilter(kind, value) : null;
+  }
+  function pivotFilter(kind, value){
+    closeModal();
+    clearMuseum();
+    artistFilter = null; artistIndexOn = false; museumIndexOn = false;
+    artistIndex.style.display = "none"; $("artist-index-bar").style.display = "none";
+    artistBar.style.display = "none"; $("artist-header").style.display = "none";
+    $("artist-btn").classList.remove("active"); $("museum-btn").classList.remove("active");
+    gallery.style.display = ""; eraTabs.style.display = "";
+    searchInput.value = ""; eraFilter.value = ""; mediumFilter.value = ""; countryFilter.value = ""; periodFilter = null;
+    (kind === "era" ? eraFilter : kind === "medium" ? mediumFilter : countryFilter).value = value;
+    buildTimelineBar();
+    applyFilters();
+  }
   function fillModal(d){
     modalEntry = d;
     const img=$("modal-img"), ph=$("modal-placeholder"), badge=$("zoom-badge");
@@ -582,17 +601,17 @@
     } else {
       img.style.backgroundImage="none"; img.style.display="none"; badge.style.display="none"; wrap.style.cursor="default"; showModalPlaceholder(d);
     }
-    $("modal-era").textContent=F(d,"era");
+    const eraEl=$("modal-era"); eraEl.textContent=F(d,"era"); metaClick(eraEl, d.era, "era");
     $("modal-title").textContent=F(d,"title");
     $("modal-artist").textContent=F(d,"artist");
     $("modal-year").textContent=F(d,"year");
-    $("modal-medium").textContent=F(d,"medium");
+    const medEl=$("modal-medium"); medEl.textContent=F(d,"medium"); metaClick(medEl, d.medium, "medium");
     const locEl = $("modal-location");
     locEl.textContent = F(d,"location");
     const clickable = d.location && d.location !== "未知收藏" && museumFilter !== d.location;
     locEl.classList.toggle("loc-link", !!clickable);
     locEl.onclick = clickable ? () => { closeModal(); selectMuseum(d.location); } : null;
-    $("modal-country").textContent=F(d,"country");
+    const ctyEl=$("modal-country"); ctyEl.textContent=F(d,"country"); metaClick(ctyEl, (d.country && d.country!=="未知") ? d.country : null, "country");
     fillDesc(d);
     fillCredit(d);
     $("modal-num").textContent = lang==="zh" ? `第 ${d.id} / ${TOTAL} ${T("of_total")}` : `${d.id} / ${TOTAL}`;
