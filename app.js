@@ -13,7 +13,8 @@
   function artistPortrait(key){ const m=ARTISTS[key]; return (m && m.p) ? imgURL(m.p) : null; }   // 艺术家肖像（懒加载后可用）
 
   // —— 语言状态 ——
-  let lang = (localStorage.getItem("art1001_lang") === "en") ? "en" : "zh";
+  let lang = "zh";
+  try{ if(localStorage.getItem("art1001_lang") === "en") lang = "en"; }catch(e){}   // 隐私模式 localStorage 可能抛错，兜底防整页白屏
   const T = k => (LANG.ui[lang] && LANG.ui[lang][k]) || (LANG.ui.zh[k] || k);
   // 取条目的当前语言字段
   const F = (d, base) => (lang === "en" && d[base + "_en"]) ? d[base + "_en"] : d[base];
@@ -179,8 +180,20 @@
     artistAgg = [...m.values()].sort((x,y) => y.n - x.n || x.en.localeCompare(y.en));
     artistByKey = m;   // key → 聚合（含 works[]），供弹窗「相关作品」O(该艺术家) 查表
   }
+  // 数据清洗：个别作品的 artist/location 字段残留 Wikidata 空节点(genid)或裸 URL，
+  // 会以链接文本形式出现在弹窗与索引里。就地归一为「佚名/未知收藏」等，幂等，兼防未来重建回归。
+  const _BADVAL = /^https?:|\.well-known\/genid\//i;
+  function sanitizeData(){
+    for(const d of DATA){
+      if(d.artist && _BADVAL.test(d.artist)) d.artist = "佚名";
+      if(d.artist_en && _BADVAL.test(d.artist_en)) d.artist_en = (d.id === 1651) ? "Jan van Eyck" : (d.artist && d.artist !== "佚名") ? d.artist : "Anonymous";
+      if(d.location && _BADVAL.test(d.location)) d.location = "未知收藏";
+      if(d.location_en && _BADVAL.test(d.location_en)) d.location_en = (d.location && d.location !== "未知收藏") ? "" : "Unknown collection";
+    }
+  }
   // 重算所有 DATA 派生结构（首屏一次；其余数据流式合并后再调一次）
   function computeDerived(){
+    sanitizeData();
     buildTrMaps();
     eraVals = uniq("era"); mediumVals = uniq("medium"); countryVals = uniq("country");
     eraCounts = {}; DATA.forEach(d => eraCounts[d.era] = (eraCounts[d.era]||0)+1);
@@ -233,7 +246,7 @@
     });
     artistIndex.innerHTML = ""; artistIndex.appendChild(frag);
     $("artist-filter-count").textContent = q ? `${list.length} / ${artistAgg.length}` : "";
-    if(artistIndexOn){ $("shown-count").textContent = list.length; $("t-works").textContent = T("artists"); }  // 计的是艺术家数
+    if(artistIndexOn){ $("shown-count").textContent = list.length; $("t-works").textContent = plu(list.length, "artists"); }  // 计的是艺术家数
   }
   function showArtistIndex(){
     clearMuseum();
@@ -258,6 +271,7 @@
     $("museum-btn").classList.remove("active");
     if(!_metaLoaded) loadMeta().then(() => { if(artistFilter === key) selectArtist(key); });  // artists.js 到达后补小传
     artistIndex.style.display = "none"; $("artist-index-bar").style.display = "none"; gallery.style.display = ""; eraTabs.style.display = "none";
+    timelineBar.classList.remove("show");   // 专辑视图不显示时间线条
     const a = artistAgg.find(x => x.key === key);
     artistBar.style.display = "flex"; artistBar.innerHTML = "";
     const back = document.createElement("button");
@@ -295,6 +309,7 @@
     artistIndex.style.display = "none"; $("artist-index-bar").style.display = "none"; artistBar.style.display = "none"; $("artist-header").style.display = "none";
     $("museum-btn").classList.remove("active");
     gallery.style.display = ""; eraTabs.style.display = "";
+    timelineBar.classList.toggle("show", timelineMode);   // 回到画廊：时间线条与开关状态一致
     $("artist-btn").classList.remove("active");
     applyFilters();
   }
@@ -306,6 +321,7 @@
     exitArtist();                       // 退出艺术家视图（互斥）
     museumFilter = name;
     eraTabs.style.display = "none"; gallery.style.display = "";
+    timelineBar.classList.remove("show");   // 藏品展视图不显示时间线条
     const works = DATA.filter(d => d.location === name);
     const rep = works.find(d => d.thumb);
     const enName = works[0] ? (works[0].location_en || "") : "";
@@ -333,6 +349,7 @@
     museumFilter = null;
     $("museum-bar").style.display = "none"; $("museum-header").style.display = "none";
     gallery.style.display = ""; eraTabs.style.display = "";
+    timelineBar.classList.toggle("show", timelineMode);
     applyFilters();
   }
   // —— 按馆藏博物馆索引（复用艺术家索引网格）——
@@ -360,7 +377,7 @@
     });
     artistIndex.innerHTML = ""; artistIndex.appendChild(frag);
     $("artist-filter-count").textContent = q ? `${list.length} / ${museumAgg.length}` : "";
-    if(museumIndexOn){ $("shown-count").textContent = list.length; $("t-works").textContent = T("museums"); }  // 计的是博物馆数
+    if(museumIndexOn){ $("shown-count").textContent = list.length; $("t-works").textContent = plu(list.length, "museums"); }  // 计的是博物馆数
   }
   function showMuseumIndex(){
     clearMuseum(); exitArtist();          // 与艺术家视图互斥（exitArtist 会走 applyFilters，随后覆盖）
@@ -382,6 +399,7 @@
     $("museum-btn").classList.remove("active");
     const fi = $("artist-filter"); if(fi) fi.placeholder = T("filter_artist");
     gallery.style.display = ""; eraTabs.style.display = "";
+    timelineBar.classList.toggle("show", timelineMode);
     applyFilters();
   }
 
@@ -423,7 +441,7 @@
   // —— 渲染 ——
   function render(){
     $("shown-count").textContent = filtered.length;
-    $("t-works").textContent = T("works");   // 画廊/专辑视图计的是作品数（索引视图各自改回）
+    $("t-works").textContent = plu(filtered.length, "works");   // 画廊/专辑视图计的是作品数（索引视图各自改回）
     if(filtered.length === 0){
       gallery.innerHTML=""; pagination.innerHTML="";
       $("t-noresults").textContent = favOnly ? T("fav_empty") : T("no_results");
@@ -674,6 +692,8 @@
     loadMeta().then(() => { if(modalEntry === d) el.textContent = pickDesc(d); });
   }
 
+  // 许可名归一（「public domain」→ 本地化标签），弹窗署名与灯箱题注共用，避免逻辑分叉
+  function licLabel(l){ return l ? (/public domain/i.test(l) ? T("credit_pd") : l) : null; }
   function fillCredit(d){
     const mc = $("modal-credit");
     if(!_metaLoaded) loadMeta().then(() => { if(modalEntry === d) fillCredit(d); });  // credits.js 到达后补署名
@@ -683,8 +703,9 @@
     const parts = [];
     if(cr.a) parts.push(esc(cr.a));
     if(cr.l){
-      const licName = /public domain/i.test(cr.l) ? T("credit_pd") : cr.l;
-      parts.push(cr.lu ? `<a href="${esc(cr.lu)}" target="_blank" rel="noopener">${esc(licName)}</a>` : esc(licName));
+      const licName = licLabel(cr.l);
+      const safeLu = cr.lu && /^https?:/i.test(cr.lu);   // 仅 http(s) 才作链接，挡住 javascript:/data: 等注入
+      parts.push(safeLu ? `<a href="${esc(cr.lu)}" target="_blank" rel="noopener">${esc(licName)}</a>` : esc(licName));
     }
     parts.push(`<a href="${esc(src)}" target="_blank" rel="noopener">Wikimedia Commons ↗</a>`);
     mc.innerHTML = `<span class="mc-label">${esc(T("credit_img"))}：</span>` + parts.join(" · ");
@@ -786,7 +807,7 @@
     let cap = F(d,"title")+" · "+F(d,"artist");
     const cr = CREDITS[d.id];
     if(cr && (cr.a || cr.l)){
-      const lic = cr.l ? (/public domain/i.test(cr.l) ? T("credit_pd") : cr.l) : null;
+      const lic = licLabel(cr.l);
       cap += "　·　" + T("credit_img") + ": " + [cr.a, lic].filter(Boolean).join(" / ");
     }
     $("lb-caption").textContent = cap;
@@ -907,7 +928,7 @@
   function applyLang(){ applyLangChrome(); renderCurrentView(); }
   $("lang-toggle").onclick = () => {
     lang = (lang==="en") ? "zh" : "en";
-    localStorage.setItem("art1001_lang", lang);
+    try{ localStorage.setItem("art1001_lang", lang); }catch(e){}   // 写失败也要继续切换（Safari 隐私模式 setItem 抛错）
     applyLang();
   };
 
@@ -1026,9 +1047,9 @@
     searchInput.value=""; eraFilter.value=""; mediumFilter.value=""; countryFilter.value=""; $("sort-filter").value="default";
     periodFilter=null; favOnly=false; $("fav-only-btn").classList.remove("active");
     if(timelineMode){ timelineMode=false; timelineBar.classList.remove("show"); const tb=$("timeline-btn"); tb.classList.remove("active"); tb.textContent=T("timeline"); }
-    artistFilter=null; artistIndexOn=false; clearMuseum();
-    artistIndex.style.display="none"; artistBar.style.display="none";
-    gallery.style.display=""; eraTabs.style.display=""; $("artist-btn").classList.remove("active");
+    artistFilter=null; artistIndexOn=false; museumIndexOn=false; clearMuseum();
+    artistIndex.style.display="none"; $("artist-index-bar").style.display="none"; artistBar.style.display="none";
+    gallery.style.display=""; eraTabs.style.display=""; $("artist-btn").classList.remove("active"); $("museum-btn").classList.remove("active");
     buildTimelineBar(); applyFilters();
   };
 
@@ -1047,6 +1068,7 @@
     if(modalEntry && modalEntry.id === id && $("modal").classList.contains("open")) return;
     const d = DATA.find(x => x.id === id);
     if(d) openModal(d);
+    else if(!_restLoaded){ _pendingWantId = id; loadRest(reinitAfterRest); }   // 深链指向尚未合并的其余分片 → 载入后再开
   }
   window.addEventListener("hashchange", openFromHash);
 

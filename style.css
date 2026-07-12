@@ -74,7 +74,7 @@ select:focus{border-color:var(--accent)}
 /* 艺术家肖像：方形裁切时偏上，保住面部 */
 .artist-portrait{object-position:center 20% !important}
 /* 艺术家索引筛选条 */
-.artist-index-bar{display:flex;align-items:center;gap:0.75rem;max-width:1400px;margin:0 auto;padding:0 1.5rem 0.5rem}
+.artist-index-bar{display:flex;align-items:center;gap:0.75rem;max-width:1400px;margin:0 auto;padding:0 2rem 0.5rem}
 .artist-index-bar input{flex:1;max-width:320px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:0.55rem 0.9rem;color:var(--text);font-size:0.9rem;outline:none;transition:border-color var(--trans)}
 .artist-index-bar input:focus{border-color:var(--accent)}
 .idx-sort-btn{flex-shrink:0;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:0.55rem 0.9rem;color:var(--text2);font-size:0.85rem;cursor:pointer;white-space:nowrap;transition:all var(--trans)}
@@ -170,7 +170,7 @@ select:focus{border-color:var(--accent)}
 .modal-img-placeholder .ph-glyph{font-size:2.6rem;color:rgba(255,255,255,0.3)}
 .modal-img-placeholder .mph-title{font-family:var(--font-serif,Georgia,"Songti SC",serif);font-size:1.1rem;color:rgba(255,255,255,0.85);line-height:1.4}
 .modal-img-placeholder .mph-artist{font-size:0.85rem;color:rgba(255,255,255,0.5)}
-.modal-img-placeholder .mph-note{font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:0.4rem;max-width:80%}
+.modal-img-placeholder .mph-note{font-size:0.72rem;color:rgba(255,255,255,0.6);margin-top:0.4rem;max-width:80%}
 .modal-img-placeholder .mph-wiki{margin-top:0.5rem;font-size:0.78rem;color:var(--accent2);text-decoration:none;border:1px solid var(--border);padding:0.35rem 0.85rem;border-radius:7px;transition:all var(--trans)}
 .modal-img-placeholder .mph-wiki:hover{border-color:var(--accent);background:rgba(124,106,247,0.12)}
 .modal-info{padding:2rem;display:flex;flex-direction:column;gap:0.75rem}
@@ -250,6 +250,8 @@ select:focus{border-color:var(--accent)}
 .mr-thumb:hover{border-color:var(--accent);transform:translateY(-2px)}
 /* 键盘焦点可见（卡片、缩略图、可点击元数据等非原生按钮元素）*/
 .art-card:focus-visible,.artist-card:focus-visible,.mr-thumb:focus-visible,.modal-meta dd.meta-link:focus-visible,.modal-meta dd.loc-link:focus-visible,.modal-era-badge.meta-link:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+/* 表单控件也给清晰焦点环（此前仅 border 微变，键盘导航难辨）*/
+#search:focus-visible,select:focus-visible,.artist-index-bar input:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
 .museum-header .ah-sub{text-transform:uppercase;letter-spacing:0.1em;font-size:0.72rem}
 .modal-desc{font-size:0.85rem;color:var(--text2);line-height:1.7;margin-top:0.25rem;flex:1}
 .modal-credit{font-size:0.72rem;color:var(--text3);line-height:1.5;margin-top:0.5rem;padding-top:0.5rem;border-top:1px dashed var(--border)}
@@ -332,10 +334,10 @@ select:focus{border-color:var(--accent)}
   .filter-row > *{flex:0 0 auto;min-height:44px}
   .filter-row select{min-height:44px;padding-top:0;padding-bottom:0}
   .btn-outline,.btn-accent,.btn-text{min-height:44px;display:inline-flex;align-items:center}
-  .lang-btn{min-height:36px}
+  .lang-btn{min-height:44px}
   .timeline-bar{padding-left:1rem;padding-right:1rem}
   /* 安全区适配（刘海/底部条） */
-  .gallery,.pagination,.artist-index,.artist-header,.artist-bar{padding-left:max(1rem,env(safe-area-inset-left));padding-right:max(1rem,env(safe-area-inset-right))}
+  .gallery,.pagination,.artist-index,.artist-index-bar,.artist-header,.artist-bar{padding-left:max(1rem,env(safe-area-inset-left));padding-right:max(1rem,env(safe-area-inset-right))}
   .site-footer{padding-bottom:calc(2rem + env(safe-area-inset-bottom))}
   .to-top{bottom:calc(16px + env(safe-area-inset-bottom))}
   /* 灯箱工具栏避让状态栏 */
