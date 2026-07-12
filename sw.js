@@ -2,16 +2,30 @@
    - 外壳（HTML/CSS/JS）：stale-while-revalidate
    - 本地图片（images/）：cache-first，按需缓存，离线可回看已浏览作品
 */
-const SHELL = "art1001-shell-v42";
+const SHELL = "art1001-shell-v43";
 const IMGS  = "art1001-img-v12";
 const IMG_CDN = "cdn.jsdelivr.net";   // 图片走 jsDelivr（xujiann/1001art-img）
-const SHELL_ASSETS = [
-  "./", "./index.html", "./style.css", "./lang.js", "./data.js", "./data-rest.js", "./artists.js", "./credits.js", "./app.js", "./manifest.webmanifest"
-];
+const IMG_CAP = 1200;                 // 图片缓存上限，FIFO 淘汰，防 Cache Storage 无限增长触发整源清退
+// 核心壳：小、离线首屏必需 → 原子缓存
+const CORE_ASSETS = ["./", "./index.html", "./style.css", "./lang.js", "./data.js", "./app.js", "./manifest.webmanifest"];
+// 大/可选资源（数据其余分片 + 懒加载元数据）：尽力缓存，单个失败不阻断安装
+const EXTRA_ASSETS = ["./data-rest.js", "./desc.js", "./credits.js", "./artists.js"];
 
 self.addEventListener("install", e => {
-  e.waitUntil(caches.open(SHELL).then(c => c.addAll(SHELL_ASSETS)).then(() => self.skipWaiting()));
+  e.waitUntil(
+    caches.open(SHELL).then(c =>
+      c.addAll(CORE_ASSETS).then(() => Promise.all(EXTRA_ASSETS.map(u => c.add(u).catch(() => {}))))
+    ).then(() => self.skipWaiting())
+  );
 });
+
+// 图片缓存 FIFO 淘汰：超上限则删最早写入的若干条
+async function trimCache(cacheName, max){
+  const cache = await caches.open(cacheName);
+  const keys = await cache.keys();
+  if(keys.length <= max) return;
+  for(let i = 0; i < keys.length - max; i++) await cache.delete(keys[i]);
+}
 
 self.addEventListener("activate", e => {
   e.waitUntil(
@@ -35,7 +49,7 @@ self.addEventListener("fetch", e => {
     e.respondWith(
       caches.open(IMGS).then(cache =>
         cache.match(req).then(hit => hit || fetch(url.href, { mode: "cors" }).then(res => {
-          if (res && res.ok) cache.put(req, res.clone());
+          if (res && res.ok) cache.put(req, res.clone()).then(() => trimCache(IMGS, IMG_CAP));
           return res;
         }).catch(() => fetch(req)))
       )

@@ -13,12 +13,15 @@
 <meta name="description" content="精选并展示人类历史上1001件著名艺术作品，从史前壁画到当代艺术。A curated gallery of 1001 famous works of art across human history.">
 <meta name="theme-color" content="#0a0a0f">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://xujiann.github.io/1001art/">
 <meta property="og:title" content="1001件人类艺术瑰宝 · 1001 Masterpieces of Human Art">
 <meta property="og:description" content="精选人类历史上1001件著名艺术作品 · 从史前壁画到当代艺术">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/xujiann/1001art-img@v2/images/1.jpg">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/xujiann/1001art-img@v6/images/1.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/xujiann/1001art-img@v2/images/1.jpg">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/xujiann/1001art-img@v6/images/1.jpg">
+<link rel="canonical" href="https://xujiann.github.io/1001art/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%237c6af7'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='white' font-family='Georgia,serif'%3E%E2%9D%96%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="icon-180.png">
 <link rel="manifest" href="manifest.webmanifest">
 <script type="application/ld+json">
 {
@@ -59,13 +62,13 @@
 <div class="toolbar">
   <div class="search-wrap">
     <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    <input type="text" id="search" placeholder="搜索作品名称、艺术家、年代…" autocomplete="off">
+    <input type="text" id="search" placeholder="搜索作品名称、艺术家、年代…" autocomplete="off" aria-label="搜索作品">
     <button class="clear-btn" id="clear-search" title="清除">✕</button>
   </div>
   <div class="filter-row">
-    <select id="era-filter"><option value="">全部时代</option></select>
-    <select id="medium-filter"><option value="">全部媒材</option></select>
-    <select id="country-filter"><option value="">全部地区</option></select>
+    <select id="era-filter" aria-label="时代筛选"><option value="">全部时代</option></select>
+    <select id="medium-filter" aria-label="媒材筛选"><option value="">全部媒材</option></select>
+    <select id="country-filter" aria-label="地区筛选"><option value="">全部地区</option></select>
     <select id="sort-filter" aria-label="排序">
       <option value="default">默认（名气）</option>
       <option value="year_asc">年代：早→晚</option>
@@ -95,7 +98,7 @@
 <div class="artist-header museum-header" id="museum-header" style="display:none"></div>
 
 <div class="artist-index-bar" id="artist-index-bar" style="display:none">
-  <input type="text" id="artist-filter" placeholder="筛选艺术家…" autocomplete="off">
+  <input type="text" id="artist-filter" placeholder="筛选艺术家…" autocomplete="off" aria-label="筛选艺术家">
   <button id="idx-sort" class="idx-sort-btn" type="button">按数量</button>
   <span class="aif-count" id="artist-filter-count"></span>
 </div>

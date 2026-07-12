@@ -7,7 +7,7 @@
   --border:#2a2a42;
   --text:#e8e8f0;
   --text2:#a0a0c0;
-  --text3:#606080;
+  --text3:#8a8ab0;
   --accent:#7c6af7;
   --accent2:#a594f9;
   --gold:#d4a843;
@@ -159,7 +159,7 @@ select:focus{border-color:var(--accent)}
 
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px)}
 .modal-overlay.open{display:flex}
-.modal-box{background:var(--bg2);border:1px solid var(--border);border-radius:16px;max-width:900px;width:100%;max-height:92vh;overflow-y:auto;position:relative}
+.modal-box{background:var(--bg2);border:1px solid var(--border);border-radius:16px;max-width:900px;width:100%;max-height:92vh;overflow-y:auto;overscroll-behavior:contain;position:relative}
 .modal-close{position:absolute;top:1rem;right:1rem;background:var(--bg4);border:none;color:var(--text2);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;z-index:10;transition:all var(--trans)}
 .modal-close:hover{background:var(--border);color:#fff}
 .modal-content{display:grid;grid-template-columns:1fr 1fr;min-height:400px}
@@ -248,6 +248,8 @@ select:focus{border-color:var(--accent)}
 .mr-strip::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 .mr-thumb{height:58px;width:auto;max-width:90px;object-fit:cover;border-radius:6px;cursor:pointer;border:1px solid var(--border);flex-shrink:0;background:var(--bg3);transition:border-color var(--trans),transform var(--trans)}
 .mr-thumb:hover{border-color:var(--accent);transform:translateY(-2px)}
+/* 键盘焦点可见（卡片、缩略图、可点击元数据等非原生按钮元素）*/
+.art-card:focus-visible,.artist-card:focus-visible,.mr-thumb:focus-visible,.modal-meta dd.meta-link:focus-visible,.modal-meta dd.loc-link:focus-visible,.modal-era-badge.meta-link:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
 .museum-header .ah-sub{text-transform:uppercase;letter-spacing:0.1em;font-size:0.72rem}
 .modal-desc{font-size:0.85rem;color:var(--text2);line-height:1.7;margin-top:0.25rem;flex:1}
 .modal-credit{font-size:0.72rem;color:var(--text3);line-height:1.5;margin-top:0.5rem;padding-top:0.5rem;border-top:1px dashed var(--border)}
@@ -341,6 +343,8 @@ select:focus{border-color:var(--accent)}
   /* 弹窗按钮更易点按 */
   .modal-nav button,.modal-fav,.modal-share{min-height:40px}
   .modal-close,.help-close{width:40px;height:40px}
+  /* 灯箱工具栏按钮达到 44px 触控最小尺寸 */
+  .lb-actions button,.lb-link{height:44px;min-width:44px}
 }
 @media(max-width:480px){
   .gallery{column-width:158px;column-gap:0.6rem}
@@ -350,7 +354,9 @@ select:focus{border-color:var(--accent)}
   /* 触屏设备：始终显示卡片收藏心（无 hover） */
 }
 @media(hover:none){
-  .card-fav{opacity:0.9}
+  /* 触屏：收藏心常显且放大命中区（视觉字号不变）*/
+  .card-fav{opacity:0.9;width:36px;height:36px;font-size:1.05rem}
+  .list-view .card-fav{width:30px;height:30px;font-size:0.9rem}
 }
 
 ::-webkit-scrollbar{width:6px}
