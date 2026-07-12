@@ -202,6 +202,11 @@
       if(d.location_en && _BADVAL.test(d.location_en)) d.location_en = _QID_NAME[d.location_en] || goodEn.get(d.location) || (d.location && d.location !== "未知收藏" ? "" : "Unknown collection");
       if(d.title) d.title = d.title.replace(/\s{2,}/g, " ").trim();                    // 折叠多余空格
       if(d.title_en){ d.title_en = d.title_en.replace(/\s{2,}/g, " ").trim(); if(d.artist_en === "Albrecht Dürer") d.title_en = d.title_en.replace("Great Passion", "Large Passion"); }
+      // Dürer 的《受难》《启示录》等版画组画被误标为「布面油画」→ 高置信修正为版画
+      if(d.artist_en === "Albrecht Dürer" && /oil on canvas/i.test(d.medium_en || "") &&
+         (/print/i.test((d.location || "") + (d.location_en || "")) || /Passion|Apocalypse/i.test(d.title_en || ""))){
+        d.medium = "版画"; d.medium_en = "Print";
+      }
     }
   }
   // 重算所有 DATA 派生结构（首屏一次；其余数据流式合并后再调一次）
