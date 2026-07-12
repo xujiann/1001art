@@ -18,7 +18,7 @@
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.6;min-height:100vh;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
 
-.site-header{background:var(--bg2);border-bottom:1px solid var(--border);padding:1.5rem 2rem;position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
+.site-header{background:var(--bg2);border-bottom:1px solid var(--border);padding:1.5rem 2rem;position:sticky;top:0;z-index:100;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 .header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
 .header-right{display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap}
 .lang-btn{padding:0.4rem 0.85rem;background:var(--bg3);border:1px solid var(--border);border-radius:20px;color:var(--accent2);font-size:0.8rem;font-weight:600;cursor:pointer;transition:all var(--trans);min-width:48px}
@@ -137,9 +137,9 @@ select:focus{border-color:var(--accent)}
 .card-title{font-family:var(--font-serif);font-size:1rem;font-weight:500;color:#fff;line-height:1.32;margin-bottom:0.3rem;letter-spacing:0.01em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .card-artist{font-size:0.78rem;color:var(--text2)}
 .card-year{font-size:0.72rem;color:var(--text3);margin-top:0.25rem;font-variant-numeric:oldstyle-nums}
-.card-num{position:absolute;top:8px;right:8px;z-index:2;background:rgba(0,0,0,0.6);color:rgba(255,255,255,0.75);font-size:0.62rem;padding:2px 7px;border-radius:10px;backdrop-filter:blur(4px);opacity:0;transition:opacity var(--trans)}
+.card-num{position:absolute;top:8px;right:8px;z-index:2;background:rgba(0,0,0,0.6);color:rgba(255,255,255,0.75);font-size:0.62rem;padding:2px 7px;border-radius:10px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);opacity:0;transition:opacity var(--trans)}
 .art-card:hover .card-num{opacity:1}
-.card-fav{position:absolute;top:6px;left:6px;z-index:2;width:28px;height:28px;border-radius:50%;border:none;background:rgba(0,0,0,0.5);color:rgba(255,255,255,0.85);font-size:0.95rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);opacity:0;transition:opacity var(--trans),transform var(--trans),background var(--trans)}
+.card-fav{position:absolute;top:6px;left:6px;z-index:2;width:28px;height:28px;border-radius:50%;border:none;background:rgba(0,0,0,0.5);color:rgba(255,255,255,0.85);font-size:0.95rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);opacity:0;transition:opacity var(--trans),transform var(--trans),background var(--trans)}
 .art-card:hover .card-fav,.card-fav.on{opacity:1}
 .card-fav:hover{background:rgba(0,0,0,0.7);transform:scale(1.12)}
 .card-fav.on{color:#ff6b8a}
@@ -157,7 +157,7 @@ select:focus{border-color:var(--accent)}
 .page-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
 .page-btn:disabled{opacity:0.35;cursor:not-allowed}
 
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 .modal-overlay.open{display:flex}
 .modal-box{background:var(--bg2);border:1px solid var(--border);border-radius:16px;max-width:900px;width:100%;max-height:92vh;overflow-y:auto;overscroll-behavior:contain;position:relative}
 .modal-close{position:absolute;top:1rem;right:1rem;background:var(--bg4);border:none;color:var(--text2);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;z-index:10;transition:all var(--trans)}
@@ -188,7 +188,7 @@ select:focus{border-color:var(--accent)}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 /* 快捷键帮助 */
-.help-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:250;display:none;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px)}
+.help-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:250;display:none;align-items:center;justify-content:center;padding:1rem;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 .help-overlay.open{display:flex}
 .help-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;max-width:420px;width:100%;padding:1.5rem 1.75rem;position:relative}
 .help-box h2{font-size:1.1rem;font-weight:600;margin-bottom:1rem;color:#fff}
@@ -200,7 +200,7 @@ select:focus{border-color:var(--accent)}
 .help-list kbd{display:inline-block;background:var(--bg3);border:1px solid var(--border);border-bottom-width:2px;border-radius:5px;padding:2px 7px;font-size:0.78rem;font-family:var(--font-mono,monospace);color:var(--text);min-width:20px;text-align:center}
 
 /* 关于本站 */
-.about-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:250;display:none;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px)}
+.about-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:250;display:none;align-items:center;justify-content:center;padding:1rem;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 .about-overlay.open{display:flex}
 .about-box{background:var(--bg2);border:1px solid var(--border);border-radius:16px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;padding:2rem;position:relative;text-align:center}
 .about-logo{font-size:2.4rem;color:var(--accent2);line-height:1}
@@ -269,7 +269,7 @@ select:focus{border-color:var(--accent)}
 
 /* 放大按钮（弹窗内） */
 .modal-img-wrap{cursor:zoom-in}
-.zoom-badge{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.15);color:#fff;width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);transition:all var(--trans)}
+.zoom-badge{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.15);color:#fff;width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);transition:all var(--trans)}
 .zoom-badge:hover{background:var(--accent)}
 
 /* 高清灯箱 */
@@ -282,13 +282,13 @@ select:focus{border-color:var(--accent)}
 .lb-actions button:hover,.lb-link:hover{background:var(--accent);border-color:var(--accent)}
 .lb-link{font-size:0.78rem}
 .lightbox-stage{flex:1;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;touch-action:none}
-.lightbox-stage img{max-width:100%;max-height:100%;object-fit:contain;transform-origin:0 0;user-select:none;-webkit-user-drag:none;transition:transform 0.05s linear}
+.lightbox-stage img{max-width:100%;max-height:100%;object-fit:contain;transform-origin:0 0;-webkit-user-select:none;user-select:none;-webkit-user-drag:none;transition:transform 0.05s linear}
 .lightbox-stage.grabbing{cursor:grabbing}
 .lightbox-stage.zoomed{cursor:grab}
 .lb-spinner{position:absolute;width:44px;height:44px;border:3px solid rgba(255,255,255,0.15);border-top-color:var(--accent2);border-radius:50%;animation:spin 0.8s linear infinite;display:none}
 .lb-spinner.show{display:block}
 @keyframes spin{to{transform:rotate(360deg)}}
-.lb-hint{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.6);color:var(--text2);font-size:0.72rem;padding:5px 12px;border-radius:14px;pointer-events:none;transition:opacity 0.4s ease;backdrop-filter:blur(4px)}
+.lb-hint{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.6);color:var(--text2);font-size:0.72rem;padding:5px 12px;border-radius:14px;pointer-events:none;transition:opacity 0.4s ease;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 .lb-hint.fade{opacity:0}
 
 /* 回到顶部 */

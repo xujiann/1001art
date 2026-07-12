@@ -182,13 +182,26 @@
   }
   // 数据清洗：个别作品的 artist/location 字段残留 Wikidata 空节点(genid)或裸 URL，
   // 会以链接文本形式出现在弹窗与索引里。就地归一为「佚名/未知收藏」等，幂等，兼防未来重建回归。
-  const _BADVAL = /^https?:|\.well-known\/genid\//i;
+  const _BADVAL = /^https?:|\.well-known\/genid\/|^Q\d+$/i;   // 裸 URL / Wikidata 空节点 / 裸 QID 皆为脏值
+  const _QID_NAME = {   // 已知 QID → 正确名称（艺术家 + 高频博物馆）
+    "Q41554":"Nicolas Poussin", "Q168659":"Franz Xaver Winterhalter",
+    "Q214867":"National Gallery", "Q1117704":"Indianapolis Museum of Art",
+    "Q2148186":"RISD Museum", "Q847508":"Worcester Art Museum"
+  };
   function sanitizeData(){
+    // 先按中文馆藏名收集各馆真实英文名，供被清洗的 location_en 回填（否则整馆英文名会退化成中文/未知）
+    const goodEn = new Map();
+    for(const d of DATA){
+      if(d.location && d.location_en && !_BADVAL.test(d.location_en) && d.location_en !== d.location && !goodEn.has(d.location))
+        goodEn.set(d.location, d.location_en);
+    }
     for(const d of DATA){
       if(d.artist && _BADVAL.test(d.artist)) d.artist = "佚名";
-      if(d.artist_en && _BADVAL.test(d.artist_en)) d.artist_en = (d.id === 1651) ? "Jan van Eyck" : (d.artist && d.artist !== "佚名") ? d.artist : "Anonymous";
+      if(d.artist_en && _BADVAL.test(d.artist_en)) d.artist_en = _QID_NAME[d.artist_en] || (d.id === 1651 ? "Jan van Eyck" : (d.artist && d.artist !== "佚名") ? d.artist : "Anonymous");
       if(d.location && _BADVAL.test(d.location)) d.location = "未知收藏";
-      if(d.location_en && _BADVAL.test(d.location_en)) d.location_en = (d.location && d.location !== "未知收藏") ? "" : "Unknown collection";
+      if(d.location_en && _BADVAL.test(d.location_en)) d.location_en = _QID_NAME[d.location_en] || goodEn.get(d.location) || (d.location && d.location !== "未知收藏" ? "" : "Unknown collection");
+      if(d.title) d.title = d.title.replace(/\s{2,}/g, " ").trim();                    // 折叠多余空格
+      if(d.title_en){ d.title_en = d.title_en.replace(/\s{2,}/g, " ").trim(); if(d.artist_en === "Albrecht Dürer") d.title_en = d.title_en.replace("Great Passion", "Large Passion"); }
     }
   }
   // 重算所有 DATA 派生结构（首屏一次；其余数据流式合并后再调一次）
@@ -338,7 +351,7 @@
     hdr.innerHTML = cover +
       `<div class="ah-info">`+
         `<div class="ah-name">${esc(dispName)}</div>`+
-        (alt ? `<div class="ah-altname">${esc(alt)}</div>` : "")+
+        (alt && alt !== dispName ? `<div class="ah-altname">${esc(alt)}</div>` : "")+
         `<div class="ah-sub">${esc(T("exhibit"))}</div>`+
         `<div class="ah-count">${works.length} ${esc(plu(works.length, "artist_works"))}</div>`+
       `</div>`;
@@ -405,6 +418,7 @@
 
   // —— 筛选 ——
   function applyFilters(){
+    if(artistIndexOn || museumIndexOn) return;   // 索引视图有专用筛选框，主搜索/下拉不应改动隐藏的画廊或计数
     const q = searchInput.value.trim().toLowerCase();
     const fe = eraFilter.value, fm = mediumFilter.value, fc = countryFilter.value;
     filtered = DATA.filter(d => {
@@ -529,7 +543,7 @@
       const b = document.createElement("button");
       b.className = "page-btn" + (opts.active ? " active" : "");
       b.textContent = label;
-      if(opts.disabled) b.disabled = true; else b.onclick = () => { page=p; render(); };
+      if(opts.disabled) b.disabled = true; else b.onclick = () => { page=p; render(); syncURL(); };
       return b;
     };
     pagination.appendChild(mk("‹", page-1, {disabled: page===0}));
@@ -561,6 +575,8 @@
     else if(museumIndexOn) p.set("view", "museums");
     if(museumFilter) p.set("museum", museumFilter);
     const sf = $("sort-filter").value; if(sf && sf !== "default") p.set("sort", sf);
+    if(listView) p.set("list", "1");
+    if(page > 0) p.set("p", page + 1);
     const qs = p.toString();
     const mid = currentModalId();
     const url = location.pathname + (qs ? ("?" + qs) : "") + (mid ? ("#art-" + mid) : "");
@@ -576,6 +592,7 @@
     if(p.get("timeline") === "1"){ timelineMode = true; timelineBar.classList.add("show"); $("timeline-btn").classList.add("active"); }
     if(p.get("fav") === "1"){ favOnly = true; $("fav-only-btn").classList.add("active"); }
     if(p.get("sort")) $("sort-filter").value = p.get("sort");
+    if(p.get("list") === "1"){ listView = true; $("view-toggle").textContent = "☰"; }   // 列表视图（page 于 applyFilters 后单独恢复）
   }
 
   // —— 详情弹窗 ——
@@ -976,7 +993,7 @@
     setTimeout(()=>{ b.innerHTML=old; b.classList.remove("done"); }, 1400);
   };
   $("random-btn").onclick=()=>{ if(filtered.length) openModal(filtered[Math.floor(Math.random()*filtered.length)]); else announce(favOnly ? T("fav_empty") : T("no_results")); };
-  $("view-toggle").onclick=(e)=>{ listView=!listView; e.target.textContent=listView?"☰":"⊞"; render(); };
+  $("view-toggle").onclick=(e)=>{ listView=!listView; e.target.textContent=listView?"☰":"⊞"; render(); syncURL(); };
   $("sort-filter").onchange=applyFilters;
   // —— 每日一作（按日期确定，每天稳定）——
   function dailyArtwork(){
@@ -1110,6 +1127,8 @@
     else if(_ap.get("view") === "artists") showArtistIndex();   // 恢复艺术家索引
     else if(_ap.get("view") === "museums") showMuseumIndex();   // 恢复馆藏索引
     else if(_ap.get("museum")) selectMuseum(_ap.get("museum")); // 恢复馆藏展
+    const _pg = parseInt(_ap.get("p"), 10);                     // 恢复分页（须在 applyFilters/选视图把 page 归零之后）
+    if(_pg > 1 && !artistIndexOn && !museumIndexOn){ page = _pg - 1; render(); }
     if(wantId){ const d = DATA.find(x => x.id === +wantId); if(d) openModal(d); else _pendingWantId = +wantId; }
   }
   // 带参/深链的 URL 需全量数据才正确 → 先加载其余再初始化；纯首页 → 核心集先渲染，其余随后流式合并
