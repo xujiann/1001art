@@ -482,13 +482,11 @@
   }
 
   function makeCard(d, i){
+    // 卡片本身不再是 role=button（内含真实的收藏 <button>，属 ARIA 非法嵌套）。
+    // 改由标题的原生 <button.card-open> 承担键盘可达性：其 Enter/Space 产生的 click 会冒泡到这里。
     const card = document.createElement("div");
     card.className = "art-card";
-    card.tabIndex = 0;
-    card.setAttribute("role", "button");
-    card.setAttribute("aria-label", F(d,"title") + " · " + F(d,"artist"));
     card.onclick = () => openModal(d);
-    card.onkeydown = e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openModal(d); } };
     if(HOVER && d.img){ let pf; card.addEventListener("mouseenter", () => { pf = setTimeout(() => prefetchFull(d), 140); }); card.addEventListener("mouseleave", () => clearTimeout(pf)); }
     const imgWrap = document.createElement("div");
     imgWrap.className = "card-img-wrap";
@@ -523,7 +521,7 @@
     body.className="card-body";
     body.innerHTML =
       `<div><div class="card-era">${esc(F(d,"era"))}</div>`+
-      `<div class="card-title">${esc(F(d,"title"))}</div>`+
+      `<button class="card-open" type="button" aria-label="${esc(F(d,"title") + " · " + F(d,"artist"))}"><span class="card-title">${esc(F(d,"title"))}</span></button>`+
       `<div class="card-artist">${esc(F(d,"artist"))}</div>`+
       `<div class="card-year">${esc(F(d,"year"))}</div></div>`;
     card.appendChild(imgWrap); card.appendChild(body);
