@@ -66,7 +66,8 @@ select:focus{border-color:var(--accent)}
 
 /* 按艺术家：索引网格 */
 .artist-index{max-width:1400px;margin:0 auto;padding:0.5rem 2rem 1rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:1.1rem}
-.artist-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--card-r);overflow:hidden;cursor:pointer;transition:transform var(--trans),border-color var(--trans),box-shadow var(--trans)}
+/* 索引网格一次可渲染 222–646 张卡；离屏卡跳过渲染（auto 会记住真实高度，不影响滚动条）*/
+.artist-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--card-r);overflow:hidden;cursor:pointer;transition:transform var(--trans),border-color var(--trans),box-shadow var(--trans);content-visibility:auto;contain-intrinsic-size:auto 232px}
 .artist-card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 8px 30px rgba(124,106,247,0.15)}
 .artist-thumb{width:100%;aspect-ratio:1/1;overflow:hidden;background:var(--bg3);position:relative}
 .artist-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.4s ease}

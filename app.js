@@ -1139,5 +1139,13 @@
   // 带参/深链的 URL 需全量数据才正确 → 先加载其余再初始化；纯首页 → 核心集先渲染，其余随后流式合并
   const _needFull = location.search.length > 1 || /^#art-\d+$/.test(location.hash);
   if(_needFull){ loadRest(initApp); }
-  else { initApp(); setTimeout(() => loadRest(reinitAfterRest), 0); }
+  else {
+    initApp();
+    // 其余分片（~3MB）等首屏图片加载完（load）再于空闲时拉取，把带宽让给首屏；最迟 2s 兜底。
+    // 注意：不能只用 requestIdleCallback——首屏图片由 JS 注入，浏览器在图片开始下载前就已「空闲」。
+    const _startRest = () => loadRest(reinitAfterRest);
+    const _kick = () => { if(window.requestIdleCallback) requestIdleCallback(_startRest, { timeout: 2000 }); else setTimeout(_startRest, 300); };
+    if(document.readyState === "complete") _kick();
+    else window.addEventListener("load", _kick, { once: true });
+  }
 })();
