@@ -61,6 +61,8 @@ self.addEventListener("fetch", e => {
 
   // 页面与数据：network-first（在线总是最新，离线回退缓存）
   const p = url.pathname;
+  // 预渲染详情页（art/artist/museum，共 6000+ 页）：直连网络，不进壳缓存也不回退首页
+  if (/\/(art|artist|museum)\/[^/]+\.html$/.test(p)) return;
   const isDoc = req.mode === "navigate" || p.endsWith("/") || p.endsWith("/index.html") || p.endsWith("/data.js") || p.endsWith("/data-rest.js");
   if (isDoc) {
     e.respondWith(
