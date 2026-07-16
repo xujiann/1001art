@@ -246,6 +246,9 @@ select:focus{border-color:var(--accent)}
 /* 弹窗底部「同一艺术家的其他作品」缩略图条 */
 .modal-related{margin-top:0.35rem}
 .mr-label{font-size:0.78rem;color:var(--text2);margin-bottom:0.5rem}
+.mr-label~.mr-label{margin-top:0.85rem}   /* 第二条（同时代）与上一条留白 */
+/* 搜索命中高亮 */
+mark{background:rgba(217,168,67,0.3);color:inherit;border-radius:2px;padding:0 1px}
 .mr-strip{display:flex;gap:0.5rem;overflow-x:auto;padding-bottom:0.35rem;scrollbar-width:thin}
 .mr-strip::-webkit-scrollbar{height:5px}
 .mr-strip::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}

@@ -168,7 +168,7 @@
   }
 
   // —— 按艺术家聚合 ——
-  let artistAgg = [], artistByKey = new Map();
+  let artistAgg = [], artistByKey = new Map(), eraByKey = new Map();   // eraByKey：时代 → 作品，供弹窗「同时代」相关条
   function buildArtistAgg(){
     const m = new Map();
     DATA.forEach(d => {
@@ -226,6 +226,8 @@
     periodKeys = Object.keys(periodCounts).sort((a,b)=>periodOrder(a)-periodOrder(b));
     buildArtistAgg();
     buildMuseumAgg();
+    eraByKey = new Map();
+    DATA.forEach(d => { if(!d.era) return; let l = eraByKey.get(d.era); if(!l){ l = []; eraByKey.set(d.era, l); } l.push(d); });
     TOTAL = DATA.length;
     updateStats();
   }
@@ -525,10 +527,11 @@
     imgWrap.appendChild(fav);
     const body = document.createElement("div");
     body.className="card-body";
+    const q = searchInput.value.trim().toLowerCase();   // 命中词高亮（aria-label 仍用纯文本）
     body.innerHTML =
       `<div><div class="card-era">${esc(F(d,"era"))}</div>`+
-      `<button class="card-open" type="button" aria-label="${esc(F(d,"title") + " · " + F(d,"artist"))}"><span class="card-title">${esc(F(d,"title"))}</span></button>`+
-      `<div class="card-artist">${esc(F(d,"artist"))}</div>`+
+      `<button class="card-open" type="button" aria-label="${esc(F(d,"title") + " · " + F(d,"artist"))}"><span class="card-title">${hl(F(d,"title"), q)}</span></button>`+
+      `<div class="card-artist">${hl(F(d,"artist"), q)}</div>`+
       `<div class="card-year">${esc(F(d,"year"))}</div></div>`;
     card.appendChild(imgWrap); card.appendChild(body);
     return card;
@@ -738,18 +741,33 @@
     mc.style.display = "";
   }
   // 弹窗底部：同一艺术家的其他作品缩略图条
+  function relThumbs(list){
+    return `<div class="mr-strip">` + list.map(x =>
+      `<img class="mr-thumb" tabindex="0" role="button" loading="lazy" decoding="async" src="${imgURL(x.thumb)}" alt="${esc(F(x,"title"))}" aria-label="${esc(F(x,"title"))}" title="${esc(F(x,"title") + " · " + F(x,"year"))}" data-id="${x.id}">`
+    ).join("") + `</div>`;
+  }
+  // 在大池子里等距取样（而非取头 10 件——那样多是同一批相邻 id）；以 d.id 作起点，不同作品看到不同邻居
+  function pickSpread(pool, n, seed){
+    if(pool.length <= n) return pool.slice();
+    const step = Math.max(1, Math.floor(pool.length / n)), out = [];
+    let i = seed % pool.length;
+    for(let k = 0; k < n; k++){ out.push(pool[i % pool.length]); i += step; }
+    return out;
+  }
   function fillRelated(d){
     const box = $("modal-related");
     const key = d.artist_en || d.artist;
     const agg = artistByKey.get(key);                                     // 查表，免每次全量 DATA 扫描
-    const others = agg ? agg.works.filter(x => x.id !== d.id && x.thumb) : [];
-    if(!others.length){ box.style.display = "none"; box.innerHTML = ""; return; }
-    const pick = others.slice(0, 10);
+    const byArtist = (agg ? agg.works.filter(x => x.id !== d.id && x.thumb) : []).slice(0, 10);
+    // 同时代（排除同一艺术家，避免与上一条重复）——让「孤本」艺术家的作品也有可去处
+    const eraPool = (eraByKey.get(d.era) || []).filter(x => x.id !== d.id && x.thumb && (x.artist_en || x.artist) !== key);
+    const byEra = pickSpread(eraPool, 10, d.id);
+    let html = "";
+    if(byArtist.length) html += `<div class="mr-label">${esc(T("related_by"))}</div>` + relThumbs(byArtist);
+    if(byEra.length) html += `<div class="mr-label">${esc(T("related_era"))}${d.era ? esc((lang === "en" ? ": " : "：") + F(d,"era")) : ""}</div>` + relThumbs(byEra);
+    if(!html){ box.style.display = "none"; box.innerHTML = ""; return; }
     box.style.display = "";
-    box.innerHTML = `<div class="mr-label">${esc(T("related_by"))}</div>` +
-      `<div class="mr-strip">` + pick.map(x =>
-        `<img class="mr-thumb" tabindex="0" role="button" loading="lazy" decoding="async" src="${imgURL(x.thumb)}" alt="${esc(F(x,"title"))}" aria-label="${esc(F(x,"title"))}" title="${esc(F(x,"title") + " · " + F(x,"year"))}" data-id="${x.id}">`
-      ).join("") + `</div>`;
+    box.innerHTML = html;
     box.querySelectorAll(".mr-thumb").forEach(im => {
       const open = () => { const w = DATA.find(y => y.id === +im.dataset.id); if(w) openModal(w); };
       im.onclick = open;
@@ -1080,6 +1098,14 @@
   };
 
   function esc(s){ return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+  // 搜索命中高亮：在原文上定位，再逐段转义（不在转义后的串上做索引，避免实体边界错位）
+  function hl(text, q){
+    const t = String(text == null ? "" : text);
+    if(!q) return esc(t);
+    const i = t.toLowerCase().indexOf(q);
+    if(i < 0) return esc(t);
+    return esc(t.slice(0, i)) + "<mark>" + esc(t.slice(i, i + q.length)) + "</mark>" + esc(t.slice(i + q.length));
+  }
 
   // —— 回到顶部 ——
   const toTop = $("to-top");

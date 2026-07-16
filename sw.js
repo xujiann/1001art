@@ -2,7 +2,7 @@
    - 外壳（HTML/CSS/JS）：stale-while-revalidate
    - 本地图片（images/）：cache-first，按需缓存，离线可回看已浏览作品
 */
-const SHELL = "art1001-shell-v49";
+const SHELL = "art1001-shell-v50";
 const IMGS  = "art1001-img-v12";
 const IMG_CDN = "cdn.jsdelivr.net";   // 图片走 jsDelivr（xujiann/1001art-img）
 const IMG_CAP = 1200;                 // 图片缓存上限，FIFO 淘汰，防 Cache Storage 无限增长触发整源清退
