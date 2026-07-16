@@ -36,11 +36,15 @@
 
   // —— 图片：本地缓存优先；file 仅用于「查看原图」外链 ——
   const FP = "https://commons.wikimedia.org/wiki/Special:FilePath/";
-  function originalURL(file){
-    if(!file) return null;
+  // 部分 file 字段本身已是百分号编码，直接再 encode 会双重编码指向不存在的页面 → 先按需解码
+  function decodeFile(file){
     let f = file;
     try{ if(/%[0-9A-Fa-f]{2}/.test(file)) f = decodeURIComponent(file); }catch(e){}
-    return FP + encodeURIComponent(f);
+    return f;
+  }
+  function originalURL(file){
+    if(!file) return null;
+    return FP + encodeURIComponent(decodeFile(file));
   }
 
   // —— 图片 CDN 分片（jsDelivr，支持多图库仓无缝扩容）——
@@ -728,7 +732,7 @@
     if(!_metaLoaded) loadMeta().then(() => { if(modalEntry === d) fillCredit(d); });  // credits.js 到达后补署名
     const cr = (d.img && d.file) ? CREDITS[d.id] : null;
     if(!cr){ mc.style.display = "none"; mc.innerHTML = ""; return; }
-    const src = "https://commons.wikimedia.org/wiki/File:" + encodeURIComponent(d.file);
+    const src = "https://commons.wikimedia.org/wiki/File:" + encodeURIComponent(decodeFile(d.file));
     const parts = [];
     if(cr.a) parts.push(esc(cr.a));
     if(cr.l){
@@ -1140,12 +1144,16 @@
     });
     if(cb) _restLoading.then(cb);
   }
+  // 只认一次的启动闸：load 事件与 3s 兜底可能都触发，若不上闩会两次排队 reinitAfterRest（两轮全量重算+重渲染）
+  let _restKicked = false;
+  function startRest(){ if(_restKicked) return; _restKicked = true; loadRest(reinitAfterRest); }
   function reinitAfterRest(){
     computeDerived();      // 重算派生结构 + 头部统计
     applyLangChrome();     // 重建下拉/标签/时间线（不渲染视图，避免二次渲染）
     if(artistIndexOn) renderArtistIndex();       // 索引视图各自以全量数据重渲染
     else if(museumIndexOn) renderMuseumIndex();
     else applyFilters();   // 以全量数据重建 filtered 并渲染一次（分页/计数更新）
+    if(modalEntry) modalIndex = filtered.indexOf(modalEntry);   // 合并后 filtered 重排，须重新定位当前项，否则上/下一件会乱跳
     if(_pendingWantId != null){ const d = DATA.find(x => x.id === _pendingWantId); _pendingWantId = null; if(d) openModal(d); }
   }
 
@@ -1164,18 +1172,21 @@
     else if(_ap.get("museum")) selectMuseum(_ap.get("museum")); // 恢复馆藏展
     const _pg = parseInt(_ap.get("p"), 10);                     // 恢复分页（须在 applyFilters/选视图把 page 归零之后）
     if(_pg > 1 && !artistIndexOn && !museumIndexOn){ page = _pg - 1; render(); }
-    if(wantId){ const d = DATA.find(x => x.id === +wantId); if(d) openModal(d); else _pendingWantId = +wantId; }
+    if(wantId){ const d = DATA.find(x => x.id === +wantId); if(d) openModal(d); else { _pendingWantId = +wantId; startRest(); } }  // 深链作品不在核心集 → 立刻拉其余，不等空闲
   }
-  // 带参/深链的 URL 需全量数据才正确 → 先加载其余再初始化；纯首页 → 核心集先渲染，其余随后流式合并
-  const _needFull = location.search.length > 1 || /^#art-\d+$/.test(location.hash);
-  if(_needFull){ loadRest(initApp); }
+  // 带参 URL 需全量数据才正确（筛选值可能来自其余分片）→ 先加载再初始化。
+  // 裸 #art-<id> 不再走这条：否则 5529 个预渲染页的「在画廊中查看」全都要先阻塞下载 3.1MB 才有画面；
+  // 核心集里的作品即刻打开，其余分片的作品由 _pendingWantId 在合并后补开。
+  const _needFull = location.search.length > 1;
+  if(_needFull){ _restKicked = true; loadRest(initApp); }
   else {
     initApp();
-    // 其余分片（~3MB）等首屏图片加载完（load）再于空闲时拉取，把带宽让给首屏；最迟 2s 兜底。
-    // 注意：不能只用 requestIdleCallback——首屏图片由 JS 注入，浏览器在图片开始下载前就已「空闲」。
-    const _startRest = () => loadRest(reinitAfterRest);
-    const _kick = () => { if(window.requestIdleCallback) requestIdleCallback(_startRest, { timeout: 2000 }); else setTimeout(_startRest, 300); };
-    if(document.readyState === "complete") _kick();
-    else window.addEventListener("load", _kick, { once: true });
+    // 其余分片（~3MB）等首屏图片加载完（load）再于空闲时拉取，把带宽让给首屏。
+    // 注意一：不能只用 requestIdleCallback——首屏图片由 JS 注入，浏览器在图片开始下载前就已「空闲」。
+    // 注意二：load 会等 jsDelivr 上的首屏图；该 CDN 在部分地区常被阻断，届时 load 可能几十秒不触发，
+    //        整站会「安静地」只剩 600 件（计数、搜索、分页全错却无任何提示）。故必须有独立于 load 的硬兜底。
+    const _sched = () => { if(window.requestIdleCallback) requestIdleCallback(startRest, { timeout: 2000 }); else setTimeout(startRest, 300); };
+    if(document.readyState === "complete") _sched();
+    else { window.addEventListener("load", _sched, { once: true }); setTimeout(_sched, 3000); }
   }
 })();

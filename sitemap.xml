@@ -5752,7 +5752,7 @@
   <url><loc>https://xujiann.github.io/1001art/artist/raymond-balze.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://xujiann.github.io/1001art/artist/domenico-gargiulo.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://xujiann.github.io/1001art/artist/camille-pissarro.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/louvre-paris.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/louvre.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/museum-of-modern-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/national-museum-oslo.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/mauritshuis.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -5762,7 +5762,7 @@
   <url><loc>https://xujiann.github.io/1001art/museum/rijksmuseum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/musee-de-l-orangerie-paris.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/musee-marmottan-monet.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/belvedere.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/belvedere-1ukso3.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/art-institute-of-chicago.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/musee-d-orsay.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/stanza-della-segnatura-vatican.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -5771,17 +5771,17 @@
   <url><loc>https://xujiann.github.io/1001art/museum/van-gogh-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/national-gallery-london.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/philadelphia-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/hermitage-st-petersburg.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/hermitage-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/kunsthaus-zurich.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/tretyakov-gallery-moscow.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/indianapolis-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/villa-farnesina-rome.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/st-peter-s-basilica-vatican.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/galleria-dell-accademia-florence.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/gallerie-dell-accademia-venice.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/gallerie-dell-accademia.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/santa-maria-delle-grazie-milan.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/bode-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/kunsthistorisches-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/kunsthistorisches-museum-urw2at.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/cathedral-of-our-lady-antwerp.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/san-luigi-dei-francesi.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/mauritshuis-the-hague.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -5793,14 +5793,14 @@
   <url><loc>https://xujiann.github.io/1001art/museum/museum-of-fine-arts-boston.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/tate-britain.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/the-phillips-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/kroller-muller-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/kroller-muller-museum-9axxtp.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/buffalo-akg-art-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/leopold-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/neue-galerie-new-york.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/san-francisco-museum-of-modern-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/barnes-foundation-philadelphia.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/the-met-new-york.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/tate-london.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/metropolitan-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/tate-r2af2t.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/replicas-in-various-collections.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/guggenheim-new-york.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/lacma-los-angeles.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -5826,11 +5826,11 @@
   <url><loc>https://xujiann.github.io/1001art/museum/chateau-de-malmaison.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/huntington-library-san-marino.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/convent-of-san-marco-florence.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/m75.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/m1qc0pu.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/pinacoteca-di-brera-milan.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/santa-maria-gloriosa-dei-frari.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/church-of-santo-tome.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/alte-pinakothek-munich.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/alte-pinakothek-1t5d82.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/bavarian-state-painting-collections.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/albertina-vienna.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/unterlinden-museum-colmar.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -5839,10 +5839,10 @@
   <url><loc>https://xujiann.github.io/1001art/museum/russian-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/j-paul-getty-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/national-gallery-of-art-washington.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/courtauld-gallery.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/courtauld-gallery-k8f5sc.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/dresden-state-art-collections.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/yale-university-art-gallery.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/gemaldegalerie-berlin.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/gemaldegalerie-berlin-761h66.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/pushkin-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/tretyakov-gallery.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/pinacoteca-di-brera.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -5853,12 +5853,12 @@
   <url><loc>https://xujiann.github.io/1001art/museum/finnish-national-gallery.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/derby-museum-and-art-gallery.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/museo-di-capodimonte.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/alte-nationalgalerie.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/alte-nationalgalerie-rpmfl6.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/galleria-borghese.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/hessian-state-museum-darmstadt.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/pinacoteca-ambrosiana.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/palazzo-vecchio.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/isabella-stewart-gardner-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/isabella-stewart-gardner-museum-n8c1lh.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/royal-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/royal-museums-of-fine-arts-of-belgium.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/stadel-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -5875,7 +5875,7 @@
   <url><loc>https://xujiann.github.io/1001art/museum/national-museum-in-gdansk.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/clark-art-institute.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/detroit-institute-of-arts.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/scottish-national-gallery.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/national-galleries-scotland.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/galleria-doria-pamphilj.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/manchester-art-gallery.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/church-of-san-giorgio-maggiore.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -5896,7 +5896,7 @@
   <url><loc>https://xujiann.github.io/1001art/museum/museum-folkwang.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/museum-of-fine-arts-budapest.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/galleria-nazionale-d-arte-moderna-e-contemporanea-di-roma.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/statens-museum-for-kunst.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/statens-museum-for-kunst-1u8c1d.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/lady-lever-art-gallery.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/palace-of-versailles.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/watts-gallery.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -5912,7 +5912,7 @@
   <url><loc>https://xujiann.github.io/1001art/museum/sao-paulo-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/norman-rockwell-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/amon-carter-museum-of-american-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/birmingham-museums-trust.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/birmingham-museums-trust-usql15.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/barnes-foundation.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/foundation-e-g-buhrle-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/schloss-wei-enstein.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -5931,12 +5931,12 @@
   <url><loc>https://xujiann.github.io/1001art/museum/capitoline-museums.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/kunstmuseum-basel.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/sorolla-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/leiden-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/the-leiden-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/jagiellonian-university-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/nationalmuseum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/toledo-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/historical-museum-frankfurt.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/national-museum-of-western-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/matsukata-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/centraal-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/villa-ludovisi.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/hearst-castle.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -5957,10 +5957,10 @@
   <url><loc>https://xujiann.github.io/1001art/museum/musee-fabre.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/national-museum-in-krakow.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/joslyn-art-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/galleria-d-arte-moderna-di-milano.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/galleria-d-arte-moderna-milan.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/beaux-arts-de-paris.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/timken-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/hessen-kassel-heritage.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/timken-museum-of-art-ltdohq.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/hessen-kassel-heritage-397nda.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/gothenburg-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/brukenthal-national-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/tehran-museum-of-contemporary-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -5972,10 +5972,10 @@
   <url><loc>https://xujiann.github.io/1001art/museum/raclin-murphy-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/herbert-art-gallery-and-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/museum-of-montserrat.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/royal-museum-of-fine-arts-antwerp.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/vlaamse-kunstcollectie-1qzrsy.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/museo-degli-innocenti.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/musee-granet.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/museum-of-fine-arts-houston.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/prints-in-the-national-gallery-of-art-yj42sx.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/santa-lucia-al-sepolcro-sanctuary.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/palazzo-colonna.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/pinacoteca-nazionale-di-bologna.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -6007,7 +6007,7 @@
   <url><loc>https://xujiann.github.io/1001art/museum/wallraf-richartz-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/musee-des-beaux-arts-de-caen.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/musee-des-beaux-arts-de-rouen.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/cleveland-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/prints-in-the-national-gallery-of-art-1e6mjq.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/musee-national-d-art-moderne.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/royal-museums-greenwich.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/san-diego-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -6021,11 +6021,11 @@
   <url><loc>https://xujiann.github.io/1001art/museum/national-gallery-of-athens.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/kelvingrove-art-gallery-and-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/toledo-cathedral.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/herzog-anton-ulrich-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/prints-in-the-national-gallery-of-art-w8kive.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/museum-mayer-van-den-bergh.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/the-lobkowicz-collections.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/musee-de-l-armee.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/sanssouci-picture-gallery.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/jacques-goudstikker-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/basilica-of-saint-augustine-in-campo-marzio.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/hospices-de-beaune.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/phoenix-art-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -6082,7 +6082,7 @@
   <url><loc>https://xujiann.github.io/1001art/museum/mead-art-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/montauban-cathedral.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/musee-ingres-bourdelle.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/ashmolean-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/ashmolean-museum-to8ze4.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/national-library-of-wales.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/the-huntington-library-art-museum-and-botanical-gardens.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/pozzuoli-cathedral.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -6113,7 +6113,7 @@
   <url><loc>https://xujiann.github.io/1001art/museum/musee-de-la-cohue.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/moscow-conservatory.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/dayton-art-institute.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/princeton-art-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/henry-and-rose-pearlman-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/hirshhorn-museum-and-sculpture-garden.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/radishchev-art-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/stedelijk-museum-amsterdam.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -6122,7 +6122,7 @@
   <url><loc>https://xujiann.github.io/1001art/museum/odesa-museum-of-western-and-eastern-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/vienna-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/toyota-municipal-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/kupferstich-kabinett-dresden.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/kupferstich-kabinett-dresden-1cgflr.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/addison-gallery-of-american-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/smithsonian-american-art-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/sudley-house.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -6147,12 +6147,12 @@
   <url><loc>https://xujiann.github.io/1001art/museum/biblioteca-ambrosiana.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/musee-thomas-henry.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/musee-des-beaux-arts-de-marseille.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/national-gallery.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/national-gallery-1szsxt.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/museum-of-fine-arts-reims.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/artizon-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/los-angeles-county-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/kunsthistorisches-museum-2.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/belvedere-2.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/kunsthistorisches-museum-28rwth.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/belvedere-1ijog7.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/cincinnati-art-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/tokyo-fuji-art-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/barber-institute-of-fine-arts.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -6161,7 +6161,7 @@
   <url><loc>https://xujiann.github.io/1001art/museum/arnot-art-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/burrell-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/bowes-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/ashmolean-museum-2.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/ashmolean-museum-pg8adx.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/tweed-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/yamanashi-prefectural-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/museum-of-grenoble.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -6173,7 +6173,7 @@
   <url><loc>https://xujiann.github.io/1001art/museum/grundy-art-gallery.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/garman-ryan-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/portland-art-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/kroller-muller-museum-2.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/kroller-muller-museum-1oui3x.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/museo-soumaya.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/kasama-nichido-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/frans-buffa-sons.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -6183,7 +6183,7 @@
   <url><loc>https://xujiann.github.io/1001art/museum/museum-of-cultural-history-magdeburg.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/noordbrabants-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/building-of-the-winterthur-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/courtauld-gallery-2.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/courtauld-gallery-bzfxtu.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/risd-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/stavros-niarchos-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/musee-angladon.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -6197,7 +6197,7 @@
   <url><loc>https://xujiann.github.io/1001art/museum/staatsgalerie-stuttgart.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/canton-of-zug.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/museum-of-dieppe.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/alte-nationalgalerie-2.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/alte-nationalgalerie-5d4d34.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/muma-museum-of-modern-art-andre-malraux.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/musee-renoir.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/chrysler-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -6206,37 +6206,37 @@
   <url><loc>https://xujiann.github.io/1001art/museum/the-philip-and-janice-levin-foundation.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/musee-de-l-eveche-de-limoges.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/nippon-television.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/batliner-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/albertina.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/carnegie-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/national-museum-of-western-art-tokyo.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/marunuma-art-park.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/unterlinden-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/hugh-lane-gallery.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/nahmad-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/impressionism-the-hasso-plattner-collection-1w5irx.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/collection-bemberg.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/museu-da-chacara-do-ceu.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/seattle-art-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/denver-art-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/allen-memorial-art-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/impressionism-the-hasso-plattner-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/impressionism-the-hasso-plattner-collection-12fk20.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/museum-of-modern-art-saitama.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/hill-stead-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/norton-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/degas-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/degas-collection-602vzw.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/pont-aven-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/ohara-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/musee-departemental-maurice-denis.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/musee-des-beaux-arts-de-quimper.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/bilbao-fine-arts-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/degas-collection-2.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/degas-collection-1ho4ln.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/staatliche-kunsthalle-karlsruhe.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/musee-des-beaux-arts-d-orleans.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/musee-des-arts-decoratifs.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/smith-college-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/statens-museum-for-kunst-2.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/degas-collection-3.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/statens-museum-for-kunst-7ueb10.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/degas-collection-1s1ck2.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/collection-of-modern-religious-art-vatican-museums.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/m485.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/m277i2r.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/basil-and-elise-goulandris-foundation.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/kunstmuseum-bern.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/white-house.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -6248,32 +6248,32 @@
   <url><loc>https://xujiann.github.io/1001art/museum/beyeler-foundation.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/perez-simon-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/rosengart-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/kupferstich-kabinett-dresden-2.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/kupferstich-kabinett-dresden-9hff2z.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/germanisches-nationalmuseum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/six-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/munich-central-collecting-point.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/aartsbisschoppelijk-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/charles-sedelmeyer-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/gemaldegalerie-berlin-x6jpyo.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/stichting-nederlands-kunstbezit.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/private-collection-william-i.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/timken-museum-of-art-2.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/timken-museum-of-art-1dqwk3.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/french-academy-in-rome.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/isabella-stewart-gardner-museum-2.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/isabella-stewart-gardner-museum-zjd8bq.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/museum-de-lakenhal.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/taft-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/church-of-st-vincent.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/bader-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/frederiksborg-palace.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/the-hyde-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/hunterian-museum-and-art-gallery.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/prints-in-the-national-gallery-of-art-1yu46f.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/kb-nationale-bibliotheek.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/g-cramer-oude-kunst.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/cabinet-de-monseigneur-le-duc-de-choiseul.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/musee-departemental-d-art-ancien-et-contemporain.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/duke-of-buccleuch-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/gustave-caillebotte.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/national-gallery-2.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/tate.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/national-gallery-ianh7l.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/tate-1r331g.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/galerie-nathan.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/musee-de-la-chartreuse-de-douai.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/la-casona.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -6290,7 +6290,7 @@
   <url><loc>https://xujiann.github.io/1001art/museum/southampton-city-art-gallery.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/yoshino-gypsum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/ipswich-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/birmingham-museums-trust-2.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/birmingham-museums-trust-welo5w.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/richard-green-fine-paintings.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/montreal-museum-of-fine-arts.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/kitakyushu-municipal-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -6329,7 +6329,7 @@
   <url><loc>https://xujiann.github.io/1001art/museum/saragossa-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/museo-goya.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/museu-de-belles-arts-de-valencia.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/m578.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/m10ldr6.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/musee-des-beaux-arts-de-strasbourg.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/church-of-san-juan-el-real.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/calasanctian-museum-of-the-piarist-fathers.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -6351,37 +6351,37 @@
   <url><loc>https://xujiann.github.io/1001art/museum/fundacion-carlos-de-amberes.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/british-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/saint-omer-cathedral.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/hessen-kassel-heritage-2.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/hessen-kassel-heritage-1hbkcw.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/rubenshuis.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/musee-de-la-chasse-et-de-la-nature.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/royal-museum-of-fine-arts-antwerp-2.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/royal-museum-of-fine-arts-antwerp.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/diocesan-museum-of-ancona-mons-cesare-recanatini.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/vlaamse-kunstcollectie.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/vlaamse-kunstcollectie-6itx1u.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/bavarian-state-library.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/alte-pinakothek.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/alte-pinakothek-nk9fvc.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/weimar.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/kupferstichkabinett-berlin.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/prints-in-the-national-gallery-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/prints-in-the-national-gallery-of-art-2.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/prints-in-the-national-gallery-of-art-3.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/prints-in-the-national-gallery-of-art-4.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/prints-in-the-national-gallery-of-art-1d34rw.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/prints-in-the-national-gallery-of-art-18bevk.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/prints-in-the-national-gallery-of-art-zrnw3x.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/prints-in-the-national-gallery-of-art-5u6h5b.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/kode-art-museums.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/moderna-museet.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/degenerate-art-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/degenerate-art-collection-1pl0d5.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/university-of-oslo-art-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/lillehammer-art-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/stavanger-kunstmuseum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/flaten-art-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/museum-behnhaus-dragerhaus.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/neue-nationalgalerie.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/degenerate-art-collection-2.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/degenerate-art-collection-b7izmd.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/moritzburg.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/stenersen-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/gallery-oldham.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/royal-academy-of-arts.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/m628.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/mean9ib.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/leeds-art-gallery.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/towneley-hall-art-gallery-and-museum.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/towneley-hall-art-gallery-and-museum-18l9xt.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/touchstones-rochdale.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/forbes-galleries.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/auckland-art-gallery.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -6393,7 +6393,7 @@
   <url><loc>https://xujiann.github.io/1001art/museum/dahesh-museum-of-art.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/northumbria-university.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/qagoma.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://xujiann.github.io/1001art/museum/towneley-hall-art-gallery-and-museum-2.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://xujiann.github.io/1001art/museum/towneley-hall-art-gallery-and-museum-1dtwl6.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/falmouth-art-gallery.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/andrew-lloyd-webber-collection.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xujiann.github.io/1001art/museum/the-box.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
