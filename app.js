@@ -207,6 +207,12 @@
          (/print/i.test((d.location || "") + (d.location_en || "")) || /Passion|Apocalypse/i.test(d.title_en || ""))){
         d.medium = "版画"; d.medium_en = "Print";
       }
+      // 戈雅《狂想曲》系列（1799，私人收藏）为蚀刻版画，同样被误标为布面油画。
+      // 限定「私人收藏」以排除同年确为油画的《提拉纳》《狩猎装的查理四世》等馆藏真迹。
+      if(d.artist_en === "Francisco Goya" && /oil on canvas/i.test(d.medium_en || "") &&
+         /1799/.test(d.year_en || d.year || "") && /private collection|私人收藏/i.test((d.location || "") + (d.location_en || ""))){
+        d.medium = "蚀刻版画"; d.medium_en = "Etching";
+      }
     }
   }
   // 重算所有 DATA 派生结构（首屏一次；其余数据流式合并后再调一次）
