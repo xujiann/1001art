@@ -192,18 +192,28 @@
     "Q214867":"National Gallery", "Q1117704":"Indianapolis Museum of Art",
     "Q2148186":"RISD Museum", "Q847508":"Worcester Art Museum"
   };
+  // 同一机构的中文音译重名 → 归并到规范名（仅英文名一致且明确同馆的保守合并）
+  const MU_MERGE = {
+    "克勒勒-米勒博物馆":"库勒-穆勒博物馆", "艺术史博物馆":"维也纳艺术史博物馆", "旧国家画廊":"柏林旧国家画廊",
+    "安特卫普皇家美术馆":"安特卫普皇家美术博物馆", "皇家安特卫普美术馆":"安特卫普皇家美术博物馆",
+    "维也纳美景宫":"奥地利美景宫美术馆", "丹麦国家美术馆":"国立丹麦美术馆", "泰特在线":"泰特美术馆"
+  };
+  // location_en 常被 Wikidata 的「收藏史」(P195) 污染成藏家/中转站/部门串（非当前收藏机构）。
+  // 小写 collection 结尾是可靠的 provenance 信号，且不会误伤 Frick/Wallace 等大写 Collection 真馆。
+  const _PROV_SET = new Set(["Degas Collection","Matsukata Collection","Potter Palmer Collection","Johann Wilhelm von der Pfalz collection","State Museum of Modern Western Art","Keynes Collection","Rose-Marie and Eijk van Otterloo Collection","Mrs. Chester Beatty","Gabriele and Werner Merzbacher Collection","Collection of Max Emden","The William L. Elkins Collection, 1924","Borghese Collection","Villa Flora","White Fund","Payne Gallery","NEPIP","Curationist","Aberdeen Archives, Gallery and Museums collections","Fondation Corboud","Ernst von Siemens Kunststiftung","C.M. van Gogh Gallery","Sint-Augustinuskerk","Davison Art Center","Victoria and Albert museum prints, drawings, & paintings collection","Vlaamse Kunstcollectie","Museo del vino","Musée du vin","Stavros Niarchos Collection","Six Collection","Jean Walter-Paul Guillaume Collection","Otto Krebs collection","Fop Smit collection"]);
+  const _PROV_LOWER = / collection$/;   // 大小写敏感：仅小写 c 才当作 provenance
+  const _PROV_RE = / in the National Gallery of Art$|Central Collecting Point|Nationaux Récupération|degenerate art|Kunsthandel|Sedelmeyer|Böhler|Plattner|Pérez Simón/i;
+  const _muIsProv = en => _PROV_SET.has(en) || _PROV_LOWER.test(en) || _PROV_RE.test(en);
+  const MU_EN = {   // 少数主导英文名仍不对/需消歧的馆 → 权威指定
+    "普林斯顿大学艺术博物馆":"Princeton University Art Museum",
+    "安特卫普皇家美术博物馆":"Royal Museum of Fine Arts Antwerp",
+    "国家艺廊":"National Gallery"
+  };
   function sanitizeData(){
-    // 先按中文馆藏名收集各馆真实英文名，供被清洗的 location_en 回填（否则整馆英文名会退化成中文/未知）
-    const goodEn = new Map();
-    for(const d of DATA){
-      if(d.location && d.location_en && !_BADVAL.test(d.location_en) && d.location_en !== d.location && !goodEn.has(d.location))
-        goodEn.set(d.location, d.location_en);
-    }
+    // pass 1：逐条清洗 艺术家 / 标题 / 媒材，并合并馆名、归一脏 location
     for(const d of DATA){
       if(d.artist && _BADVAL.test(d.artist)) d.artist = "佚名";
       if(d.artist_en && _BADVAL.test(d.artist_en)) d.artist_en = _QID_NAME[d.artist_en] || (d.id === 1651 ? "Jan van Eyck" : (d.artist && d.artist !== "佚名") ? d.artist : "Anonymous");
-      if(d.location && _BADVAL.test(d.location)) d.location = "未知收藏";
-      if(d.location_en && _BADVAL.test(d.location_en)) d.location_en = _QID_NAME[d.location_en] || goodEn.get(d.location) || (d.location && d.location !== "未知收藏" ? "" : "Unknown collection");
       if(d.title) d.title = d.title.replace(/\s{2,}/g, " ").trim();                    // 折叠多余空格
       if(d.title_en){ d.title_en = d.title_en.replace(/\s{2,}/g, " ").trim(); if(d.artist_en === "Albrecht Dürer") d.title_en = d.title_en.replace("Great Passion", "Large Passion"); }
       // Dürer 的《受难》《启示录》等版画组画被误标为「布面油画」→ 高置信修正为版画
@@ -217,6 +227,25 @@
          /1799/.test(d.year_en || d.year || "") && /private collection|私人收藏/i.test((d.location || "") + (d.location_en || ""))){
         d.medium = "蚀刻版画"; d.medium_en = "Etching";
       }
+      if(d.location){ if(MU_MERGE[d.location]) d.location = MU_MERGE[d.location]; if(_BADVAL.test(d.location)) d.location = "未知收藏"; }
+    }
+    // pass 2：每馆的权威英文名 = 候选中出现最多者（先把 QID 映射成名称，剔除 provenance/脏值/等于中文名者）
+    const enCount = new Map();
+    for(const d of DATA){
+      if(!d.location || d.location === "未知收藏") continue;
+      let en = d.location_en; if(en && _QID_NAME[en]) en = _QID_NAME[en];
+      if(!en || _BADVAL.test(en) || en === d.location || _muIsProv(en)) continue;
+      let m = enCount.get(d.location); if(!m){ m = new Map(); enCount.set(d.location, m); }
+      m.set(en, (m.get(en) || 0) + 1);
+    }
+    const domEn = new Map();
+    for(const [loc, m] of enCount){ let best = "", bn = 0; for(const [en, n] of m) if(n > bn || (n === bn && en < best)){ best = en; bn = n; } domEn.set(loc, best); }
+    // pass 3：把每件作品的 location_en 统一为该馆权威英文名（消除 provenance 泄漏 + 同馆命名一致）
+    for(const d of DATA){
+      if(!d.location || d.location === "未知收藏"){ if(d.location_en && _BADVAL.test(d.location_en)) d.location_en = "Unknown collection"; continue; }
+      const canon = MU_EN[d.location] || domEn.get(d.location);
+      if(canon) d.location_en = canon;
+      else if(d.location_en && (_BADVAL.test(d.location_en) || _QID_NAME[d.location_en] || _muIsProv(d.location_en))) d.location_en = "";   // 无权威名且原值不可用 → 回退中文
     }
   }
   // 重算所有 DATA 派生结构（首屏一次；其余数据流式合并后再调一次）
