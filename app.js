@@ -47,25 +47,11 @@
     return FP + encodeURIComponent(decodeFile(file));
   }
 
-  // —— 图片 CDN 分片（jsDelivr，支持多图库仓无缝扩容）——
-  // 图片存在独立仓，经 jsDelivr 分发；data.js 内存相对路径（images/<id>.<ext>），此处按 id 路由到对应仓再拼 CDN 前缀。
-  // 单仓约 5GB 撞 GitHub 软上限（~13000 件）。扩容时：新建仓 1001art-img-N、把超界 id 的图推过去打标签，
-  //   然后在下表把当前分片的 until 改成分界 id、追加一行新分片即可——前端零改动。
-  // 迁移/换 CDN：改对应分片的 base。留空字符串数组则回退同源相对路径（本地调试）。
-  // 肖像 images/a/<qid>.<ext>（无数字 id）恒落第一分片。
-  const IMG_SHARDS = [
-    { base: "https://cdn.jsdelivr.net/gh/xujiann/1001art-img@v6/", until: Infinity },
-    // 扩容示例（届时取消注释并把上一行 until 改为分界 id，如 13000）：
-    // { base: "https://cdn.jsdelivr.net/gh/xujiann/1001art-img-2@v1/", until: Infinity },
-  ];
-  const _idRe = /^images\/(?:t\/)?(\d+)\./;   // 从 images/<id>. 或 images/t/<id>. 提取 id
-  function imgURL(p){
-    if(!p) return p;
-    let base = IMG_SHARDS.length ? IMG_SHARDS[0].base : "";
-    const m = _idRe.exec(p);
-    if(m){ const id = +m[1]; for(const s of IMG_SHARDS){ if(id <= s.until){ base = s.base; break; } } }
-    return base + p;
-  }
+  // —— 图片基址：腾讯云 COS 南京区（国内直连，比 jsDelivr 快数倍且不受墙影响；与 1001fish/1001birds 同桶）——
+  // data.js 存相对路径 images/<id>.、images/t/<id>.、images/a/<qid>.；COS 上对应 art/<id>.、art/t/、art/a/，
+  // 故拼接时去掉 images/ 前缀。本地开发把 IMG_BASE 置空即可回退同源 images/。
+  const IMG_BASE = "https://pic-1302017848.cos.ap-nanjing.myqcloud.com/art/";
+  function imgURL(p){ return p ? (IMG_BASE ? IMG_BASE + String(p).replace(/^images\//, "") : p) : p; }
 
   // —— 时间线分期 ——
   function periodKey(sy){

@@ -2,9 +2,9 @@
    - 外壳（HTML/CSS/JS）：stale-while-revalidate
    - 本地图片（images/）：cache-first，按需缓存，离线可回看已浏览作品
 */
-const SHELL = "art1001-shell-v52";
+const SHELL = "art1001-shell-v53";
 const IMGS  = "art1001-img-v12";
-const IMG_CDN = "cdn.jsdelivr.net";   // 图片走 jsDelivr（xujiann/1001art-img）
+const IMG_CDN = "pic-1302017848.cos.ap-nanjing.myqcloud.com";   // 图片走腾讯云 COS（art/ 前缀）
 const IMG_CAP = 1200;                 // 图片缓存上限，FIFO 淘汰，防 Cache Storage 无限增长触发整源清退
 // 核心壳：小、离线首屏必需 → 原子缓存
 const CORE_ASSETS = ["./", "./index.html", "./style.css", "./lang.js", "./data.js", "./app.js", "./manifest.webmanifest"];
@@ -43,8 +43,8 @@ self.addEventListener("fetch", e => {
   // 图片：本地 images/ 或 jsDelivr CDN → cache-first（离线可回看已浏览作品）。
   // 跨域图先于同源判断处理。jsDelivr 带 CORS 头，用 cors 请求取回“真实”响应缓存
   // （避免 opaque 响应在 Cache Storage 的 padding 配额膨胀）；失败再回退原始请求。
-  const isImg = url.pathname.includes("/images/") &&
-    (url.origin === location.origin || url.hostname === IMG_CDN);
+  const isImg = url.hostname === IMG_CDN ||
+    (url.origin === location.origin && url.pathname.includes("/images/"));
   if (isImg) {
     e.respondWith(
       caches.open(IMGS).then(cache =>
