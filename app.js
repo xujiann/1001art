@@ -181,7 +181,7 @@
       const k = d.artist_en || d.artist;
       let a = m.get(k);
       if(!a){ a = {key:k, zh:d.artist, en:d.artist_en || d.artist, n:0, rep:null, works:[]}; m.set(k, a); }
-      a.n++; a.works.push(d); if(!a.rep && d.thumb) a.rep = d;
+      a.n++; a.works.push(d); if(!a.rep && d.img) a.rep = d;
     });
     artistAgg = [...m.values()].sort((x,y) => y.n - x.n || x.en.localeCompare(y.en));
     artistByKey = m;   // key → 聚合（含 works[]），供弹窗「相关作品」O(该艺术家) 查表
@@ -277,7 +277,7 @@
       if(!d.location || MU_SKIP[d.location]) return;
       let a = m.get(d.location);
       if(!a){ a = {name:d.location, en:d.location_en || d.location, n:0, rep:null}; m.set(d.location, a); }
-      a.n++; if(!a.rep && d.thumb) a.rep = d;
+      a.n++; if(!a.rep && d.img) a.rep = d;
     });
     museumAgg = [...m.values()].sort((x,y) => y.n - x.n || x.name.localeCompare(y.name,"zh"));
   }
@@ -298,7 +298,7 @@
       const pImg = artistPortrait(a.key, 200);
       const thumb = pImg
         ? `<img class="artist-portrait" loading="lazy" decoding="async" src="${pImg}" alt="">`
-        : (a.rep && a.rep.thumb)
+        : (a.rep && a.rep.img)
           ? `<img loading="lazy" decoding="async" src="${imgURL(a.rep.img, 200)}" alt="">`
           : `<div class="artist-noimg">❖</div>`;
       const ls = lifespanStr(a.key);
@@ -353,7 +353,7 @@
     const pCover = artistPortrait(key, 120);
     const cover = pCover
       ? `<img class="ah-cover artist-portrait" loading="lazy" decoding="async" src="${pCover}" alt="">`
-      : (a && a.rep && a.rep.thumb)
+      : (a && a.rep && a.rep.img)
         ? `<img class="ah-cover" loading="lazy" decoding="async" src="${imgURL(a.rep.img, 120)}" alt="">`
         : `<div class="ah-cover ah-noimg">❖</div>`;
     hdr.innerHTML = cover +
@@ -387,7 +387,7 @@
     eraTabs.style.display = "none"; gallery.style.display = "";
     timelineBar.classList.remove("show");   // 藏品展视图不显示时间线条
     const works = DATA.filter(d => d.location === name);
-    const rep = works.find(d => d.thumb);
+    const rep = works.find(d => d.img);
     const enName = works[0] ? (works[0].location_en || "") : "";
     const dispName = lang === "en" ? (enName || name) : name;
     const alt = lang === "en" ? name : (enName && enName !== name ? enName : "");
@@ -396,7 +396,7 @@
     back.className = "crumb"; back.textContent = T("back_all"); back.onclick = exitMuseum;
     bar.appendChild(back);
     const hdr = $("museum-header");
-    const cover = (rep && rep.thumb)
+    const cover = (rep && rep.img)
       ? `<img class="ah-cover" loading="lazy" decoding="async" src="${imgURL(rep.img, 120)}" alt="">`
       : `<div class="ah-cover ah-noimg">❖</div>`;
     hdr.innerHTML = cover +
@@ -431,7 +431,7 @@
       const open = () => selectMuseum(a.name);
       card.onclick = open;
       card.onkeydown = e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); open(); } };
-      const thumb = (a.rep && a.rep.thumb)
+      const thumb = (a.rep && a.rep.img)
         ? `<img loading="lazy" decoding="async" src="${imgURL(a.rep.img, 200)}" alt="">`
         : `<div class="artist-noimg">🏛</div>`;
       card.innerHTML = `<div class="artist-thumb">${thumb}</div>`+
@@ -537,7 +537,7 @@
     const imgWrap = document.createElement("div");
     imgWrap.className = "card-img-wrap";
     imgWrap.style.setProperty("--ar", d.ar ? Math.max(0.45, Math.min(2.4, d.ar)) : 1.33);  // 真实宽高比（极端长卷/竖轴做限幅，contain 不裁切）
-    if(d.thumb){
+    if(d.img){
       imgWrap.classList.add("loading");
       const img = document.createElement("img");
       const eager = i < 8;   // 首屏首行：eager + 高优先级，其余懒加载
@@ -693,7 +693,7 @@
     const wrap=$("modal-img-wrap");
     if(d.img){
       img.style.display="block";
-      img.style.backgroundImage = d.thumb ? `url("${imgURL(d.img, 250)}")` : "none";  // 缩略图秒显垫底(LQIP)，与网格同 URL 命中缓存
+      img.style.backgroundImage = d.img ? `url("${imgURL(d.img, 250)}")` : "none";  // 缩略图秒显垫底(LQIP)，与网格同 URL 命中缓存
       img.fetchPriority = "high";                                                    // 优先拉当前大图
       img.src=imgURL(d.img); img.alt=F(d,"title");
       ph.classList.remove("show"); badge.style.display="flex"; wrap.style.cursor="zoom-in";
@@ -796,9 +796,9 @@
     const box = $("modal-related");
     const key = d.artist_en || d.artist;
     const agg = artistByKey.get(key);                                     // 查表，免每次全量 DATA 扫描
-    const byArtist = (agg ? agg.works.filter(x => x.id !== d.id && x.thumb) : []).slice(0, 10);
+    const byArtist = (agg ? agg.works.filter(x => x.id !== d.id && x.img) : []).slice(0, 10);
     // 同时代（排除同一艺术家，避免与上一条重复）——让「孤本」艺术家的作品也有可去处
-    const eraPool = (eraByKey.get(d.era) || []).filter(x => x.id !== d.id && x.thumb && (x.artist_en || x.artist) !== key);
+    const eraPool = (eraByKey.get(d.era) || []).filter(x => x.id !== d.id && x.img && (x.artist_en || x.artist) !== key);
     const byEra = pickSpread(eraPool, 10, d.id);
     let html = "";
     if(byArtist.length) html += `<div class="mr-label">${esc(T("related_by"))}</div>` + relThumbs(byArtist);

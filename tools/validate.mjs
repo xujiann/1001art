@@ -30,7 +30,6 @@ for (const d of DATA) {
   if (d.img) {
     withImg++;
     if (!existsSync(join(ROOT, d.img))) errs.push(`#${d.id} 大图缺失: ${d.img}`);
-    if (!d.thumb || !existsSync(join(ROOT, d.thumb))) errs.push(`#${d.id} 缩略图缺失: ${d.thumb}`);
   } else {
     placeholders++;
   }
