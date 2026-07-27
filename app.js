@@ -51,7 +51,11 @@
   // data.js 存相对路径 images/<id>.、images/t/<id>.、images/a/<qid>.；COS 上对应 art/<id>.、art/t/、art/a/，
   // 故拼接时去掉 images/ 前缀。本地开发把 IMG_BASE 置空即可回退同源 images/。
   const IMG_BASE = "https://pic-1302017848.cos.ap-nanjing.myqcloud.com/art/";
-  function imgURL(p){ return p ? (IMG_BASE ? IMG_BASE + String(p).replace(/^images\//, "") : p) : p; }
+  // 浏览器支持 WebP 时，用腾讯云 COS 数据万象按需转码（不重传、缩略图省约 37%）。
+  // canvas 能编码 WebP 即能解码；老浏览器检测失败则回退原 JPEG，绝不出现坏图。
+  const _WEBP = (() => { try { const c = document.createElement("canvas"); c.width = c.height = 1; return c.toDataURL("image/webp").indexOf("data:image/webp") === 0; } catch(e){ return false; } })();
+  const _CIQ = _WEBP ? "?imageMogr2/format/webp" : "";   // 仅前端运行时加；静态页/og:image 保持普通 jpg 以稳妥被抓取
+  function imgURL(p){ return p ? (IMG_BASE ? IMG_BASE + String(p).replace(/^images\//, "") + _CIQ : p) : p; }
 
   // —— 时间线分期 ——
   function periodKey(sy){
