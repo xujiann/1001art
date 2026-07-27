@@ -10,7 +10,7 @@
   function lifespanStr(key){ const m=ARTISTS[key]; if(!m||(!m.born&&!m.died)) return ""; return (m.born||"?")+"–"+(m.died||(m.born?"":"?")); }
   function artistBio(key){ const m=ARTISTS[key]; if(!m) return null; return lang==="en" ? (m.bio_en||m.bio_zh) : (m.bio_zh||m.bio_en); }
   function artistCountry(key){ const m=ARTISTS[key]; if(!m) return ""; return lang==="en" ? (m.cty_en||m.cty_zh||"") : (m.cty_zh||m.cty_en||""); }
-  function artistPortrait(key){ const m=ARTISTS[key]; return (m && m.p) ? imgURL(m.p) : null; }   // 艺术家肖像（懒加载后可用）
+  function artistPortrait(key, w){ const m=ARTISTS[key]; return (m && m.p) ? imgURL(m.p, w) : null; }   // 艺术家肖像（懒加载后可用），w=目标 CSS 宽
 
   // —— 语言状态 ——
   let lang = "zh";
@@ -54,8 +54,15 @@
   // 浏览器支持 WebP 时，用腾讯云 COS 数据万象按需转码（不重传、缩略图省约 37%）。
   // canvas 能编码 WebP 即能解码；老浏览器检测失败则回退原 JPEG，绝不出现坏图。
   const _WEBP = (() => { try { const c = document.createElement("canvas"); c.width = c.height = 1; return c.toDataURL("image/webp").indexOf("data:image/webp") === 0; } catch(e){ return false; } })();
-  const _CIQ = _WEBP ? "?imageMogr2/format/webp" : "";   // 仅前端运行时加；静态页/og:image 保持普通 jpg 以稳妥被抓取
-  function imgURL(p){ return p ? (IMG_BASE ? IMG_BASE + String(p).replace(/^images\//, "") + _CIQ : p) : p; }
+  // w = 目标 CSS 宽度（可选）：按 DPR（封顶 2×）换算成实际像素，交给 COS 数据万象缩放（只缩不放，源 500/960px）。
+  // 大图（弹窗/灯箱/预取）一律不传 w，保持同一 URL 以命中缓存。静态页/og:image 仍用普通 jpg。
+  function imgURL(p, w){
+    if(!p || !IMG_BASE) return p;
+    const ops = [];
+    if(w) ops.push("thumbnail/" + Math.round(w * Math.min(window.devicePixelRatio || 1, 2)) + "x");
+    if(_WEBP) ops.push("format/webp");
+    return IMG_BASE + String(p).replace(/^images\//, "") + (ops.length ? "?imageMogr2/" + ops.join("/") : "");
+  }
 
   // —— 时间线分期 ——
   function periodKey(sy){
@@ -280,11 +287,11 @@
       const open = () => selectArtist(a.key);
       card.onclick = open;
       card.onkeydown = e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); open(); } };
-      const pImg = artistPortrait(a.key);
+      const pImg = artistPortrait(a.key, 200);
       const thumb = pImg
         ? `<img class="artist-portrait" loading="lazy" decoding="async" src="${pImg}" alt="">`
         : (a.rep && a.rep.thumb)
-          ? `<img loading="lazy" decoding="async" src="${imgURL(a.rep.thumb)}" alt="">`
+          ? `<img loading="lazy" decoding="async" src="${imgURL(a.rep.thumb, 200)}" alt="">`
           : `<div class="artist-noimg">❖</div>`;
       const ls = lifespanStr(a.key);
       card.innerHTML = `<div class="artist-thumb">${thumb}</div>`+
@@ -335,11 +342,11 @@
     const bio = artistBio(key), ls = lifespanStr(key), cty = artistCountry(key);
     const sub = [ls, cty].filter(Boolean).join(" · ");
     const alt = a ? (lang === "en" ? a.zh : a.en) : "";
-    const pCover = artistPortrait(key);
+    const pCover = artistPortrait(key, 120);
     const cover = pCover
       ? `<img class="ah-cover artist-portrait" loading="lazy" decoding="async" src="${pCover}" alt="">`
       : (a && a.rep && a.rep.thumb)
-        ? `<img class="ah-cover" loading="lazy" decoding="async" src="${imgURL(a.rep.thumb)}" alt="">`
+        ? `<img class="ah-cover" loading="lazy" decoding="async" src="${imgURL(a.rep.thumb, 120)}" alt="">`
         : `<div class="ah-cover ah-noimg">❖</div>`;
     hdr.innerHTML = cover +
       `<div class="ah-info">`+
@@ -382,7 +389,7 @@
     bar.appendChild(back);
     const hdr = $("museum-header");
     const cover = (rep && rep.thumb)
-      ? `<img class="ah-cover" loading="lazy" decoding="async" src="${imgURL(rep.thumb)}" alt="">`
+      ? `<img class="ah-cover" loading="lazy" decoding="async" src="${imgURL(rep.thumb, 120)}" alt="">`
       : `<div class="ah-cover ah-noimg">❖</div>`;
     hdr.innerHTML = cover +
       `<div class="ah-info">`+
@@ -417,7 +424,7 @@
       card.onclick = open;
       card.onkeydown = e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); open(); } };
       const thumb = (a.rep && a.rep.thumb)
-        ? `<img loading="lazy" decoding="async" src="${imgURL(a.rep.thumb)}" alt="">`
+        ? `<img loading="lazy" decoding="async" src="${imgURL(a.rep.thumb, 200)}" alt="">`
         : `<div class="artist-noimg">🏛</div>`;
       card.innerHTML = `<div class="artist-thumb">${thumb}</div>`+
         `<div class="artist-meta"><div class="artist-name">${esc(nm)}</div>`+
@@ -528,7 +535,7 @@
       const eager = i < 8;   // 首屏首行：eager + 高优先级，其余懒加载
       img.loading = eager ? "eager" : "lazy"; img.decoding="async"; img.alt=F(d,"title");
       if(eager) img.fetchPriority = "high";
-      img.src=imgURL(d.thumb);
+      img.src=imgURL(d.thumb, 250);   // 网格卡约 248px，DPR 换算后 1× 取 250 / 2× 取 500
       img.onload = () => { img.classList.add("loaded"); imgWrap.classList.remove("loading"); imgWrap.classList.add("loaded"); };
       img.onerror = () => { imgWrap.classList.remove("loading"); imgWrap.innerHTML = placeholderHTML(d); };
       imgWrap.appendChild(img);
@@ -678,7 +685,7 @@
     const wrap=$("modal-img-wrap");
     if(d.img){
       img.style.display="block";
-      img.style.backgroundImage = d.thumb ? `url("${imgURL(d.thumb)}")` : "none";  // 缩略图秒显垫底(LQIP)，大图加载完覆盖
+      img.style.backgroundImage = d.thumb ? `url("${imgURL(d.thumb, 250)}")` : "none";  // 缩略图秒显垫底(LQIP)，与网格同 URL 命中缓存
       img.fetchPriority = "high";                                                    // 优先拉当前大图
       img.src=imgURL(d.img); img.alt=F(d,"title");
       ph.classList.remove("show"); badge.style.display="flex"; wrap.style.cursor="zoom-in";
@@ -715,7 +722,7 @@
   function fillArtistAvatar(d, akey){
     const av = $("modal-artist-avatar");
     const setP = () => {
-      const p = artistPortrait(akey);
+      const p = artistPortrait(akey, 40);   // 弹窗小头像 38px
       if(p){ av.src = p; av.style.display = ""; av.title = F(d, "artist"); av.onclick = () => { closeModal(); selectArtist(akey); }; }
       else { av.style.display = "none"; av.removeAttribute("src"); av.onclick = null; }
     };
@@ -766,7 +773,7 @@
   // 弹窗底部：同一艺术家的其他作品缩略图条
   function relThumbs(list){
     return `<div class="mr-strip">` + list.map(x =>
-      `<img class="mr-thumb" tabindex="0" role="button" loading="lazy" decoding="async" src="${imgURL(x.thumb)}" alt="${esc(F(x,"title"))}" aria-label="${esc(F(x,"title"))}" title="${esc(F(x,"title") + " · " + F(x,"year"))}" data-id="${x.id}">`
+      `<img class="mr-thumb" tabindex="0" role="button" loading="lazy" decoding="async" src="${imgURL(x.thumb, 90)}" alt="${esc(F(x,"title"))}" aria-label="${esc(F(x,"title"))}" title="${esc(F(x,"title") + " · " + F(x,"year"))}" data-id="${x.id}">`
     ).join("") + `</div>`;
   }
   // 在大池子里等距取样（而非取头 10 件——那样多是同一批相邻 id）；以 d.id 作起点，不同作品看到不同邻居
