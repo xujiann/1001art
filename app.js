@@ -54,14 +54,19 @@
   // 浏览器支持 WebP 时，用腾讯云 COS 数据万象按需转码（不重传、缩略图省约 37%）。
   // canvas 能编码 WebP 即能解码；老浏览器检测失败则回退原 JPEG，绝不出现坏图。
   const _WEBP = (() => { try { const c = document.createElement("canvas"); c.width = c.height = 1; return c.toDataURL("image/webp").indexOf("data:image/webp") === 0; } catch(e){ return false; } })();
-  // w = 目标 CSS 宽度（可选）：按 DPR（封顶 2×）换算成实际像素，交给 COS 数据万象缩放（只缩不放，源 500/960px）。
-  // 大图（弹窗/灯箱/预取）一律不传 w，保持同一 URL 以命中缓存。静态页/og:image 仍用普通 jpg。
+  // 像素密度量化为 1×/2×（而非透传 1.25/1.5 等分数 DPR），避免每种缩放比各生成一份 CI 变体、
+  // 碎裂 CDN/SW/浏览器缓存并多计一次转码；≥1.5 视作 2×（宁可清晰不软）。
+  const _DENS = (window.devicePixelRatio || 1) >= 1.5 ? 2 : 1;
+  // w = 目标 CSS 宽度（可选）：×密度得实际像素，交给 COS 数据万象缩放（只缩不放，源 500/960px）。
+  // 大图（弹窗/灯箱/预取）不传 w，保持同一 URL 命中缓存。
+  // 关键：即使既无 w 又无 WebP，也强制走一次 CI（format/jpg）——裸 COS 对象无 CORS/Cache-Control，
+  //   SW 的 cors 取回会失败而不缓存、浏览器也难缓存；CI 变体带 ACAO:* 与 30 天 max-age，字节几乎不变。
   function imgURL(p, w){
     if(!p || !IMG_BASE) return p;
     const ops = [];
-    if(w) ops.push("thumbnail/" + Math.round(w * Math.min(window.devicePixelRatio || 1, 2)) + "x");
-    if(_WEBP) ops.push("format/webp");
-    return IMG_BASE + String(p).replace(/^images\//, "") + (ops.length ? "?imageMogr2/" + ops.join("/") : "");
+    if(w) ops.push("thumbnail/" + (w * _DENS) + "x");
+    ops.push(_WEBP ? "format/webp" : "format/jpg");
+    return IMG_BASE + String(p).replace(/^images\//, "") + "?imageMogr2/" + ops.join("/");
   }
 
   // —— 时间线分期 ——
@@ -213,6 +218,9 @@
       if(d.artist_en && _BADVAL.test(d.artist_en)) d.artist_en = _QID_NAME[d.artist_en] || (d.id === 1651 ? "Jan van Eyck" : (d.artist && d.artist !== "佚名") ? d.artist : "Anonymous");
       if(d.title) d.title = d.title.replace(/\s{2,}/g, " ").trim();                    // 折叠多余空格
       if(d.title_en){ d.title_en = d.title_en.replace(/\s{2,}/g, " ").trim(); if(d.artist_en === "Albrecht Dürer") d.title_en = d.title_en.replace("Great Passion", "Large Passion"); }
+      // 标题若是裸 QID（采集无标签时的兜底泄漏）→ 用另一语言字段替代，避免「Q12345」出现在卡片/搜索/静态页
+      if(d.title && _BADVAL.test(d.title)) d.title = (d.title_en && !_BADVAL.test(d.title_en)) ? d.title_en : "";
+      if(d.title_en && _BADVAL.test(d.title_en)) d.title_en = (d.title && !_BADVAL.test(d.title)) ? d.title : "";
       // Dürer 的《受难》《启示录》等版画组画被误标为「布面油画」→ 高置信修正为版画
       if(d.artist_en === "Albrecht Dürer" && /oil on canvas/i.test(d.medium_en || "") &&
          (/print/i.test((d.location || "") + (d.location_en || "")) || /Passion|Apocalypse/i.test(d.title_en || ""))){
@@ -291,7 +299,7 @@
       const thumb = pImg
         ? `<img class="artist-portrait" loading="lazy" decoding="async" src="${pImg}" alt="">`
         : (a.rep && a.rep.thumb)
-          ? `<img loading="lazy" decoding="async" src="${imgURL(a.rep.thumb, 200)}" alt="">`
+          ? `<img loading="lazy" decoding="async" src="${imgURL(a.rep.img, 200)}" alt="">`
           : `<div class="artist-noimg">❖</div>`;
       const ls = lifespanStr(a.key);
       card.innerHTML = `<div class="artist-thumb">${thumb}</div>`+
@@ -346,7 +354,7 @@
     const cover = pCover
       ? `<img class="ah-cover artist-portrait" loading="lazy" decoding="async" src="${pCover}" alt="">`
       : (a && a.rep && a.rep.thumb)
-        ? `<img class="ah-cover" loading="lazy" decoding="async" src="${imgURL(a.rep.thumb, 120)}" alt="">`
+        ? `<img class="ah-cover" loading="lazy" decoding="async" src="${imgURL(a.rep.img, 120)}" alt="">`
         : `<div class="ah-cover ah-noimg">❖</div>`;
     hdr.innerHTML = cover +
       `<div class="ah-info">`+
@@ -389,7 +397,7 @@
     bar.appendChild(back);
     const hdr = $("museum-header");
     const cover = (rep && rep.thumb)
-      ? `<img class="ah-cover" loading="lazy" decoding="async" src="${imgURL(rep.thumb, 120)}" alt="">`
+      ? `<img class="ah-cover" loading="lazy" decoding="async" src="${imgURL(rep.img, 120)}" alt="">`
       : `<div class="ah-cover ah-noimg">❖</div>`;
     hdr.innerHTML = cover +
       `<div class="ah-info">`+
@@ -424,7 +432,7 @@
       card.onclick = open;
       card.onkeydown = e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); open(); } };
       const thumb = (a.rep && a.rep.thumb)
-        ? `<img loading="lazy" decoding="async" src="${imgURL(a.rep.thumb, 200)}" alt="">`
+        ? `<img loading="lazy" decoding="async" src="${imgURL(a.rep.img, 200)}" alt="">`
         : `<div class="artist-noimg">🏛</div>`;
       card.innerHTML = `<div class="artist-thumb">${thumb}</div>`+
         `<div class="artist-meta"><div class="artist-name">${esc(nm)}</div>`+
@@ -535,7 +543,7 @@
       const eager = i < 8;   // 首屏首行：eager + 高优先级，其余懒加载
       img.loading = eager ? "eager" : "lazy"; img.decoding="async"; img.alt=F(d,"title");
       if(eager) img.fetchPriority = "high";
-      img.src=imgURL(d.thumb, 250);   // 网格卡约 248px，DPR 换算后 1× 取 250 / 2× 取 500
+      img.src=imgURL(d.img, 250);   // 网格卡约 248px，DPR 换算后 1× 取 250 / 2× 取 500
       img.onload = () => { img.classList.add("loaded"); imgWrap.classList.remove("loading"); imgWrap.classList.add("loaded"); };
       img.onerror = () => { imgWrap.classList.remove("loading"); imgWrap.innerHTML = placeholderHTML(d); };
       imgWrap.appendChild(img);
@@ -685,7 +693,7 @@
     const wrap=$("modal-img-wrap");
     if(d.img){
       img.style.display="block";
-      img.style.backgroundImage = d.thumb ? `url("${imgURL(d.thumb, 250)}")` : "none";  // 缩略图秒显垫底(LQIP)，与网格同 URL 命中缓存
+      img.style.backgroundImage = d.thumb ? `url("${imgURL(d.img, 250)}")` : "none";  // 缩略图秒显垫底(LQIP)，与网格同 URL 命中缓存
       img.fetchPriority = "high";                                                    // 优先拉当前大图
       img.src=imgURL(d.img); img.alt=F(d,"title");
       ph.classList.remove("show"); badge.style.display="flex"; wrap.style.cursor="zoom-in";
@@ -773,7 +781,7 @@
   // 弹窗底部：同一艺术家的其他作品缩略图条
   function relThumbs(list){
     return `<div class="mr-strip">` + list.map(x =>
-      `<img class="mr-thumb" tabindex="0" role="button" loading="lazy" decoding="async" src="${imgURL(x.thumb, 90)}" alt="${esc(F(x,"title"))}" aria-label="${esc(F(x,"title"))}" title="${esc(F(x,"title") + " · " + F(x,"year"))}" data-id="${x.id}">`
+      `<img class="mr-thumb" tabindex="0" role="button" loading="lazy" decoding="async" src="${imgURL(x.img, 90)}" alt="${esc(F(x,"title"))}" aria-label="${esc(F(x,"title"))}" title="${esc(F(x,"title") + " · " + F(x,"year"))}" data-id="${x.id}">`
     ).join("") + `</div>`;
   }
   // 在大池子里等距取样（而非取头 10 件——那样多是同一批相邻 id）；以 d.id 作起点，不同作品看到不同邻居
