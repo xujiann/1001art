@@ -2,14 +2,14 @@
    - 外壳（HTML/CSS/JS）：stale-while-revalidate
    - 本地图片（images/）：cache-first，按需缓存，离线可回看已浏览作品
 */
-const SHELL = "art1001-shell-v63";
+const SHELL = "art1001-shell-v64";
 const IMGS  = "art1001-img-v12";
 const IMG_CDN = "pic-1302017848.cos.ap-nanjing.myqcloud.com";   // 图片走腾讯云 COS（art/ 前缀）
 const IMG_CAP = 1200;                 // 图片缓存上限，FIFO 淘汰，防 Cache Storage 无限增长触发整源清退
 // 核心壳：小、离线首屏必需 → 原子缓存
 const CORE_ASSETS = ["./", "./index.html", "./style.css", "./lang.js", "./data.js", "./app.js", "./manifest.webmanifest"];
 // 大/可选资源（数据其余分片 + 懒加载元数据）：尽力缓存，单个失败不阻断安装
-const EXTRA_ASSETS = ["./data-rest.js", "./desc.js", "./credits.js", "./artists.js"];
+const EXTRA_ASSETS = ["./data-rest.json", "./desc.js", "./credits.js", "./artists.js"];
 
 self.addEventListener("install", e => {
   e.waitUntil(
@@ -63,7 +63,7 @@ self.addEventListener("fetch", e => {
   const p = url.pathname;
   // 预渲染详情页（art/artist/museum，共 6000+ 页）：直连网络，不进壳缓存也不回退首页
   if (/\/(art|artist|museum)\/[^/]+\.html$/.test(p)) return;
-  const isDoc = req.mode === "navigate" || p.endsWith("/") || p.endsWith("/index.html") || p.endsWith("/data.js") || p.endsWith("/data-rest.js");
+  const isDoc = req.mode === "navigate" || p.endsWith("/") || p.endsWith("/index.html") || p.endsWith("/data.js") || p.endsWith("/data-rest.json");
   if (isDoc) {
     e.respondWith(
       fetch(req).then(res => {

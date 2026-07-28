@@ -186,76 +186,11 @@
     artistAgg = [...m.values()].sort((x,y) => y.n - x.n || x.en.localeCompare(y.en));
     artistByKey = m;   // key → 聚合（含 works[]），供弹窗「相关作品」O(该艺术家) 查表
   }
-  // 数据清洗：个别作品的 artist/location 字段残留 Wikidata 空节点(genid)或裸 URL，
-  // 会以链接文本形式出现在弹窗与索引里。就地归一为「佚名/未知收藏」等，幂等，兼防未来重建回归。
-  const _BADVAL = /^https?:|\.well-known\/genid\/|^Q\d+$/i;   // 裸 URL / Wikidata 空节点 / 裸 QID 皆为脏值
-  const _QID_NAME = {   // 已知 QID → 正确名称（艺术家 + 高频博物馆）
-    "Q41554":"Nicolas Poussin", "Q168659":"Franz Xaver Winterhalter",
-    "Q214867":"National Gallery", "Q1117704":"Indianapolis Museum of Art",
-    "Q2148186":"RISD Museum", "Q847508":"Worcester Art Museum"
-  };
-  // 同一机构的中文音译重名 → 归并到规范名（仅英文名一致且明确同馆的保守合并）
-  const MU_MERGE = {
-    "克勒勒-米勒博物馆":"库勒-穆勒博物馆", "艺术史博物馆":"维也纳艺术史博物馆", "旧国家画廊":"柏林旧国家画廊",
-    "安特卫普皇家美术馆":"安特卫普皇家美术博物馆", "皇家安特卫普美术馆":"安特卫普皇家美术博物馆",
-    "维也纳美景宫":"奥地利美景宫美术馆", "丹麦国家美术馆":"国立丹麦美术馆", "泰特在线":"泰特美术馆"
-  };
-  // location_en 常被 Wikidata 的「收藏史」(P195) 污染成藏家/中转站/部门串（非当前收藏机构）。
-  // 小写 collection 结尾是可靠的 provenance 信号，且不会误伤 Frick/Wallace 等大写 Collection 真馆。
-  const _PROV_SET = new Set(["Degas Collection","Matsukata Collection","Potter Palmer Collection","Johann Wilhelm von der Pfalz collection","State Museum of Modern Western Art","Keynes Collection","Rose-Marie and Eijk van Otterloo Collection","Mrs. Chester Beatty","Gabriele and Werner Merzbacher Collection","Collection of Max Emden","The William L. Elkins Collection, 1924","Borghese Collection","Villa Flora","White Fund","Payne Gallery","NEPIP","Curationist","Aberdeen Archives, Gallery and Museums collections","Fondation Corboud","Ernst von Siemens Kunststiftung","C.M. van Gogh Gallery","Sint-Augustinuskerk","Davison Art Center","Victoria and Albert museum prints, drawings, & paintings collection","Vlaamse Kunstcollectie","Museo del vino","Musée du vin","Stavros Niarchos Collection","Six Collection","Jean Walter-Paul Guillaume Collection","Otto Krebs collection","Fop Smit collection"]);
-  const _PROV_LOWER = / collection$/;   // 大小写敏感：仅小写 c 才当作 provenance
-  const _PROV_RE = / in the National Gallery of Art$|Central Collecting Point|Nationaux Récupération|degenerate art|Kunsthandel|Sedelmeyer|Böhler|Plattner|Pérez Simón/i;
-  const _muIsProv = en => _PROV_SET.has(en) || _PROV_LOWER.test(en) || _PROV_RE.test(en);
-  const MU_EN = {   // 少数主导英文名仍不对/需消歧的馆 → 权威指定
-    "普林斯顿大学艺术博物馆":"Princeton University Art Museum",
-    "安特卫普皇家美术博物馆":"Royal Museum of Fine Arts Antwerp",
-    "国家艺廊":"National Gallery"
-  };
-  function sanitizeData(){
-    // pass 1：逐条清洗 艺术家 / 标题 / 媒材，并合并馆名、归一脏 location
-    for(const d of DATA){
-      if(d.artist && _BADVAL.test(d.artist)) d.artist = "佚名";
-      if(d.artist_en && _BADVAL.test(d.artist_en)) d.artist_en = _QID_NAME[d.artist_en] || (d.id === 1651 ? "Jan van Eyck" : (d.artist && d.artist !== "佚名") ? d.artist : "Anonymous");
-      if(d.title) d.title = d.title.replace(/\s{2,}/g, " ").trim();                    // 折叠多余空格
-      if(d.title_en){ d.title_en = d.title_en.replace(/\s{2,}/g, " ").trim(); if(d.artist_en === "Albrecht Dürer") d.title_en = d.title_en.replace("Great Passion", "Large Passion"); }
-      // 标题若是裸 QID（采集无标签时的兜底泄漏）→ 用另一语言字段替代，避免「Q12345」出现在卡片/搜索/静态页
-      if(d.title && _BADVAL.test(d.title)) d.title = (d.title_en && !_BADVAL.test(d.title_en)) ? d.title_en : "";
-      if(d.title_en && _BADVAL.test(d.title_en)) d.title_en = (d.title && !_BADVAL.test(d.title)) ? d.title : "";
-      // Dürer 的《受难》《启示录》等版画组画被误标为「布面油画」→ 高置信修正为版画
-      if(d.artist_en === "Albrecht Dürer" && /oil on canvas/i.test(d.medium_en || "") &&
-         (/print/i.test((d.location || "") + (d.location_en || "")) || /Passion|Apocalypse/i.test(d.title_en || ""))){
-        d.medium = "版画"; d.medium_en = "Print";
-      }
-      // 戈雅《狂想曲》系列（1799，私人收藏）为蚀刻版画，同样被误标为布面油画。
-      // 限定「私人收藏」以排除同年确为油画的《提拉纳》《狩猎装的查理四世》等馆藏真迹。
-      if(d.artist_en === "Francisco Goya" && /oil on canvas/i.test(d.medium_en || "") &&
-         /1799/.test(d.year_en || d.year || "") && /private collection|私人收藏/i.test((d.location || "") + (d.location_en || ""))){
-        d.medium = "蚀刻版画"; d.medium_en = "Etching";
-      }
-      if(d.location){ if(MU_MERGE[d.location]) d.location = MU_MERGE[d.location]; if(_BADVAL.test(d.location)) d.location = "未知收藏"; }
-    }
-    // pass 2：每馆的权威英文名 = 候选中出现最多者（先把 QID 映射成名称，剔除 provenance/脏值/等于中文名者）
-    const enCount = new Map();
-    for(const d of DATA){
-      if(!d.location || d.location === "未知收藏") continue;
-      let en = d.location_en; if(en && _QID_NAME[en]) en = _QID_NAME[en];
-      if(!en || _BADVAL.test(en) || en === d.location || _muIsProv(en)) continue;
-      let m = enCount.get(d.location); if(!m){ m = new Map(); enCount.set(d.location, m); }
-      m.set(en, (m.get(en) || 0) + 1);
-    }
-    const domEn = new Map();
-    for(const [loc, m] of enCount){ let best = "", bn = 0; for(const [en, n] of m) if(n > bn || (n === bn && en < best)){ best = en; bn = n; } domEn.set(loc, best); }
-    // pass 3：把每件作品的 location_en 统一为该馆权威英文名（消除 provenance 泄漏 + 同馆命名一致）
-    for(const d of DATA){
-      if(!d.location || d.location === "未知收藏"){ if(d.location_en && _BADVAL.test(d.location_en)) d.location_en = "Unknown collection"; continue; }
-      const canon = MU_EN[d.location] || domEn.get(d.location);
-      if(canon) d.location_en = canon;
-      else if(d.location_en && (_BADVAL.test(d.location_en) || _QID_NAME[d.location_en] || _muIsProv(d.location_en))) d.location_en = "";   // 无权威名且原值不可用 → 回退中文
-    }
-  }
+  // 数据清洗已前移到构建期（tools/sanitize.mjs，由 _buildjs 在写 data.js 前执行），
+  // 产物即为干净数据；tools/validate.mjs 复用同一套规则做闸门。前端因此不再运行时清洗，
+  // 每位访客省去约 38ms 主线程（中端手机约 150ms）。
   // 重算所有 DATA 派生结构（首屏一次；其余数据流式合并后再调一次）
   function computeDerived(){
-    sanitizeData();
     buildTrMaps();
     eraVals = uniq("era"); mediumVals = uniq("medium"); countryVals = uniq("country");
     eraCounts = {}; DATA.forEach(d => eraCounts[d.era] = (eraCounts[d.era]||0)+1);
@@ -480,10 +415,12 @@
       if(fm && d.medium !== fm) return false;
       if(fc && d.country !== fc) return false;
       if(periodFilter && periodKey(d.sy) !== periodFilter) return false;
+      // 检索串惰性预拼一次并挂在记录上：此前每敲一个字符都要为 16000+ 条重新拼 14 段字符串
+      // 并 toLowerCase（实测 47ms/次，中端手机约 200ms，打字明显滞后且不断触发 GC）。
       if(q){
-        const hay = (d.title+" "+d.artist+" "+d.year+" "+d.era+" "+d.medium+" "+d.location+" "+(d.country||"")+" "+
+        if(d._h === undefined) d._h = (d.title+" "+d.artist+" "+d.year+" "+d.era+" "+d.medium+" "+d.location+" "+(d.country||"")+" "+
           (d.title_en||"")+" "+(d.artist_en||"")+" "+(d.era_en||"")+" "+(d.location_en||"")+" "+(d.country_en||"")+" "+(d.medium_en||"")+" "+(d.py||"")).toLowerCase();
-        if(!hay.includes(q)) return false;
+        if(!d._h.includes(q)) return false;
       }
       return true;
     });
@@ -532,7 +469,13 @@
     // 改由标题的原生 <button.card-open> 承担键盘可达性：其 Enter/Space 产生的 click 会冒泡到这里。
     const card = document.createElement("div");
     card.className = "art-card";
-    card.onclick = () => openModal(d);
+    // 标题现在是真链接（见下）。普通左键 → 拦下走弹窗；Ctrl/⌘/中键/Shift 点击 → 放行，
+    // 让用户能在新标签页打开静态作品页。
+    card.onclick = (e) => {
+      if(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button === 1) return;
+      e.preventDefault();
+      openModal(d);
+    };
     if(HOVER && d.img){ let pf; card.addEventListener("mouseenter", () => { pf = setTimeout(() => prefetchFull(d), 140); }); card.addEventListener("mouseleave", () => clearTimeout(pf)); }
     const imgWrap = document.createElement("div");
     imgWrap.className = "card-img-wrap";
@@ -568,7 +511,10 @@
     const q = searchInput.value.trim().toLowerCase();   // 命中词高亮（aria-label 仍用纯文本）
     body.innerHTML =
       `<div><div class="card-era">${esc(F(d,"era"))}</div>`+
-      `<button class="card-open" type="button" aria-label="${esc(F(d,"title") + " · " + F(d,"artist"))}"><span class="card-title">${hl(F(d,"title"), q)}</span></button>`+
+      // 标题用真链接指向预渲染的作品页：① 给 16000+ 静态页真实内链（此前全站零内链，
+      // 搜索引擎只能靠 sitemap 排队）② 无 JS 时仍可浏览 ③ 支持新标签页打开。
+      // 普通左键点击由 onclick 拦下走弹窗，交互与原先完全一致（渐进增强）。
+      `<a class="card-open" href="art/${d.id}.html" aria-label="${esc(F(d,"title") + " · " + F(d,"artist"))}"><span class="card-title">${hl(F(d,"title"), q)}</span></a>`+
       `<div class="card-artist">${hl(F(d,"artist"), q)}</div>`+
       `<div class="card-year">${esc(F(d,"year"))}</div></div>`;
     card.appendChild(imgWrap); card.appendChild(body);
@@ -751,12 +697,23 @@
     ]).then(() => { DESC = window.ART_DESC || {}; CREDITS = window.ART_CREDITS || {}; ARTISTS = window.ART_ARTISTS || {}; _metaLoaded = true; });
     return _metaLoading;
   }
-  function pickDesc(d){ const e = DESC && DESC[d.id]; return e ? (lang === "en" ? (e[1] || e[0]) : (e[0] || e[1])) : ""; }
+  // e[2] === "t" 表示这条描述是「艺术家+媒材+年代+馆藏」的事实模板 —— 它与弹窗上方的元数据行
+  // 逐字节等价，当正文渲染只会让读者觉得被敷衍。故模板与空值一律显示「暂无详述」。
+  function pickDesc(d){
+    const e = DESC && DESC[d.id];
+    if(!e || e[2] === "t") return "";
+    return lang === "en" ? (e[1] || e[0]) : (e[0] || e[1]);
+  }
+  function setDesc(el, d){
+    const t = pickDesc(d);
+    el.textContent = t || T("no_desc");
+    el.classList.toggle("is-empty", !t);
+  }
   function fillDesc(d){
     const el = $("modal-desc");
-    if(_metaLoaded){ el.textContent = pickDesc(d); return; }
+    if(_metaLoaded){ setDesc(el, d); return; }
     el.textContent = "";
-    loadMeta().then(() => { if(modalEntry === d) el.textContent = pickDesc(d); });
+    loadMeta().then(() => { if(modalEntry === d) setDesc(el, d); });
   }
 
   // 许可名归一（「public domain」→ 本地化标签），弹窗署名与灯箱题注共用，避免逻辑分叉
@@ -768,7 +725,10 @@
     if(!cr){ mc.style.display = "none"; mc.innerHTML = ""; return; }
     const src = "https://commons.wikimedia.org/wiki/File:" + encodeURIComponent(decodeFile(d.file));
     const parts = [];
-    if(cr.a) parts.push(esc(cr.a));
+    // CC 类许可的授权人是拍摄/上传者（cr.ph），不是几百年前的画家——按许可要求署真正的授权人。
+    // PD/CC0 无授权人可署，cr.a（画家）作为「此图为某人作品的翻拍」信息保留。
+    if(cr.ph) parts.push(esc(T("credit_photo")) + " " + esc(cr.ph));
+    else if(cr.a) parts.push(esc(cr.a));
     if(cr.l){
       const licName = licLabel(cr.l);
       const safeLu = cr.lu && /^https?:/i.test(cr.lu);   // 仅 http(s) 才作链接，挡住 javascript:/data: 等注入
@@ -1172,9 +1132,12 @@
         if(window.ART_DATA_REST && window.ART_DATA_REST.length){ for(const d of window.ART_DATA_REST) DATA.push(d); window.ART_DATA_REST = null; }
         _restLoaded = true; res();
       };
-      const s = document.createElement("script"); s.src = "data-rest.js";
-      s.onload = merge; s.onerror = () => { _restLoaded = true; res(); };   // 失败也放行，核心集仍可用
-      document.head.appendChild(s);
+      // 用 fetch + JSON.parse 而非 <script>：同一份 9.2MB 数据，JS 字面量要走完整解析器（实测约 365ms），
+      // JSON 有 V8 专用快速路径（约 61ms）。传输体积一样（gz 1.25MB），省下的是主线程。
+      fetch("data-rest.json")
+        .then(r => r.ok ? r.json() : Promise.reject(new Error("HTTP " + r.status)))
+        .then(arr => { if(Array.isArray(arr)) window.ART_DATA_REST = arr; merge(); })
+        .catch(() => { _restLoaded = true; res(); });   // 失败也放行，核心集仍可用
     });
     if(cb) _restLoading.then(cb);
   }
@@ -1184,9 +1147,15 @@
   function reinitAfterRest(){
     computeDerived();      // 重算派生结构 + 头部统计
     applyLangChrome();     // 重建下拉/标签/时间线（不渲染视图，避免二次渲染）
+    // 合并其余分片时用户可能已经在浏览：保住滚动位置与当前页码，别把人拽回页首第 1 页。
+    const _y = window.scrollY, _page = page;
     if(artistIndexOn) renderArtistIndex();       // 索引视图各自以全量数据重渲染
     else if(museumIndexOn) renderMuseumIndex();
-    else applyFilters();   // 以全量数据重建 filtered 并渲染一次（分页/计数更新）
+    else {
+      applyFilters();   // 以全量数据重建 filtered 并渲染一次（分页/计数更新）
+      if(_page > 0 && _page < Math.ceil(filtered.length / PER_PAGE)){ page = _page; render(); }   // page 为 0 基
+      if(_y > 0) window.scrollTo({ top: _y });
+    }
     if(modalEntry) modalIndex = filtered.indexOf(modalEntry);   // 合并后 filtered 重排，须重新定位当前项，否则上/下一件会乱跳
     if(_pendingWantId != null){ const d = DATA.find(x => x.id === _pendingWantId); _pendingWantId = null; if(d) openModal(d); }
   }
