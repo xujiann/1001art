@@ -13,7 +13,7 @@ await import("file://" + join(ROOT, "data-rest.js").replace(/\\/g, "/"));   // æ
 const DATA = (globalThis.window.ART_DATA || []).concat(globalThis.window.ART_DATA_REST || []);
 
 const REQ = ["id","sy","th","title","title_en","artist","artist_en","year","era","era_en","medium","country","location"];
-const THEMES = new Set(["prehistoric","ancient","egypt","greece","rome","byzantine","medieval","gothic","renaissance","baroque","rococo","neoclassic","romantic","realism","impressionism","modern","contemporary","default"]);
+const THEMES = new Set(["prehistoric","ancient","egypt","greece","rome","byzantine","medieval","gothic","renaissance","baroque","rococo","neoclassic","romantic","realism","impressionism","modern","contemporary","eastasia","default"]);
 
 const errs = [];
 const warns = [];
