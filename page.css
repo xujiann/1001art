@@ -72,3 +72,6 @@ body.sp{padding:0 0 3rem;background:var(--bg);color:var(--text)}
 .hub-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.25rem .9rem}
 .hub-list li{font-size:.88rem;line-height:1.7;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hub-n{color:var(--text3,#8a8ab0);font-size:.76rem}
+
+.sp-tags{font-size:.78rem;color:var(--text3);margin-top:.8rem}
+.sp-tags span{opacity:.7}

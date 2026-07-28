@@ -1,4 +1,4 @@
-/* 1001件人类艺术瑰宝 — 交互逻辑（双语 / 高清灯箱 / 时间线索引） */
+/* 1001+ 人类艺术瑰宝 — 交互逻辑（双语 / 高清灯箱 / 时间线索引） */
 (function(){
   "use strict";
   const DATA = window.ART_DATA || [];
@@ -419,6 +419,7 @@
       // 并 toLowerCase（实测 47ms/次，中端手机约 200ms，打字明显滞后且不断触发 GC）。
       if(q){
         if(d._h === undefined) d._h = (d.title+" "+d.artist+" "+d.year+" "+d.era+" "+d.medium+" "+d.location+" "+(d.country||"")+" "+
+          (d.tg?d.tg.join(" "):"")+" "+(d.tg_en?d.tg_en.join(" "):"")+" "+
           (d.title_en||"")+" "+(d.artist_en||"")+" "+(d.era_en||"")+" "+(d.location_en||"")+" "+(d.country_en||"")+" "+(d.medium_en||"")+" "+(d.py||"")).toLowerCase();
         if(!d._h.includes(q)) return false;
       }
@@ -659,6 +660,7 @@
     setActivation(locEl, clickable ? () => { closeModal(); selectMuseum(d.location); } : null);
     const ctyEl=$("modal-country"); ctyEl.textContent=F(d,"country"); metaClick(ctyEl, (d.country && d.country!=="未知") ? d.country : null, "country");
     fillDesc(d);
+    fillTags(d);
     fillCredit(d);
     fillRelated(d);
     $("modal-num").textContent = lang==="zh" ? `第 ${d.id} / ${TOTAL} ${T("of_total")}` : `${d.id} / ${TOTAL}`;
@@ -709,6 +711,17 @@
     el.textContent = t || T("no_desc");
     el.classList.toggle("is-empty", !t);
   }
+  // 主题标签（大都会 API 的 tags）：点击即以该题材搜索全站——一条 Wikidata 给不了的浏览轴。
+  function fillTags(d){
+    const box = $("modal-tags");
+    const list = (lang === "en" ? (d.tg_en || d.tg) : (d.tg || d.tg_en)) || [];
+    if(!list.length){ box.style.display = "none"; box.innerHTML = ""; return; }
+    box.innerHTML = list.map(t => `<button class="mt-tag" type="button" data-t="${esc(t)}">${esc(t)}</button>`).join("");
+    box.style.display = "";
+    box.querySelectorAll(".mt-tag").forEach(b => {
+      b.onclick = () => { closeModal(); searchInput.value = b.dataset.t; page = 0; applyFilters(); window.scrollTo({top:0, behavior:"smooth"}); };
+    });
+  }
   function fillDesc(d){
     const el = $("modal-desc");
     if(_metaLoaded){ setDesc(el, d); return; }
@@ -721,9 +734,11 @@
   function fillCredit(d){
     const mc = $("modal-credit");
     if(!_metaLoaded) loadMeta().then(() => { if(modalEntry === d) fillCredit(d); });  // credits.js 到达后补署名
-    const cr = (d.img && d.file) ? CREDITS[d.id] : null;
+    const cr = (d.img && (d.file || d.su)) ? CREDITS[d.id] : null;
     if(!cr){ mc.style.display = "none"; mc.innerHTML = ""; return; }
-    const src = "https://commons.wikimedia.org/wiki/File:" + encodeURIComponent(decodeFile(d.file));
+    // 溯源链接：馆藏 API 来源（大都会等）指向该馆藏品页；Commons 来源指向文件页。
+    const isMuseumSrc = !!d.su;
+    const src = isMuseumSrc ? d.su : ("https://commons.wikimedia.org/wiki/File:" + encodeURIComponent(decodeFile(d.file)));
     const parts = [];
     // CC 类许可的授权人是拍摄/上传者（cr.ph），不是几百年前的画家——按许可要求署真正的授权人。
     // PD/CC0 无授权人可署，cr.a（画家）作为「此图为某人作品的翻拍」信息保留。
@@ -734,7 +749,7 @@
       const safeLu = cr.lu && /^https?:/i.test(cr.lu);   // 仅 http(s) 才作链接，挡住 javascript:/data: 等注入
       parts.push(safeLu ? `<a href="${esc(cr.lu)}" target="_blank" rel="noopener">${esc(licName)}</a>` : esc(licName));
     }
-    parts.push(`<a href="${esc(src)}" target="_blank" rel="noopener">Wikimedia Commons ↗</a>`);
+    parts.push(`<a href="${esc(src)}" target="_blank" rel="noopener">${isMuseumSrc ? "Metropolitan Museum ↗" : "Wikimedia Commons ↗"}</a>`);
     mc.innerHTML = `<span class="mc-label">${esc(T("credit_img"))}：</span>` + parts.join(" · ");
     mc.style.display = "";
   }

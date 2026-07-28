@@ -1,10 +1,10 @@
-/* 1001件人类艺术瑰宝 — 界面文案（中英双语）
+/* 1001+ 人类艺术瑰宝 — 界面文案（中英双语）
    作品数据（含双语字段）已内联在 data.js，此处仅保留 UI 文案。
 */
 window.LANG = {
 ui: {
   zh: {
-    title_sub:"件人类艺术瑰宝", subtitle:"跨越五万年的人类创造力",
+    title_sub:" 人类艺术瑰宝", subtitle:"跨越五万年的人类创造力",
     works:"件作品", eras:"个时代", artists:"位艺术家",
     all_eras:"全部时代", all_media:"全部媒材", all_regions:"全部地区",
     random:"随机作品", all:"全部",
@@ -31,7 +31,7 @@ ui: {
     sort_label:"排序", sort_default:"默认（名气）", sort_year_asc:"年代：早→晚", sort_year_desc:"年代：晚→早", sort_title:"按标题",
     kbd:"快捷键", kbd_search:"聚焦搜索框", kbd_random:"随机作品", kbd_artist:"切换艺术家视图", kbd_timeline:"切换时间线", kbd_fav:"切换仅看收藏", kbd_nav:"上一件 / 下一件", kbd_close:"关闭弹窗 / 帮助", kbd_help:"显示本帮助",
     about:"关于", about_title:"关于本站",
-    about_intro:"「1001件人类艺术瑰宝」是一座跨越五万年的数字艺术画廊，精选展示人类历史上的著名艺术作品——从史前壁画到当代艺术。",
+    about_intro:"「1001+ 人类艺术瑰宝」是一座跨越五万年的数字艺术画廊，精选展示人类历史上的著名艺术作品——从史前壁画到当代艺术。",
     about_sources:"作品信息采集自 Wikidata 结构化数据（按维基百科收录度排序），图片来自 Wikimedia Commons 公有领域资源，并已下载缓存于本站。",
     about_tech:"纯静态前端，无框架、无运行时依赖；支持中英双语、拼音搜索、离线访问（PWA），部署于 GitHub Pages。",
     about_credits:"图片版权归原作者及收藏机构所有；少数 20 世纪受版权保护的作品以占位卡呈现，并提供 Wikipedia 链接。",
@@ -69,7 +69,7 @@ ui: {
     sort_label:"Sort", sort_default:"Default (fame)", sort_year_asc:"Date: old→new", sort_year_desc:"Date: new→old", sort_title:"By title",
     kbd:"Shortcuts", kbd_search:"Focus search", kbd_random:"Random work", kbd_artist:"Toggle artist view", kbd_timeline:"Toggle timeline", kbd_fav:"Toggle favorites", kbd_nav:"Previous / next work", kbd_close:"Close dialog / help", kbd_help:"Show this help",
     about:"About", about_title:"About this site",
-    about_intro:"“1001 Masterpieces of Human Art” is a digital gallery spanning fifty thousand years — a curated showcase of famous works of art across human history, from cave paintings to contemporary art.",
+    about_intro:"“1001+ Masterpieces of Human Art” is a digital gallery spanning fifty thousand years — a curated showcase of famous works of art across human history, from cave paintings to contemporary art.",
     about_sources:"Artwork metadata is gathered from Wikidata structured data (ranked by Wikipedia coverage); images come from public-domain Wikimedia Commons and are cached locally on this site.",
     about_tech:"A pure static front-end — no framework, no runtime dependencies; with bilingual UI, pinyin search and offline access (PWA), deployed on GitHub Pages.",
     about_credits:"Image rights belong to the original artists and holding institutions; a few 20th-century works under copyright are shown as placeholders with a link to Wikipedia.",

@@ -378,3 +378,8 @@ mark{background:rgba(217,168,67,0.3);color:inherit;border-radius:2px;padding:0 1
 .footer-hubs{margin-top:.5rem;font-size:.8rem}
 .footer-hubs a{color:var(--text3);text-decoration:none}
 .footer-hubs a:hover{color:var(--accent2);text-decoration:underline}
+
+/* 主题标签（来自大都会 API）：点击按题材检索全站 */
+.modal-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.75rem}
+.mt-tag{padding:.22rem .6rem;border-radius:14px;border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-size:.74rem;cursor:pointer;transition:all var(--trans)}
+.mt-tag:hover{border-color:var(--accent);color:var(--accent2);background:var(--bg4)}
