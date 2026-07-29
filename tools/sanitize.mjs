@@ -89,6 +89,15 @@ export function sanitizeAll(DATA) {
         n.desc++;
       }
       BADVAL_IN.lastIndex = 0;
+      // 馆藏 API 的策展文字常含 HTML（克利夫兰的 description 里有 <em>）。
+      // 我们用 textContent 渲染，标签会原样显示成 "<em>"，故一律剥掉。
+      if (/<[^>]+>|&(?:nbsp|amp|lt|gt|quot|#\d+);/.test(d[k])) {
+        d[k] = d[k].replace(/<[^>]+>/g, " ")
+          .replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+          .replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+          .replace(/\s+/g, " ").trim();
+        n.desc++;
+      }
     }
   }
 

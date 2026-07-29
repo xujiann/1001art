@@ -794,7 +794,12 @@
       const safeLu = cr.lu && /^https?:/i.test(cr.lu);   // 仅 http(s) 才作链接，挡住 javascript:/data: 等注入
       parts.push(safeLu ? `<a href="${esc(cr.lu)}" target="_blank" rel="noopener">${esc(licName)}</a>` : esc(licName));
     }
-    parts.push(`<a href="${esc(src)}" target="_blank" rel="noopener">${isMuseumSrc ? "Metropolitan Museum ↗" : "Wikimedia Commons ↗"}</a>`);
+    // 链接文案按来源域名决定——写死某一家会在别家来源上显示错误机构名（曾把克利夫兰标成大都会）
+    const srcLabel = !isMuseumSrc ? "Wikimedia Commons ↗"
+      : /metmuseum\./i.test(src) ? "Metropolitan Museum ↗"
+      : /clevelandart\./i.test(src) ? "Cleveland Museum of Art ↗"
+      : (cr.a ? esc(cr.a) + " ↗" : "查看馆藏页 ↗");
+    parts.push(`<a href="${esc(src)}" target="_blank" rel="noopener">${srcLabel}</a>`);
     mc.innerHTML = `<span class="mc-label">${esc(T("credit_img"))}：</span>` + parts.join(" · ");
     mc.style.display = "";
   }
