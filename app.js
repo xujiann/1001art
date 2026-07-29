@@ -740,10 +740,16 @@
   }
   // e[2] === "t" 表示这条描述是「艺术家+媒材+年代+馆藏」的事实模板 —— 它与弹窗上方的元数据行
   // 逐字节等价，当正文渲染只会让读者觉得被敷衍。故模板与空值一律显示「暂无详述」。
+  // e[2] 是分语言的模板标志：含 z = 中文侧为事实模板，含 e = 英文侧为事实模板。
+  // 模板与页面上方的元数据行逐字节等价，不作正文；但只要**另一侧**有真实文字就回退显示它，
+  // 免得「中文模板 + 英文真实维基首段」的作品两边都空着（曾因此埋掉 3981 件真内容）。
   function pickDesc(d){
     const e = DESC && DESC[d.id];
-    if(!e || e[2] === "t") return "";
-    return lang === "en" ? (e[1] || e[0]) : (e[0] || e[1]);
+    if(!e) return "";
+    const f = e[2] || "";
+    const zh = f.includes("z") ? "" : (e[0] || "");
+    const en = f.includes("e") ? "" : (e[1] || "");
+    return lang === "en" ? (en || zh) : (zh || en);
   }
   function setDesc(el, d){
     const t = pickDesc(d);
