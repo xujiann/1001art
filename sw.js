@@ -2,7 +2,7 @@
    - 外壳（HTML/CSS/JS）：stale-while-revalidate
    - 本地图片（images/）：cache-first，按需缓存，离线可回看已浏览作品
 */
-const SHELL = "art1001-shell-v68";
+const SHELL = "art1001-shell-36986ed95f";
 const IMGS  = "art1001-img-v12";
 const IMG_CDN = "pic-1302017848.cos.ap-nanjing.myqcloud.com";   // 图片走腾讯云 COS（art/ 前缀）
 const IMG_CAP = 1200;                 // 图片缓存上限，FIFO 淘汰，防 Cache Storage 无限增长触发整源清退
@@ -11,10 +11,17 @@ const CORE_ASSETS = ["./", "./index.html", "./style.css", "./lang.js", "./data.j
 // 大/可选资源（数据其余分片 + 懒加载元数据）：尽力缓存，单个失败不阻断安装
 const EXTRA_ASSETS = ["./data-rest.json", "./desc.js", "./credits.js", "./artists.js"];
 
+// 装机时必须绕开 HTTP 缓存取新文件。
+// cache.addAll() 默认走浏览器 HTTP 缓存：换了新缓存名、却把浏览器手里的旧副本装了进去，
+// 于是「版本号变了、内容没变」，看起来像发布成功、读者拿到的还是旧壳。
+// 本轮 page.css 的 .ot-tag 就是这样：磁盘新、SW 缓存名新、缓存内容旧。
+// 加 {cache:"reload"} 强制回源。
+const fresh = u => new Request(u, { cache: "reload" });
+
 self.addEventListener("install", e => {
   e.waitUntil(
     caches.open(SHELL).then(c =>
-      c.addAll(CORE_ASSETS).then(() => Promise.all(EXTRA_ASSETS.map(u => c.add(u).catch(() => {}))))
+      c.addAll(CORE_ASSETS.map(fresh)).then(() => Promise.all(EXTRA_ASSETS.map(u => c.add(fresh(u)).catch(() => {}))))
     ).then(() => self.skipWaiting())
   );
 });
@@ -78,7 +85,11 @@ self.addEventListener("fetch", e => {
   e.respondWith(
     caches.open(SHELL).then(cache =>
       cache.match(req).then(hit => {
-        const net = fetch(req).then(res => { if (res.ok) cache.put(req, res.clone()); return res; }).catch(() => hit);
+        // 后台复验同样要绕开 HTTP 缓存，否则 max-age 没过期时这一步只是从浏览器缓存里
+        // 把旧文件再抄一遍，SWR 的「revalidate」永远不会真的发生。
+        // 用 no-cache（带条件请求，服务器没变就回 304）而非 reload，省流量。
+        const rq = req.mode === "navigate" ? req : new Request(req, { cache: "no-cache" });
+        const net = fetch(rq).then(res => { if (res.ok) cache.put(req, res.clone()); return res; }).catch(() => hit);
         return hit || net;
       })
     )

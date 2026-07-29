@@ -38,7 +38,8 @@ for (const d of DATA) {
 
 // 繁体检测：去掉「繁/畫/單/國/學/廣」等同时也是日文汉字或简体常用字的字，只留强信号，
 // 免得「南都繁会图」「浮世繪」类正当标题被反复误报（历史上每轮都在报假阳性）。
-const trad = DATA.filter(d => /[藝術館瑩寶劍鑑]/.test(`${d.title}${d.location}${d.artist}${d.era}`));
+// d.ot 的标题本来就是日文原题（《大日本名将鑑》《古今書画鑑》），那些字是原文，不是没转换干净——豁免。
+const trad = DATA.filter(d => !d.ot && /[藝術館瑩寶劍鑑]/.test(`${d.title}${d.location}${d.artist}${d.era}`));
 if (trad.length) warns.push(`疑似繁体残留 ${trad.length} 条：${trad.slice(0,5).map(d=>d.id).join(",")}…`);
 
 // —— 脏值断言（error，非 warn）——

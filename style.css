@@ -391,3 +391,6 @@ mark{background:rgba(217,168,67,0.3);color:inherit;border-radius:2px;padding:0 1
 .sj-tag span{font-size:.68rem;color:var(--text3)}
 .sj-tag:hover span{color:var(--accent2)}
 @media(max-width:600px){.subject-panel{padding:0.5rem 1rem}}
+
+#modal-alt{margin:0.15rem 0 0;font-size:0.78rem;color:var(--muted);line-height:1.45}
+#modal-alt .ot-tag{display:inline-block;padding:0.02rem 0.34rem;margin-right:0.35rem;border:1px solid var(--border);border-radius:4px;font-size:0.72rem;color:var(--accent2)}

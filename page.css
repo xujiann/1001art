@@ -75,3 +75,6 @@ body.sp{padding:0 0 3rem;background:var(--bg);color:var(--text)}
 
 .sp-tags{font-size:.78rem;color:var(--text3);margin-top:.8rem}
 .sp-tags span{opacity:.7}
+
+/* 汉字原题标记：说明标题位放的是日文/馆方原题，不是中译 */
+.ot-tag{display:inline-block;font-style:normal;padding:0.04rem 0.36rem;margin-right:0.45rem;border:1px solid var(--border);border-radius:4px;font-size:0.74rem;line-height:1.5;color:var(--accent2);vertical-align:1px}

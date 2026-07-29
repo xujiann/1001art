@@ -689,6 +689,18 @@
     }
     const eraEl=$("modal-era"); eraEl.textContent=F(d,"era"); metaClick(eraEl, d.era, "era");
     $("modal-title").textContent=F(d,"title");
+    // 东亚作品若无中文译名，标题位显示的是汉字原题（多为日文原题）。
+    // 必须讲清楚这不是中译，并把英文题名一并列出，便于按英文检索文献。
+    (function(){
+      const el=$("modal-alt"); if(!el) return;
+      const OT={ja:["日文原题","Japanese original title"],cma:["原文题名","Original-language title"]};
+      const tag=d.ot&&OT[d.ot];
+      const en=d.title_en&&d.title_en!==d.title?d.title_en:"";
+      if(!tag&&!en){el.hidden=true;el.textContent="";return;}
+      el.hidden=false; el.innerHTML="";
+      if(tag){const s=document.createElement("span");s.className="ot-tag";s.textContent=lang==="en"?tag[1]:tag[0];el.appendChild(s);}
+      if(en)el.appendChild(document.createTextNode((lang==="en"?"":"英文题名：")+en));
+    })();
     $("modal-artist").textContent=F(d,"artist");
     $("modal-year").textContent=F(d,"year");
     const medEl=$("modal-medium"); medEl.textContent=F(d,"medium"); metaClick(medEl, d.medium, "medium");
