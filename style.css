@@ -383,3 +383,11 @@ mark{background:rgba(217,168,67,0.3);color:inherit;border-radius:2px;padding:0 1
 .modal-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.75rem}
 .mt-tag{padding:.22rem .6rem;border-radius:14px;border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-size:.74rem;cursor:pointer;transition:all var(--trans)}
 .mt-tag:hover{border-color:var(--accent);color:var(--accent2);background:var(--bg4)}
+
+/* 题材云：第三条浏览轴（标签来自大都会开放数据）*/
+.subject-panel{max-width:1400px;margin:0 auto;padding:0.5rem 2rem 0.75rem;display:flex;flex-wrap:wrap;gap:.45rem}
+.sj-tag{padding:.3rem .7rem;border-radius:16px;border:1px solid var(--border);background:var(--bg2);color:var(--text2);font-size:.8rem;cursor:pointer;transition:all var(--trans);display:inline-flex;align-items:baseline;gap:.35rem}
+.sj-tag:hover{border-color:var(--accent);color:var(--accent2);background:var(--bg4)}
+.sj-tag span{font-size:.68rem;color:var(--text3)}
+.sj-tag:hover span{color:var(--accent2)}
+@media(max-width:600px){.subject-panel{padding:0.5rem 1rem}}

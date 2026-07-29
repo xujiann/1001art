@@ -199,6 +199,7 @@
     periodKeys = Object.keys(periodCounts).sort((a,b)=>periodOrder(a)-periodOrder(b));
     buildArtistAgg();
     buildMuseumAgg();
+    buildTagAgg();
     eraByKey = new Map();
     DATA.forEach(d => { if(!d.era) return; let l = eraByKey.get(d.era); if(!l){ l = []; eraByKey.set(d.era, l); } l.push(d); });
     TOTAL = DATA.length;
@@ -217,6 +218,44 @@
     museumAgg = [...m.values()].sort((x,y) => y.n - x.n || x.name.localeCompare(y.name,"zh"));
   }
   const artistName = a => (lang === "en" ? a.en : a.zh) || a.en;
+
+  // —— 题材轴（标签来自大都会开放数据）——
+  // 数据不足时整条轴隐藏：只有几个词的「题材」对读者是噪声，不如不显示。
+  let tagAgg = [];
+  const TAG_MIN = 3, TAG_AXIS_MIN = 40;   // 单个题材至少 3 件；整条轴至少 40 个题材才露出
+  function buildTagAgg(){
+    const m = new Map();
+    for(const d of DATA){
+      if(!d.tg?.length) continue;
+      d.tg.forEach((t, i) => {
+        let a = m.get(t);
+        if(!a){ a = { zh: t, en: (d.tg_en && d.tg_en[i]) || t, n: 0 }; m.set(t, a); }
+        a.n++;
+      });
+    }
+    tagAgg = [...m.values()].filter(a => a.n >= TAG_MIN).sort((x, y) => y.n - x.n || x.zh.localeCompare(y.zh, "zh"));
+    const btn = $("subject-btn");
+    if(btn) btn.style.display = tagAgg.length >= TAG_AXIS_MIN ? "" : "none";
+  }
+  let subjectOpen = false;
+  function toggleSubjectPanel(){
+    const box = $("subject-panel"), btn = $("subject-btn");
+    subjectOpen = !subjectOpen;
+    btn.classList.toggle("active", subjectOpen);
+    if(!subjectOpen){ box.style.display = "none"; box.innerHTML = ""; return; }
+    box.innerHTML = tagAgg.map(a =>
+      `<button class="sj-tag" type="button" data-t="${esc(a.zh)}" title="${esc(a.en)}">${esc(lang === "en" ? a.en : a.zh)}<span>${a.n}</span></button>`
+    ).join("");
+    box.style.display = "";
+    box.querySelectorAll(".sj-tag").forEach(b => {
+      b.onclick = () => {
+        searchInput.value = b.dataset.t; page = 0;
+        toggleSubjectPanel();
+        applyFilters();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      };
+    });
+  }
 
   function renderArtistIndex(){
     const q = artistIdxFilter;
@@ -995,6 +1034,7 @@
   $("clear-search").onclick=()=>{ searchInput.value=""; applyFilters(); searchInput.focus(); };
   $("artist-filter").addEventListener("input", ()=>{ artistIdxFilter = $("artist-filter").value.trim().toLowerCase(); if(museumIndexOn) renderMuseumIndex(); else renderArtistIndex(); });
   $("museum-btn").onclick=()=>{ if(museumIndexOn) exitMuseumIndex(); else showMuseumIndex(); };
+  const _sjb = $("subject-btn"); if(_sjb) _sjb.onclick = toggleSubjectPanel;
   $("idx-sort").onclick=()=>{ idxSort = idxSort === "count" ? "name" : "count"; $("idx-sort").textContent = T(idxSort === "count" ? "sort_by_count" : "sort_by_name"); if(museumIndexOn) renderMuseumIndex(); else renderArtistIndex(); };
   eraFilter.onchange=applyFilters; mediumFilter.onchange=applyFilters; countryFilter.onchange=applyFilters;
   $("timeline-btn").onclick=(e)=>{
