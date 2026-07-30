@@ -850,6 +850,12 @@
     });
   }
 
+  // 没有图时到底该说什么：仍在版权期的要讲明是法律原因、哪一年解禁，
+  // 而不是含糊的「暂无」——《格尔尼卡》不是我们没采到，是 2044 年之前根本不会有自由图像。
+  function noImgNote(d){
+    if(d.pdy === undefined) return T("img_na");
+    return d.pdy > 0 ? T("cr_note").replace("{y}", d.pdy) : T("cr_note_unk");
+  }
   function showModalPlaceholder(d){
     const ph=$("modal-placeholder");
     ph.className="modal-img-placeholder show "+eraTheme(d);
@@ -857,7 +863,7 @@
       `<span class="ph-glyph">❖</span>`+
       `<span class="mph-title">${esc(F(d,"title"))}</span>`+
       `<span class="mph-artist">${esc(F(d,"artist"))}</span>`+
-      `<span class="mph-note">${esc(T("img_na"))}</span>`+
+      `<span class="mph-note">${esc(noImgNote(d))}</span>`+
       `<a class="mph-wiki" href="${esc(wikiURL(d))}" target="_blank" rel="noopener">${esc(T("view_wiki"))} ↗</a>`;
   }
   function closeModal(){ $("modal").classList.remove("open"); document.body.style.overflow=""; syncURL(); try{ lastFocus && lastFocus.focus(); }catch(e){} }
