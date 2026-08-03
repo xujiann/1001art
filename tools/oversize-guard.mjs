@@ -29,6 +29,8 @@ if (over.length) {
   over.slice(0, 20).forEach(x => console.log(`   ${mb(x.s).padStart(6)}MB  ${x.f}`));
   if (over.length > 20) console.log(`   …另有 ${over.length - 20} 张`);
   console.log('\n  修法：node _shrink_oversize.mjs（先降质量保像素，不够再缩尺寸；原图备份到 _oversize_bak/）');
+  console.log('  再传：python tools/cos-multipart.py images art --list <清单> --par 6');
+  console.log('        （压完的仍有几十 MB，上行限速时整份 PUT 会一直超时重来，必须走分块续传）');
 } else console.log('✓ 无超过 32MB 的源图');
 if (near.length) console.log(`\n⚠ 24–32MB（逼近上限，再采同类图需留意）：${near.length} 张`);
 process.exit(over.length ? 1 : 0);
