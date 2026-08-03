@@ -162,6 +162,13 @@ def put_file(path, key, part_size, state, save_state, par=1):
                 print("    块 %d/%d ok %.0fKB/s" % (n, total, len(chunk) / 1024 / dt))
                 sys.stdout.flush()
                 return n, etag
+            except urllib.error.HTTPError as e:
+                # COS 把真正的原因写在 body 里（如 RequestTimeout / SignatureDoesNotMatch），
+                # 光印 "HTTP Error 400" 查不出所以然
+                detail = e.read()[:200].decode("utf-8", "ignore").replace("\n", " ")
+                print("    块 %d/%d 第 %d 次失败: HTTP %d %s" % (n, total, attempt + 1, e.code, detail))
+                sys.stdout.flush()
+                time.sleep(3 * (attempt + 1))
             except Exception as e:
                 print("    块 %d/%d 第 %d 次失败: %s" % (n, total, attempt + 1, str(e)[:80]))
                 sys.stdout.flush()
