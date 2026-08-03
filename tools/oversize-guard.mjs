@@ -7,7 +7,7 @@
 // 阈值实测精确：最小失败 32.1MB、最大成功 31.6MB。
 //
 // 每轮采进新图后跑一次：node tools/oversize-guard.mjs [images目录]
-// 有超限的就用 _shrink_oversize.mjs 压到 30MB 以下（保 id 与 URL 不变）。
+// 有超限的就用 tools/shrink-oversize.mjs 压到 30MB 以下（保 id 与 URL 不变）。
 import { readdirSync, statSync } from 'fs';
 
 const DIR = process.argv[2] || 'images';
@@ -28,7 +28,7 @@ if (over.length) {
   console.log(`\n✗ 超过 32MB（缩略图必失败，读者看到坏图）：${over.length} 张`);
   over.slice(0, 20).forEach(x => console.log(`   ${mb(x.s).padStart(6)}MB  ${x.f}`));
   if (over.length > 20) console.log(`   …另有 ${over.length - 20} 张`);
-  console.log('\n  修法：node _shrink_oversize.mjs（先降质量保像素，不够再缩尺寸；原图备份到 _oversize_bak/）');
+  console.log('\n  修法：node tools/shrink-oversize.mjs（先降质量保像素，不够再缩尺寸；原图备份到 _oversize_bak/）');
   console.log('  再传：python tools/cos-multipart.py images art --list <清单> --par 6');
   console.log('        （压完的仍有几十 MB，上行限速时整份 PUT 会一直超时重来，必须走分块续传）');
 } else console.log('✓ 无超过 32MB 的源图');
